@@ -1,0 +1,208 @@
+<script lang="ts">
+	import { ImageWithSkeleton } from '$lib/components/ui/image-with-skeleton';
+	import { Lightbox, type LightboxItem } from '$lib/components/ui/lightbox';
+	import { getHeroColors } from '$lib/image-color';
+	import { navState, resetNav } from '$lib/nav.svelte';
+	import MetaList from '$lib/components/MetaList.svelte';
+	import SectionHead from '$lib/components/SectionHead.svelte';
+	import TagChip from '$lib/components/TagChip.svelte';
+	import PrevNext from '$lib/components/PrevNext.svelte';
+	import Seo from '$lib/components/Seo.svelte';
+	import { formatDate } from '$lib/format';
+	import type { PageData } from './$types';
+
+	const { data }: { data: PageData } = $props();
+	const { item, related, adjacent, posts } = $derived(data);
+	const isBook = $derived(item.type === 'book');
+
+	// Books drive the global transparent-overlay nav while this page is shown.
+	$effect(() => {
+		if (!isBook) return;
+		navState.transparent = true;
+		navState.text = item.navText;
+		return () => resetNav();
+	});
+
+	// Colours are baked into frontmatter at build time (instant, no flash).
+	// Client-side extraction only covers items added via the CMS between builds.
+	let fallbackColor = $state('');
+	$effect(() => {
+		if (!item.hero || item.titleColor) return;
+		let cancelled = false;
+		getHeroColors(item.hero).then(({ dominant, lightTop }) => {
+			if (cancelled) return;
+			if (dominant) fallbackColor = dominant;
+			if (isBook) navState.text = lightTop ? 'dark' : 'light';
+		});
+		return () => {
+			cancelled = true;
+		};
+	});
+
+	const titleColor = $derived(item.titleColor || fallbackColor || '');
+	const description = $derived(
+		item.seo.description ||
+			`${item.title}, ${[item.medium ?? item.type, String(item.year)].join(', ')}. By Rhea Pradeep.`
+	);
+
+	let lbOpen = $state(false);
+	let lbIndex = $state(0);
+	const lightboxItems = $derived<LightboxItem[]>(
+		item.gallery.length > 0
+			? item.gallery.map((g) => ({ src: g.src, title: item.title, caption: g.caption }))
+			: item.hero
+				? [{ src: item.hero, title: item.title, caption: item.caption ?? '' }]
+				: []
+	);
+
+	function openLightbox(i: number) {
+		lbIndex = i;
+		lbOpen = true;
+	}
+</script>
+
+<Seo
+	type="article"
+	title={item.seo.title || item.title}
+	{description}
+	image={item.seo.image || item.hero}
+	published={item.date}
+	modified={item.updated}
+	tags={item.tags}
+	keywords={item.seo.keywords}
+	noindex={item.seo.noindex}
+/>
+
+{#if isBook && item.hero}
+	<!-- Full-bleed hero — starts at the very top, behind the transparent header.
+	     The floating card gives a glimpse of what this is; it scrolls away with the hero. -->
+	<div class="relative w-full">
+		<img src={item.hero} alt={item.title} class="block h-auto w-full" />
+		<div
+			class="absolute right-4 bottom-4 hidden max-w-[320px] rounded-md bg-background/95 p-5
+			       shadow-[0_8px_30px_rgb(0_0_0/0.18)] backdrop-blur-sm sm:block md:right-8 md:bottom-8"
+		>
+			<p class="font-display text-[20px] leading-tight font-bold">{item.title}</p>
+			<p class="type-meta mt-1.5">
+				{[String(item.year), item.medium ?? item.type, item.dimensions].filter(Boolean).join(' · ')}
+			</p>
+			<div class="mt-3 flex flex-wrap gap-2">
+				{#each item.tags as tag (tag)}
+					<TagChip {tag} />
+				{/each}
+			</div>
+		</div>
+	</div>
+{/if}
+
+<article class="mx-auto max-w-[900px] px-6 pt-10 pb-4 md:px-10 md:pt-14">
+	{#if !isBook && item.hero}
+		<button type="button" onclick={() => openLightbox(0)} class="block w-full">
+			<img src={item.hero} alt={item.title} class="w-full" />
+		</button>
+	{/if}
+
+	<h1
+		class="type-display {!isBook && item.hero ? 'mt-8' : ''}"
+		style={titleColor ? `color:${titleColor}` : undefined}
+	>
+		{item.title}
+	</h1>
+
+	<div class="mt-6">
+		<MetaList {item} />
+	</div>
+
+	{#if item.component}
+		<div class="prose mt-8 max-w-[68ch]">
+			<item.component />
+		</div>
+	{/if}
+</article>
+
+{#if item.gallery.length > 0}
+	<section class="mx-auto max-w-[1100px] px-6 pt-8 pb-6 md:px-10">
+		<div class="columns-2 gap-2 md:gap-3 lg:columns-3 lg:gap-4">
+			{#each item.gallery as image, i (image.src)}
+				<button
+					type="button"
+					onclick={() => openLightbox(i)}
+					class="group mb-2 block w-full break-inside-avoid overflow-hidden md:mb-3 lg:mb-4"
+					aria-label={image.caption || item.title}
+				>
+					<img
+						src={image.src}
+						alt={image.caption || item.title}
+						loading="lazy"
+						class="block w-full transition-transform duration-500 group-hover:scale-[1.03]"
+					/>
+				</button>
+			{/each}
+		</div>
+	</section>
+{/if}
+
+<div class="mx-auto max-w-[900px] px-6 md:px-10">
+	{#if posts.length > 0}
+		<section class="mt-14">
+			<SectionHead text="posts about this work" />
+			<ul class="mt-6 space-y-3">
+				{#each posts as post (post.slug)}
+					<li class="flex items-baseline gap-2">
+						<time class="type-meta w-24 flex-shrink-0" datetime={post.date}>
+							{formatDate(post.date)}
+						</time>
+						<a href="/blog/{post.slug}/" class="min-w-0 truncate text-[15px] transition-colors hover:text-primary">
+							{post.title ?? post.description ?? formatDate(post.date)}
+						</a>
+						<span class="leader"></span>
+						<span class="type-meta flex-shrink-0">
+							{post.kind === 'log' ? 'process log' : post.kind}
+						</span>
+					</li>
+				{/each}
+			</ul>
+		</section>
+	{/if}
+
+	{#if related.length > 0}
+		<section class="mt-14">
+			<SectionHead text="related work" />
+			<div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:gap-x-6">
+				{#each related as other (other.slug)}
+					<a href="/work/{other.slug}/" class="group block">
+						<div class="mb-3 overflow-hidden">
+							<ImageWithSkeleton
+								src={other.cover}
+								alt={other.title}
+								aspectRatio="3/4"
+								class="transition-transform duration-300 group-hover:scale-[1.02]"
+							/>
+						</div>
+						<p class="font-display text-[15px] font-semibold transition-colors group-hover:text-primary">
+							{other.title}
+						</p>
+						<p class="type-meta mt-0.5">{other.year} · {other.medium ?? other.type}</p>
+					</a>
+				{/each}
+			</div>
+		</section>
+	{/if}
+
+	<div class="mt-14 pb-14 md:pb-20">
+		<PrevNext
+			prev={adjacent.prev && {
+				href: `/work/${adjacent.prev.slug}/`,
+				title: adjacent.prev.title,
+				meta: String(adjacent.prev.year)
+			}}
+			next={adjacent.next && {
+				href: `/work/${adjacent.next.slug}/`,
+				title: adjacent.next.title,
+				meta: String(adjacent.next.year)
+			}}
+		/>
+	</div>
+</div>
+
+<Lightbox items={lightboxItems} bind:open={lbOpen} bind:index={lbIndex} />

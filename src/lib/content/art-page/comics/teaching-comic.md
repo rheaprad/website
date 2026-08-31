@@ -1,4 +1,9 @@
 ---
+type: comic
 title: Teaching Comic
-image: /src/lib/content/art-page/comics/teaching-comic.webp
+date: 2024-03-01T00:00:00Z
+cover_image: /src/lib/content/art-page/comics/teaching-comic.webp
+title_color_auto: "rgb(24, 25, 25)"
+nav_text_auto: dark
+cover_ratio_auto: 0.632
 ---

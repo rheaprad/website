@@ -6,7 +6,7 @@ import camelCase from 'just-camel-case';
 const RE_SCRIPT_START = /<script(?:\s+?[a-zA-z]+(?:=(?:["']){0,1}[a-zA-Z0-9]+(?:["']){0,1})?)?>/i;
 
 export default function fancyImages() {
-  return function transformer(tree) {
+  return function transformer(/** @type {any} */ tree) {
     const images = new Map();
 
     const image_count = new Map();
@@ -68,7 +68,10 @@ export default function fancyImages() {
       if (RE_SCRIPT_START.test(node.value)) {
         scriptExists = true;
         // Inject imports into the existing script tag
-        node.value = node.value.replace(RE_SCRIPT_START, (script) => `${script}\n${scriptContent}`);
+        node.value = node.value.replace(
+          RE_SCRIPT_START,
+          (/** @type {string} */ script) => `${script}\n${scriptContent}`
+        );
       }
     });
 

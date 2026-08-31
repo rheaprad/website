@@ -19,20 +19,29 @@ collections:
     extension: md
     format: frontmatter
     fields:
+      - { label: Type, name: type, widget: hidden, default: book }
       - { label: Title, name: title, widget: string }
       - { label: Date, name: date, widget: datetime }
       - {
-          label: Category,
-          name: category,
+          label: Updated,
+          name: updated,
+          widget: datetime,
+          required: false,
+          hint: "Set when the piece changes meaningfully — it appears in the site log as an update.",
+        }
+      - {
+          label: Tags,
+          name: tags,
           widget: select,
-          default: Miscellany,
-          options:
-            [
-              "Artist Books",
-              "Picture Books",
-              "Graphic Novels",
-              "Miscellany",
-            ],
+          multiple: true,
+          options: ["artist-book", "picture-book", "graphic-novel", "character-design"],
+        }
+      - {
+          label: Medium,
+          name: medium,
+          widget: string,
+          required: false,
+          hint: "e.g. Artist book, Children's picturebook, Graphic novel",
         }
       - {
           label: Pages,
@@ -46,10 +55,10 @@ collections:
           name: dimensions,
           widget: string,
           required: false,
-          hint: "e.g. 18 × 23.5cm",
+          hint: "e.g. 18 × 23.5 cm",
         }
       - {
-          label: Grid Cover (books index),
+          label: Grid Cover (work index),
           name: cover_image,
           widget: image,
         }
@@ -86,16 +95,11 @@ collections:
             ],
         }
       - {
-          label: Other Projects,
-          name: other_projects,
-          widget: relation,
+          label: Related Work,
+          name: related,
+          widget: list,
           required: false,
-          multiple: true,
-          collection: books,
-          value_field: "{{slug}}",
-          search_fields: ["title"],
-          display_fields: ["title"],
-          hint: "Leave empty to show the 3 most recent books.",
+          hint: "Slugs of related works from any collection, e.g. canidae, tape-city. Leave empty to auto-fill.",
         }
       - label: SEO
         name: seo
@@ -127,23 +131,38 @@ collections:
     extension: md
     format: frontmatter
     fields:
+      - { label: Type, name: type, widget: hidden, default: illustration }
       - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
       - {
-          label: Category,
-          name: category,
+          label: Updated,
+          name: updated,
+          widget: datetime,
+          required: false,
+        }
+      - {
+          label: Tags,
+          name: tags,
           widget: select,
-          default: Illustration,
-          options: ["Comics", "Illustration", "Character Design", "Miscellany"],
+          multiple: true,
+          required: false,
+          options: ["character-design"],
         }
       - {
           label: Caption,
           name: caption,
           widget: string,
           required: false,
-          hint: "Shown under the image in the lightbox. Falls back to the category.",
+          hint: "Shown under the image in the lightbox.",
         }
-      - { label: Date, name: date, widget: datetime, required: false }
-      - { label: Image, name: image, widget: image }
+      - { label: Image, name: cover_image, widget: image }
+      - {
+          label: Related Work,
+          name: related,
+          widget: list,
+          required: false,
+          hint: "Slugs of related works from any collection, e.g. canidae, orullaigal.",
+        }
 
   - name: comics
     label: Comics
@@ -152,8 +171,23 @@ collections:
     extension: md
     format: frontmatter
     fields:
+      - { label: Type, name: type, widget: hidden, default: comic }
       - { label: Title, name: title, widget: string }
-      - { label: Image, name: image, widget: image }
+      - { label: Date, name: date, widget: datetime }
+      - {
+          label: Updated,
+          name: updated,
+          widget: datetime,
+          required: false,
+        }
+      - { label: Image, name: cover_image, widget: image }
+      - {
+          label: Related Work,
+          name: related,
+          widget: list,
+          required: false,
+          hint: "Slugs of related works from any collection.",
+        }
 
   - name: blog
     label: Blog
@@ -162,8 +196,29 @@ collections:
     extension: md
     format: frontmatter
     fields:
+      - {
+          label: Kind,
+          name: kind,
+          widget: select,
+          default: note,
+          options: ["note", "log", "essay"],
+          hint: "note = short sketchbook post · log = process entry for a project · essay = long-form",
+        }
       - { label: Title, name: title, widget: string, required: false }
       - { label: Date, name: date, widget: datetime }
+      - {
+          label: Updated,
+          name: updated,
+          widget: datetime,
+          required: false,
+        }
+      - {
+          label: Project,
+          name: project,
+          widget: string,
+          required: false,
+          hint: "Work slug this post belongs to (required for logs), e.g. canidae. The post appears on that work's page.",
+        }
       - {
           label: Description,
           name: description,
@@ -193,6 +248,16 @@ collections:
               hint: "1200×630 recommended. Falls back to the post image, then the site default.",
             }
       - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: now
+    label: Now
+    files:
+      - name: now
+        label: Now Page
+        file: src/lib/content/now-page/now.md
+        fields:
+          - { label: Updated, name: updated, widget: datetime }
+          - { label: Body, name: body, widget: markdown }
 
   - name: home
     label: Home

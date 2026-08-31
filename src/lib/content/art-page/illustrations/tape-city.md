@@ -1,6 +1,11 @@
 ---
+type: illustration
 title: Tape City
-category: Illustration
 date: 2023-08-01T00:00:00Z
-image: /src/lib/content/art-page/books/orullaigal/grid-7.webp
+cover_image: /src/lib/content/art-page/books/orullaigal/grid-7.webp
+related:
+  - orullaigal
+title_color_auto: "rgb(152, 147, 140)"
+nav_text_auto: light
+cover_ratio_auto: 0.766
 ---

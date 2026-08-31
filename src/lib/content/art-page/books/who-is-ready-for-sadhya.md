@@ -1,9 +1,11 @@
 ---
+type: book
 title: Who is Ready for Sadhya?
 date: 2024-01-01T00:00:00Z
-category: Picture Books
-dimensions: "Children's Picturebook | 11.25 x 9.25cm"
-format: "Children's Picturebook | 11.25 x 9.25cm"
+tags:
+  - picture-book
+medium: Children's picturebook
+dimensions: 11.25 × 9.25 cm
 cover_image: /src/lib/content/art-page/books/who-is-ready-for-sadhya/cover.webp
 gallery:
   - image: /src/lib/content/art-page/books/who-is-ready-for-sadhya/6_7.webp
@@ -24,5 +26,6 @@ other_projects:
 nav_theme: Auto
 title_color_auto: "rgb(175, 163, 154)"
 nav_text_auto: dark
+cover_ratio_auto: 1.688
 ---
 

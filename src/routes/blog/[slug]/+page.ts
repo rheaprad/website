@@ -1,37 +1,36 @@
 import { error } from '@sveltejs/kit';
+import { getAllPosts, getLogsForProject, getPost, getPrevNextPost, getWork } from '$lib/content';
 import type { PageLoad } from './$types';
 
-export const prerender = true;
-
-export async function entries() {
-	const modules = import.meta.glob('/src/lib/content/blog-page/**/*.md', { eager: true });
-	return Object.keys(modules).map((path) => ({
-		slug: path.split('/').pop()?.replace('.md', '') ?? ''
-	}));
+export function entries() {
+	return getAllPosts().map((p) => ({ slug: p.slug }));
 }
 
-export const load: PageLoad = async ({ params }) => {
-	const { slug } = params;
-
-	const modules = import.meta.glob('/src/lib/content/blog-page/**/*.md', { eager: true });
-	const match = Object.entries(modules).find(([path]) => path.includes(`/${slug}.md`));
-
-	if (!match) {
-		error(404, `Post "${slug}" not found`);
+export const load: PageLoad = ({ params }) => {
+	const post = getPost(params.slug);
+	if (!post) {
+		error(404, `Post "${params.slug}" not found`);
 	}
 
-	const mod = match[1] as any;
+	const project = post.project ? getWork(post.project) : undefined;
 
-	const images = import.meta.glob('/src/lib/content/**/*.{jpg,jpeg,png,webp}', {
-		query: '?url',
-		import: 'default',
-		eager: true
-	}) as Record<string, string>;
+	// Logs also get prev/next within their own project's diary.
+	let projectLogs: { prev?: { slug: string; date: string }; next?: { slug: string; date: string } } =
+		{};
+	if (post.kind === 'log' && post.project) {
+		const logs = getLogsForProject(post.project);
+		const i = logs.findIndex((l) => l.slug === post.slug);
+		projectLogs = {
+			prev: logs[i - 1] && { slug: logs[i - 1].slug, date: logs[i - 1].date },
+			next: logs[i + 1] && { slug: logs[i + 1].slug, date: logs[i + 1].date }
+		};
+	}
 
 	return {
-		slug,
-		component: mod.default,
-		metadata: mod.metadata ?? {},
-		images
+		post,
+		projectTitle: project?.title,
+		projectSlug: project?.slug,
+		prevNext: getPrevNextPost(post.slug),
+		projectLogs
 	};
 };

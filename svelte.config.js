@@ -10,6 +10,9 @@ const config = {
 	compilerOptions: { compatibility: { componentApi: 4 } },
 	kit: {
 		adapter: adapter(),
+		// Empty in prod (custom domain at root). Set BASE_PATH=/site-redesign for
+		// the redesign project site published under github.io/<repo>/.
+		paths: { base: process.env.BASE_PATH || '' },
 		prerender: {
 			// Never fail the whole build on a broken/missing link during active
 			// development — log it and keep going. (WIP nav pages, CMS-uploaded

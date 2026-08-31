@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 /**
- * Bakes each book's hero-derived styling into its frontmatter so the detail
- * page renders instantly (no client-side flash). Runs automatically as part of
+ * Bakes each work's hero-derived styling (books, comics, illustrations) into
+ * its frontmatter so the detail page renders instantly (no client-side flash).
+ * Runs automatically as part of
  * `pnpm build` (see package.json), so it works in CI/CD too — uses `sharp`, a
  * pure-npm decoder with prebuilt binaries (no system ImageMagick needed).
  *
  * Writes computed values to dedicated `*_auto` fields so they never overwrite a
  * manual override set in the CMS:
- *   - title_color_auto : legible-on-white dominant/vibrant colour of the hero
- *   - nav_text_auto    : "light" | "dark" — contrast for the overlay nav
+ *   - title_color_auto  : legible-on-white dominant/vibrant colour of the hero
+ *   - nav_text_auto     : "light" | "dark" — contrast for the overlay nav
+ *   - cover_ratio_auto  : intrinsic width/height of the cover, so the gallery
+ *                         grid can size each tile to its true proportions and
+ *                         never crop artwork (comics span wide, tall pieces run
+ *                         tall). Manual override: `cover_ratio`.
  *
  * Manual CMS fields still win: `title_color` and `nav_theme` (Light/Dark text).
  */
@@ -16,7 +21,11 @@ import sharp from 'sharp';
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BOOKS = 'src/lib/content/art-page/books';
+const WORK_DIRS = [
+	'src/lib/content/art-page/books',
+	'src/lib/content/art-page/comics',
+	'src/lib/content/art-page/illustrations'
+];
 const lum = (r, g, b) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 const contentPathToFile = (p) => p.replace(/^\//, '');
 
@@ -83,6 +92,13 @@ async function analyse(file) {
 	return { titleColor, navText };
 }
 
+/** Intrinsic aspect ratio (w/h) of an image, honouring EXIF orientation. */
+async function ratioOf(file) {
+	const { width, height } = await sharp(file).rotate().metadata();
+	if (!width || !height) return null;
+	return +(width / height).toFixed(3);
+}
+
 function upsert(src, key, value) {
 	const fm = src.match(/^---\n([\s\S]*?)\n---/);
 	if (!fm) return src;
@@ -97,8 +113,13 @@ function upsert(src, key, value) {
 }
 
 let processed = 0;
-for (const f of readdirSync(BOOKS).filter((n) => n.endsWith('.md'))) {
-	const path = join(BOOKS, f);
+const files = WORK_DIRS.flatMap((dir) =>
+	readdirSync(dir)
+		.filter((n) => n.endsWith('.md'))
+		.map((n) => ({ dir, f: n }))
+);
+for (const { dir, f } of files) {
+	const path = join(dir, f);
 	let src = readFileSync(path, 'utf8');
 	const heroMatch = src.match(/^hero_image:\s*(.+)$/m) || src.match(/^cover_image:\s*(.+)$/m);
 	if (!heroMatch) continue;
@@ -111,11 +132,23 @@ for (const f of readdirSync(BOOKS).filter((n) => n.endsWith('.md'))) {
 		const { titleColor, navText } = await analyse(file);
 		if (titleColor) src = upsert(src, 'title_color_auto', `"${titleColor}"`);
 		src = upsert(src, 'nav_text_auto', navText);
+
+		// Cover ratio drives the gallery grid; measured from the cover, not the hero.
+		const coverMatch = src.match(/^cover_image:\s*(.+)$/m);
+		let ratio = null;
+		if (coverMatch) {
+			const coverFile = contentPathToFile(coverMatch[1].trim());
+			if (existsSync(coverFile)) ratio = await ratioOf(coverFile);
+		}
+		if (ratio) src = upsert(src, 'cover_ratio_auto', ratio);
+
 		writeFileSync(path, src);
 		processed++;
-		console.log(`✓ ${f.padEnd(32)} title=${titleColor ?? '—'}  nav=${navText}`);
+		console.log(
+			`✓ ${f.padEnd(32)} title=${titleColor ?? '—'}  nav=${navText}  ratio=${ratio ?? '—'}`
+		);
 	} catch (err) {
 		console.warn(`! ${f}: ${err.message}`);
 	}
 }
-console.log(`\nBaked colours for ${processed} book(s).`);
+console.log(`\nBaked colours for ${processed} work(s).`);

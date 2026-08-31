@@ -1,95 +1,123 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
+	import TagChip from '$lib/components/TagChip.svelte';
+	import PrevNext from '$lib/components/PrevNext.svelte';
+	import { formatDate } from '$lib/format';
 	import type { PageData } from './$types';
 
-	const { data } = $props<{ data: PageData }>();
-	const { metadata, component, images } = $derived(data);
-	const post = $derived(metadata ?? {});
+	const { data }: { data: PageData } = $props();
+	const { post, projectTitle, projectSlug, prevNext } = $derived(data);
 
-	const seo = $derived(post.seo ?? {});
-	const shareImage = $derived(
-		(seo.image && (images[seo.image] || seo.image)) ||
-			(post.image && (images[post.image] || post.image)) ||
-			''
-	);
-
-	function formatDate(dateStr: string) {
-		return new Date(dateStr).toLocaleDateString('en-GB', {
-			day: 'numeric',
-			month: 'long',
-			year: 'numeric'
-		});
-	}
-
-	function isoDate(dateStr: string) {
-		return new Date(dateStr).toISOString().split('T')[0];
-	}
+	const kindLabel = $derived(post.kind === 'log' ? 'process log' : post.kind);
+	const shareImage = $derived(post.seo.image || post.image || '');
 </script>
 
 <Seo
 	type="article"
-	title={seo.title || post.title || 'Note'}
-	description={seo.description || post.description}
+	title={post.seo.title || post.title || formatDate(post.date)}
+	description={post.seo.description || post.description}
 	image={shareImage}
 	published={post.date}
-	keywords={seo.keywords}
-	noindex={seo.noindex}
+	modified={post.updated}
+	tags={post.tags}
+	keywords={post.seo.keywords}
+	noindex={post.seo.noindex}
 />
 
-<article
-	class="h-entry px-6 pt-10 pb-16
-	       md:px-10 md:pt-12
-	       lg:px-[169px] lg:pt-[72px] lg:pb-[80px]"
->
-	<!-- p-author h-card -->
+<article class="h-entry mx-auto max-w-[720px] px-6 pt-10 pb-16 md:px-10 md:pt-14 md:pb-20">
 	<span class="p-author h-card hidden">
-		<a class="u-url p-name" href="/about">Rhea Pradeep</a>
+		<a class="u-url p-name" href="/about/">Rhea Pradeep</a>
 	</span>
 
-	<!-- Date -->
-	{#if post.date}
-		<time
-			class="dt-published mb-4 block font-sans text-[13px] text-gray-400 md:text-[14px]"
-			datetime={isoDate(post.date)}
-		>
-			{formatDate(post.date)}
-		</time>
-	{/if}
+	<!-- Context line: date · kind · project -->
+	<p class="type-meta flex flex-wrap items-baseline gap-x-2">
+		<time class="dt-published" datetime={post.date}>{formatDate(post.date)}</time>
+		<span>{kindLabel}</span>
+		{#if projectSlug && projectTitle}
+			<a href="/work/{projectSlug}/" class="transition-colors hover:text-primary">
+				{projectTitle}
+			</a>
+		{/if}
+		{#if post.updated}
+			<span>· updated <time class="dt-updated" datetime={post.updated}>{formatDate(post.updated)}</time></span>
+		{/if}
+	</p>
 
-	<!-- Image -->
-	{#if post.image}
-		<div class="mb-6 md:mb-8">
-			<img
-				src={images[post.image] || post.image}
-				alt={post.title || ''}
-				class="u-photo w-full object-cover"
-			/>
+	{#if post.kind === 'essay'}
+		{#if post.title}
+			<h1 class="p-name type-display mt-4">{post.title}</h1>
+		{/if}
+		{#if post.description}
+			<p class="p-summary mt-4 text-[18px] leading-[1.6] text-muted-foreground">
+				{post.description}
+			</p>
+		{/if}
+		{#if post.image}
+			<img src={post.image} alt={post.title ?? ''} class="u-photo mt-8 w-full" />
+		{/if}
+		<div class="e-content prose mt-8">
+			<post.component />
+		</div>
+	{:else}
+		{#if post.title}
+			<h1 class="p-name mt-4 font-display text-[26px] font-semibold md:text-[30px]">
+				{post.title}
+			</h1>
+		{/if}
+		{#if post.image}
+			<img src={post.image} alt={post.title ?? ''} class="u-photo mt-6 w-full" />
+		{/if}
+		<div class="e-content prose mt-6 text-[17px] md:text-[18px]">
+			<post.component />
 		</div>
 	{/if}
 
-	<!-- Title -->
-	{#if post.title}
-		<h1 class="p-name mb-6 font-sans text-[28px] font-normal md:text-[36px] lg:mb-8 lg:text-[48px]">
-			{post.title}
-		</h1>
-	{/if}
-
-	<!-- Body -->
-	{#if component}
-		<div
-			class="e-content max-w-[720px] font-sans text-[15px] leading-[1.7] md:text-[18px] lg:text-[20px]"
-		>
-			<svelte:component this={component} />
+	{#if post.tags.length > 0}
+		<div class="mt-8 flex flex-wrap gap-1.5">
+			{#each post.tags as tag (tag)}
+				<span class="u-category"><TagChip {tag} /></span>
+			{/each}
 		</div>
 	{/if}
 
-	<!-- Back link -->
-	<div class="mt-10 lg:mt-[56px]">
-		<a
-			href="/blog"
-			class="font-sans text-[14px] text-gray-400 transition-colors hover:text-gray-800"
-		>
-			← blog
-		</a>
+	{#if post.kind === 'log' && projectTitle && (data.projectLogs.prev || data.projectLogs.next)}
+		<div class="mt-10">
+			<h2 class="type-section">More logs for {projectTitle}</h2>
+			<div class="mt-4">
+				<PrevNext
+					prev={data.projectLogs.next && {
+						href: `/blog/${data.projectLogs.next.slug}/`,
+						title: formatDate(data.projectLogs.next.date)
+					}}
+					next={data.projectLogs.prev && {
+						href: `/blog/${data.projectLogs.prev.slug}/`,
+						title: formatDate(data.projectLogs.prev.date)
+					}}
+					prevLabel="Next entry"
+					nextLabel="Previous entry"
+				/>
+			</div>
+		</div>
+	{/if}
+
+	<div class="mt-10">
+		<PrevNext
+			prev={prevNext.prev && {
+				href: `/blog/${prevNext.prev.slug}/`,
+				title: prevNext.prev.title ?? formatDate(prevNext.prev.date),
+				meta: prevNext.prev.kind
+			}}
+			next={prevNext.next && {
+				href: `/blog/${prevNext.next.slug}/`,
+				title: prevNext.next.title ?? formatDate(prevNext.next.date),
+				meta: prevNext.next.kind
+			}}
+			prevLabel="Newer post"
+			nextLabel="Older post"
+		/>
 	</div>
+
+	<p class="mt-8">
+		<a href="/blog/" class="type-meta transition-colors hover:text-primary">← Blog</a>
+	</p>
 </article>

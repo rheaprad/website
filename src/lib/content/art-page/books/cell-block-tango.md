@@ -1,8 +1,10 @@
 ---
+type: book
 title: Cell Block Tango
 date: 2024-01-01T00:00:00Z
-category: Graphic Novels
-format: (i'll tell you this in a bit)
+tags:
+  - graphic-novel
+medium: Graphic novel
 cover_image: /src/lib/content/art-page/books/chicago/cover.webp
 gallery:
   - image: /src/lib/content/art-page/books/chicago/front-cover.webp
@@ -37,11 +39,12 @@ gallery:
     caption: ""
   - image: /src/lib/content/art-page/books/chicago/px_20241212_232114045.webp
     caption: ""
-other_projects:
+related:
   - house-of-memories
   - who-is-ready-for-sadhya
 nav_theme: Auto
 title_color_auto: "rgb(166, 165, 162)"
 nav_text_auto: dark
+cover_ratio_auto: 1.528
 ---
 

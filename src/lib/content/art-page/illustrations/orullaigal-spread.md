@@ -1,6 +1,11 @@
 ---
+type: illustration
 title: Orullaigal Spread
-category: Illustration
 date: 2023-09-01T00:00:00Z
-image: /src/lib/content/art-page/books/orullaigal/grid-3.webp
+cover_image: /src/lib/content/art-page/books/orullaigal/grid-3.webp
+related:
+  - orullaigal
+title_color_auto: "rgb(171, 164, 156)"
+nav_text_auto: light
+cover_ratio_auto: 0.766
 ---

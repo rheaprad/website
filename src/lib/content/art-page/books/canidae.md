@@ -1,9 +1,11 @@
 ---
+type: book
 title: Canidae
 date: 2025-01-01T00:00:00Z
-category: Picture Books
-dimensions: "Children's Picturebook | 3 x 14in"
-format: "Children's Picturebook | 3 x 14in"
+tags:
+  - picture-book
+medium: Children's picturebook
+dimensions: 3 × 14 in
 cover_image: /src/lib/content/art-page/books/canidae/cover.webp
 gallery:
   - image: /src/lib/content/art-page/books/canidae/canidae_pages-to-jpg-0001.webp
@@ -32,11 +34,12 @@ gallery:
     caption: ""
   - image: /src/lib/content/art-page/books/canidae/canidae_pages-to-jpg-0018.webp
     caption: ""
-other_projects:
+related:
   - house-of-memories
   - who-is-ready-for-sadhya
   - cell-block-tango
 nav_theme: Auto
 title_color_auto: "rgb(40, 73, 87)"
 nav_text_auto: dark
+cover_ratio_auto: 1.5
 ---

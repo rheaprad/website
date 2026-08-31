@@ -50,7 +50,7 @@
 		jsonLd
 	}: Props = $props();
 
-	const fullTitle = $derived(title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`);
+	const fullTitle = $derived(title ? `${title} | ${site.name}` : `${site.name} · ${site.tagline}`);
 	const metaDescription = $derived(description || site.description);
 	const path = $derived(page.url?.pathname ?? '/');
 	const canonicalUrl = $derived(canonical || `${site.url}${path}`);

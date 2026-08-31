@@ -11,6 +11,7 @@
 
 	const { data } = $props<{ data: PageData }>();
 	const { metadata, component, images, enhanced } = $derived(data);
+	const Bio = $derived(component);
 	const about = $derived(metadata ?? {});
 	const photoEnhanced = $derived(about.photo ? enhanced?.[about.photo] : undefined);
 
@@ -84,16 +85,15 @@
 	title="About"
 	type="profile"
 	description={seo.description ||
-		"About Rhea Pradeep — an Indian illustrator and visual artist working across comics, picture books and bookmaking."}
+		'About Rhea Pradeep, an Indian illustrator and visual artist working across comics, picture books and bookmaking.'}
 	image={shareImage}
 	keywords={seo.keywords}
 	noindex={seo.noindex}
 />
 
 <article
-	class="px-6 pt-10 pb-12
-	       md:px-10 md:pt-12
-	       lg:pt-[72px] lg:pr-[131px] lg:pb-[80px] lg:pl-[131px]"
+	class="mx-auto max-w-[1100px] px-6 pt-10 pb-12
+	       md:px-10 md:pt-14 md:pb-20 lg:px-16"
 >
 	<div class="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-[80px]">
 		<!-- Left: photo, resume button, socials -->
@@ -126,8 +126,8 @@
 					{/if}
 				</figure>
 			{:else}
-				<div class="flex aspect-[3/4] w-full items-center justify-center bg-gray-100">
-					<span class="text-gray-400">Photo</span>
+				<div class="flex aspect-[3/4] w-full items-center justify-center bg-muted">
+					<span class="text-muted-foreground">Photo</span>
 				</div>
 			{/if}
 
@@ -173,12 +173,12 @@
 
 		<!-- Right: bio content -->
 		<div class="max-w-3xl min-w-0 flex-1">
-			{#if component}
+			{#if Bio}
 				<div
 					bind:this={proseEl}
 					class="about-prose font-sans text-[15px] leading-[1.65] font-normal md:text-[17px]"
 				>
-					<svelte:component this={component} />
+					<Bio />
 				</div>
 			{/if}
 		</div>
