@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import PostRiver from '$lib/components/PostRiver.svelte';
 	import type { Post } from '$lib/content';
@@ -13,10 +14,10 @@
 	let { title, sub = '', items, active }: Props = $props();
 
 	const filters = [
-		{ key: 'all', href: '/blog/', label: 'All' },
-		{ key: 'note', href: '/blog/notes/', label: 'Notes' },
-		{ key: 'log', href: '/blog/logs/', label: 'Process logs' },
-		{ key: 'essay', href: '/blog/essays/', label: 'Essays' }
+		{ key: 'all', href: `${base}/blog/`, label: 'All' },
+		{ key: 'note', href: `${base}/blog/notes/`, label: 'Notes' },
+		{ key: 'log', href: `${base}/blog/logs/`, label: 'Process logs' },
+		{ key: 'essay', href: `${base}/blog/essays/`, label: 'Essays' }
 	];
 </script>
 
@@ -38,7 +39,7 @@
 	</nav>
 
 	<span class="p-author h-card hidden">
-		<a class="u-url p-name" href="/about/">Rhea Pradeep</a>
+		<a class="u-url p-name" href="{base}/about/">Rhea Pradeep</a>
 	</span>
 
 	<div class="mt-14">
@@ -46,7 +47,7 @@
 	</div>
 
 	<p class="mt-14">
-		<a href="/rss.xml" class="type-meta text-primary underline underline-offset-3">
+		<a href="{base}/rss.xml" class="type-meta text-primary underline underline-offset-3">
 			follow via RSS
 		</a>
 	</p>

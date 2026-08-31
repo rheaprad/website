@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import EmailLink from '$lib/components/EmailLink.svelte';
 	import { site } from '$lib/seo/config';
 	import artStrip from '$lib/content/home-page/landing-01.webp';
@@ -7,20 +8,20 @@
 		{
 			heading: 'Index',
 			links: [
-				{ href: '/work/', label: 'All work' },
-				{ href: '/tags/book/', label: 'Books' },
-				{ href: '/tags/comic/', label: 'Comics' },
-				{ href: '/tags/illustration/', label: 'Illustrations' },
-				{ href: '/tags/', label: 'All tags' }
+				{ href: `${base}/work/`, label: 'All work' },
+				{ href: `${base}/tags/book/`, label: 'Books' },
+				{ href: `${base}/tags/comic/`, label: 'Comics' },
+				{ href: `${base}/tags/illustration/`, label: 'Illustrations' },
+				{ href: `${base}/tags/`, label: 'All tags' }
 			]
 		},
 		{
 			heading: 'Writing',
 			links: [
-				{ href: '/blog/', label: 'Blog' },
-				{ href: '/now/', label: 'Now' },
-				{ href: '/log/', label: 'Site log' },
-				{ href: '/rss.xml', label: 'RSS' }
+				{ href: `${base}/blog/`, label: 'Blog' },
+				{ href: `${base}/now/`, label: 'Now' },
+				{ href: `${base}/log/`, label: 'Site log' },
+				{ href: `${base}/rss.xml`, label: 'RSS' }
 			]
 		}
 	];
@@ -89,7 +90,7 @@
 
 	<!-- The signature -->
 	<div class="h-card overflow-hidden px-2 pt-10 pb-2 md:pt-14">
-		<a href="/" class="u-url block text-center">
+		<a href="{base}/" class="u-url block text-center">
 			<span
 				class="p-name block font-display text-[13.5vw] leading-[0.95] font-bold whitespace-nowrap"
 			>
@@ -99,7 +100,7 @@
 	</div>
 
 	<!-- A spread from the shelves to end on -->
-	<a href="/work/" aria-label="Browse the work" class="group block">
+	<a href="{base}/work/" aria-label="Browse the work" class="group block">
 		<img
 			src={artStrip}
 			alt="Spread from one of Rhea Pradeep's books"

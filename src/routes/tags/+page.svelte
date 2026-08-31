@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import { tagLabel } from '$lib/format';
@@ -16,7 +17,7 @@
 		{#each data.tags as { tag, count, yearRange } (tag)}
 			<li class="flex items-baseline gap-2">
 				<a
-					href="/tags/{tag}/"
+					href="{base}/tags/{tag}/"
 					class="font-display text-[18px] font-semibold transition-colors hover:text-primary"
 				>
 					{tagLabel(tag)}

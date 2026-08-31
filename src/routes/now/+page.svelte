@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import { formatDate } from '$lib/format';
@@ -18,7 +19,7 @@
 	</div>
 
 	<p class="mt-10 flex gap-4">
-		<a href="/log/" class="type-meta transition-colors hover:text-primary">Site log</a>
-		<a href="/blog/" class="type-meta transition-colors hover:text-primary">Blog</a>
+		<a href="{base}/log/" class="type-meta transition-colors hover:text-primary">Site log</a>
+		<a href="{base}/blog/" class="type-meta transition-colors hover:text-primary">Blog</a>
 	</p>
 </div>

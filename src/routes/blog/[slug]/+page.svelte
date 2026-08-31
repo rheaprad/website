@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import Seo from '$lib/components/Seo.svelte';
 	import TagChip from '$lib/components/TagChip.svelte';
 	import PrevNext from '$lib/components/PrevNext.svelte';
@@ -26,7 +27,7 @@
 
 <article class="h-entry mx-auto max-w-[720px] px-6 pt-10 pb-16 md:px-10 md:pt-14 md:pb-20">
 	<span class="p-author h-card hidden">
-		<a class="u-url p-name" href="/about/">Rhea Pradeep</a>
+		<a class="u-url p-name" href="{base}/about/">Rhea Pradeep</a>
 	</span>
 
 	<!-- Context line: date · kind · project -->
@@ -34,7 +35,7 @@
 		<time class="dt-published" datetime={post.date}>{formatDate(post.date)}</time>
 		<span>{kindLabel}</span>
 		{#if projectSlug && projectTitle}
-			<a href="/work/{projectSlug}/" class="transition-colors hover:text-primary">
+			<a href="{base}/work/{projectSlug}/" class="transition-colors hover:text-primary">
 				{projectTitle}
 			</a>
 		{/if}
@@ -86,11 +87,11 @@
 			<div class="mt-4">
 				<PrevNext
 					prev={data.projectLogs.next && {
-						href: `/blog/${data.projectLogs.next.slug}/`,
+						href: `${base}/blog/${data.projectLogs.next.slug}/`,
 						title: formatDate(data.projectLogs.next.date)
 					}}
 					next={data.projectLogs.prev && {
-						href: `/blog/${data.projectLogs.prev.slug}/`,
+						href: `${base}/blog/${data.projectLogs.prev.slug}/`,
 						title: formatDate(data.projectLogs.prev.date)
 					}}
 					prevLabel="Next entry"
@@ -103,12 +104,12 @@
 	<div class="mt-10">
 		<PrevNext
 			prev={prevNext.prev && {
-				href: `/blog/${prevNext.prev.slug}/`,
+				href: `${base}/blog/${prevNext.prev.slug}/`,
 				title: prevNext.prev.title ?? formatDate(prevNext.prev.date),
 				meta: prevNext.prev.kind
 			}}
 			next={prevNext.next && {
-				href: `/blog/${prevNext.next.slug}/`,
+				href: `${base}/blog/${prevNext.next.slug}/`,
 				title: prevNext.next.title ?? formatDate(prevNext.next.date),
 				meta: prevNext.next.kind
 			}}
@@ -118,6 +119,6 @@
 	</div>
 
 	<p class="mt-8">
-		<a href="/blog/" class="type-meta transition-colors hover:text-primary">← Blog</a>
+		<a href="{base}/blog/" class="type-meta transition-colors hover:text-primary">← Blog</a>
 	</p>
 </article>

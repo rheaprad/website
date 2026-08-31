@@ -2,6 +2,7 @@
 	import portrait from '$lib/content/home-page/portrait_r.webp';
 	import * as Popover from '$lib/components/ui/popover';
 	import { page } from '$app/state';
+	import { base } from '$app/paths';
 	import { navState } from '$lib/nav.svelte';
 
 	// Pages (e.g. work details) can make the header a transparent overlay.
@@ -20,11 +21,11 @@
 	const isHome = $derived(page.url.pathname === '/');
 
 	const navLinks = [
-		{ href: '/work/', label: 'Work' },
-		{ href: '/tags/book/', label: 'Books' },
-		{ href: '/blog/', label: 'Blog' },
-		{ href: '/about/', label: 'About' },
-		{ href: '/now/', label: 'Now' }
+		{ href: `${base}/work/`, label: 'Work' },
+		{ href: `${base}/tags/book/`, label: 'Books' },
+		{ href: `${base}/blog/`, label: 'Blog' },
+		{ href: `${base}/about/`, label: 'About' },
+		{ href: `${base}/now/`, label: 'Now' }
 	];
 
 	const isActive = (href: string) =>
@@ -38,7 +39,7 @@
 		: 'sticky top-0 bg-background/95 shadow-[0_1px_8px_rgb(0_0_0/0.06)] backdrop-blur-sm'}"
 >
 	{#if !isHome}
-		<a href="/" class="flex flex-shrink-0 items-center gap-3">
+		<a href="{base}/" class="flex flex-shrink-0 items-center gap-3">
 			<img class="h-8 w-8 rounded-full object-cover" src={portrait} alt="" />
 			<span
 				class="font-display text-[17px] font-semibold

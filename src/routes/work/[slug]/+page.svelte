@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { ImageWithSkeleton } from '$lib/components/ui/image-with-skeleton';
 	import { Lightbox, type LightboxItem } from '$lib/components/ui/lightbox';
 	import { getHeroColors } from '$lib/image-color';
@@ -152,7 +153,7 @@
 						<time class="type-meta w-24 flex-shrink-0" datetime={post.date}>
 							{formatDate(post.date)}
 						</time>
-						<a href="/blog/{post.slug}/" class="min-w-0 truncate text-[15px] transition-colors hover:text-primary">
+						<a href="{base}/blog/{post.slug}/" class="min-w-0 truncate text-[15px] transition-colors hover:text-primary">
 							{post.title ?? post.description ?? formatDate(post.date)}
 						</a>
 						<span class="leader"></span>
@@ -170,7 +171,7 @@
 			<SectionHead text="related work" />
 			<div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:gap-x-6">
 				{#each related as other (other.slug)}
-					<a href="/work/{other.slug}/" class="group block">
+					<a href="{base}/work/{other.slug}/" class="group block">
 						<div class="mb-3 overflow-hidden">
 							<ImageWithSkeleton
 								src={other.cover}
@@ -192,12 +193,12 @@
 	<div class="mt-14 pb-14 md:pb-20">
 		<PrevNext
 			prev={adjacent.prev && {
-				href: `/work/${adjacent.prev.slug}/`,
+				href: `${base}/work/${adjacent.prev.slug}/`,
 				title: adjacent.prev.title,
 				meta: String(adjacent.prev.year)
 			}}
 			next={adjacent.next && {
-				href: `/work/${adjacent.next.slug}/`,
+				href: `${base}/work/${adjacent.next.slug}/`,
 				title: adjacent.next.title,
 				meta: String(adjacent.next.year)
 			}}

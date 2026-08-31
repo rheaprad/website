@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { WorkItem } from '$lib/content';
 
 	interface Props {
@@ -15,7 +16,7 @@
 	The `masonry` action reads `data-ratio`/`data-feature` to pack the grid.
 -->
 <a
-	href="/work/{item.slug}/"
+	href="{base}/work/{item.slug}/"
 	class="group block overflow-hidden bg-muted"
 	style="--ratio:{item.ratio}"
 	data-ratio={item.ratio}

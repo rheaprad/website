@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import portrait from '$lib/content/home-page/portrait_r.webp';
 	import Seo from '$lib/components/Seo.svelte';
 	import SectionHead from '$lib/components/SectionHead.svelte';
@@ -22,7 +23,7 @@
 		class="u-photo mx-auto h-20 w-20 rounded-full object-cover md:h-24 md:w-24"
 	/>
 	<h1 class="mt-5 font-display text-[40px] leading-[1.05] font-bold md:text-[56px]">
-		<a href="/" class="u-url p-name">{site.name}</a>
+		<a href="{base}/" class="u-url p-name">{site.name}</a>
 	</h1>
 	<p class="p-note mx-auto mt-4 max-w-[48ch] text-[15px] leading-[1.65] text-muted-foreground md:text-[16px]">
 		{site.description}
@@ -52,7 +53,7 @@
 								{formatDate(entry.date)} · {entry.action} {entry.kind}
 							</time>
 							<a
-								href={entry.href}
+								href={base + entry.href}
 								class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
 							>
 								{entry.title}
@@ -60,7 +61,7 @@
 						</li>
 					{/each}
 				</ul>
-				<a href="/log/" class="text-[13px] underline underline-offset-3">full site log</a>
+				<a href="{base}/log/" class="text-[13px] underline underline-offset-3">full site log</a>
 			</div>
 		</div>
 
@@ -85,7 +86,7 @@
 									{formatDate(latestNote.post.date)} · note
 								</time>
 								<a
-									href="/blog/{latestNote.post.slug}/"
+									href="{base}/blog/{latestNote.post.slug}/"
 									class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
 								>
 									{latestNote.post.title ??
@@ -99,7 +100,7 @@
 									{formatDate(latestEssay.date)} · essay
 								</time>
 								<a
-									href="/blog/{latestEssay.slug}/"
+									href="{base}/blog/{latestEssay.slug}/"
 									class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
 								>
 									{latestEssay.title}
@@ -110,7 +111,7 @@
 							</div>
 						{/if}
 					</div>
-					<a href="/blog/" class="text-[13px] underline underline-offset-3">the blog</a>
+					<a href="{base}/blog/" class="text-[13px] underline underline-offset-3">the blog</a>
 				</div>
 			</div>
 		{/if}
@@ -122,7 +123,7 @@
 
 	<p class="py-10 text-center">
 		<a
-			href="/work/"
+			href="{base}/work/"
 			class="tactile bg-primary px-6 py-2.5 font-display text-[16px] font-semibold text-primary-foreground"
 		>
 			Browse all work

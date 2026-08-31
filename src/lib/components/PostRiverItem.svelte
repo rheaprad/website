@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { Post } from '$lib/content';
 	import { formatDate } from '$lib/format';
 
@@ -15,12 +16,12 @@
 
 <article class="h-entry">
 	<p class="type-meta flex flex-wrap items-baseline gap-x-2">
-		<a href="/blog/{post.slug}/" class="u-url transition-colors hover:text-primary">
+		<a href="{base}/blog/{post.slug}/" class="u-url transition-colors hover:text-primary">
 			<time class="dt-published" datetime={post.date}>{formatDate(post.date)}</time>
 		</a>
 		<span>{kindLabel}</span>
 		{#if post.project && projectTitle}
-			<a href="/work/{post.project}/" class="transition-colors hover:text-primary">
+			<a href="{base}/work/{post.project}/" class="transition-colors hover:text-primary">
 				{projectTitle}
 			</a>
 		{/if}
@@ -30,7 +31,7 @@
 		{#if post.title}
 			<h2 class="mt-2">
 				<a
-					href="/blog/{post.slug}/"
+					href="{base}/blog/{post.slug}/"
 					class="p-name font-display text-[24px] font-semibold transition-colors hover:text-primary"
 				>
 					{post.title}
@@ -44,7 +45,7 @@
 		{#if post.title}
 			<h2 class="mt-2">
 				<a
-					href="/blog/{post.slug}/"
+					href="{base}/blog/{post.slug}/"
 					class="p-name font-display text-[19px] font-semibold transition-colors hover:text-primary"
 				>
 					{post.title}
@@ -52,7 +53,7 @@
 			</h2>
 		{/if}
 		{#if post.image}
-			<a href="/blog/{post.slug}/" class="mt-4 block">
+			<a href="{base}/blog/{post.slug}/" class="mt-4 block">
 				<img src={post.image} alt={post.title ?? ''} loading="lazy" class="block w-full" />
 			</a>
 		{/if}
