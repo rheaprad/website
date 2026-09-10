@@ -5,6 +5,9 @@
  * at runtime).
  */
 import type { Component } from 'svelte';
+// Re-exported by enhanced-img; `from 'vite-imagetools'` does not resolve under
+// pnpm's strict node_modules layout.
+import type { Picture } from '@sveltejs/enhanced-img';
 import type { SeoOverrides } from '$lib/seo/config';
 
 export type WorkType = 'book' | 'comic' | 'illustration';
@@ -13,6 +16,10 @@ export type PostKind = 'note' | 'log' | 'essay';
 export interface GalleryItem {
 	src: string;
 	caption: string;
+	/** Responsive form; undefined only if the optimiser couldn't read the file. */
+	picture?: Picture;
+	/** Intrinsic w/h, so a gallery cell can reserve its box before the bytes land. */
+	ratio: number;
 }
 
 /**
@@ -54,10 +61,15 @@ export interface WorkItem {
 	feature: boolean;
 	/** Cover-derived backdrop reading; see PlateReading. */
 	plate: PlateReading;
-	/** Responsive `?enhanced` form of the cover, when one could be generated. */
-	coverEnhanced?: unknown;
+	/** Responsive form of the cover, when one could be generated. */
+	coverPicture?: Picture;
 	/** Resolved hero_image, falling back to the cover. */
 	hero: string;
+	/** Responsive form of the hero, falling back to the cover's. */
+	heroPicture?: Picture;
+	/** Intrinsic hero w/h. 0 when unknown. Distinct from `ratio`, which
+	 *  describes the *cover* and is what the shelf grid lays out against. */
+	heroRatio: number;
 	gallery: GalleryItem[];
 	related: string[];
 	titleColor?: string;
@@ -74,6 +86,10 @@ export interface Post {
 	updated?: string;
 	description?: string;
 	image?: string;
+	/** Responsive form of `image`. */
+	imagePicture?: Picture;
+	/** Intrinsic w/h of `image`. 0 when there is none. */
+	imageRatio: number;
 	project?: string;
 	tags: string[];
 	component: Component;
@@ -92,6 +108,8 @@ export interface RecentEntry {
 	title: string;
 	href: string;
 	thumb?: string;
+	/** Responsive form of `thumb`. */
+	thumbPicture?: Picture;
 }
 
 const workModules = import.meta.glob('/src/lib/content/art-page/*/*.md', { eager: true }) as Record<
@@ -120,24 +138,65 @@ const homeModules = import.meta.glob('/src/lib/content/home-page/*.md', { eager:
 	string,
 	any
 >;
-const images = import.meta.glob('/src/lib/content/**/*.{jpg,jpeg,png,webp}', {
+/**
+ * Every content image, as a responsive `<picture>` payload.
+ *
+ * The width ladder is fixed HERE rather than at the call site, and that is not
+ * a style choice. `<enhanced:img {src}>` — the only form a wrapper component
+ * can emit — takes imagetools' *dynamic* path, where the `sizes` attribute is
+ * written into the markup but arrives long after the srcset was decided. With
+ * no `w` directive the plugin generates only [width/2, width], so a 2126px
+ * master would ship a 1063px file and nothing smaller. So: the glob decides
+ * which widths exist, and `sizes` at the call site only picks among them.
+ *
+ * imagetools clamps each `w` to the master's intrinsic width and de-duplicates,
+ * so small sources neither upscale nor emit the same variant twice.
+ *
+ * `format` is deliberately left at enhanced-img's default (avif;webp;jpg): the
+ * jpg is what `picture.img.src` points at, and that is the URL share cards and
+ * RSS readers get.
+ */
+const pictures = import.meta.glob('/src/lib/content/**/*.{jpg,jpeg,png,webp}', {
+	query: '?enhanced&w=240;480;800;1280;1920',
+	import: 'default',
+	eager: true
+}) as Record<string, Picture>;
+
+/** Formats the optimiser won't touch (animated, vector). None today, but the
+ *  CMS can accept one tomorrow, and a missing picture must not blank an image. */
+const rawImages = import.meta.glob('/src/lib/content/**/*.{gif,svg,avif}', {
 	query: '?url',
 	import: 'default',
 	eager: true
 }) as Record<string, string>;
 
-// Covers alone also get a responsive `?enhanced` form: they're the one image
-// shown many-to-a-page, and the originals are 3-4 megapixel camera files.
-// Keyed by the raw frontmatter path, not the resolved URL.
-const enhancedCovers = import.meta.glob('/src/lib/content/art-page/**/cover.{jpg,jpeg,png,webp}', {
-	query: '?enhanced',
-	import: 'default',
-	eager: true
-}) as Record<string, unknown>;
+/** The responsive form. Anything rendering through `ui/Image` wants this. */
+export function resolvePicture(path: string): Picture | undefined {
+	return path ? pictures[path] : undefined;
+}
 
+/**
+ * A plain URL, for the places that genuinely need a string rather than a
+ * picture: RSS enclosures (`feed.ts`), og:image (`Seo.svelte`), and identity
+ * comparison in `workForImage()` below.
+ *
+ * Note what this now returns: the largest *generated* fallback variant, around
+ * 1920px, not the multi-megabyte master. That is why replacing the old `?url`
+ * glob is safe — every existing caller keeps its string and silently stops
+ * serving originals. The bare `path` fallback is load-bearing: `site.default_image`
+ * is authored as `/sharecard.jpg` (see `static/admin/config.yml`), which lives
+ * outside both globs and is already a valid public URL.
+ */
 export function resolveImage(path: string): string {
 	if (!path) return '';
-	return images[path] ?? path;
+	return pictures[path]?.img.src ?? rawImages[path] ?? path;
+}
+
+/** Intrinsic aspect ratio (w/h), free from the picture — no frontmatter needed.
+ *  0 when the path has no generated picture. */
+export function ratioOfImage(path: string): number {
+	const p = pictures[path];
+	return p ? +(p.img.w / p.img.h).toFixed(3) : 0;
 }
 
 const slugOf = (path: string) => path.split('/').pop()?.replace('.md', '') ?? '';
@@ -149,6 +208,7 @@ function toWorkItem(path: string, mod: any): WorkItem {
 	const type: WorkType = meta.type ?? 'illustration';
 	const fmTags: string[] = Array.isArray(meta.tags) ? meta.tags : [];
 	const coverPath: string = meta.cover_image ?? '';
+	const heroPath: string = meta.hero_image ?? '';
 	const cover = resolveImage(coverPath);
 	const manualNav: 'light' | 'dark' | null =
 		meta.nav_theme === 'Light text' ? 'light' : meta.nav_theme === 'Dark text' ? 'dark' : null;
@@ -173,13 +233,19 @@ function toWorkItem(path: string, mod: any): WorkItem {
 			chroma: num(meta.shelf_chroma_auto, 0.3),
 			light: num(meta.cover_light_auto, 0.6)
 		},
-		coverEnhanced: enhancedCovers[coverPath],
-		hero: resolveImage(meta.hero_image ?? '') || cover,
-		gallery: (Array.isArray(meta.gallery) ? meta.gallery : []).map((g: any) =>
-			typeof g === 'string'
-				? { src: resolveImage(g), caption: '' }
-				: { src: resolveImage(g.image ?? ''), caption: g.caption ?? '' }
-		),
+		coverPicture: resolvePicture(coverPath),
+		hero: resolveImage(heroPath) || cover,
+		heroPicture: resolvePicture(heroPath) ?? resolvePicture(coverPath),
+		heroRatio: ratioOfImage(heroPath) || ratioOfImage(coverPath),
+		gallery: (Array.isArray(meta.gallery) ? meta.gallery : []).map((g: any) => {
+			const p = typeof g === 'string' ? g : (g.image ?? '');
+			return {
+				src: resolveImage(p),
+				caption: typeof g === 'string' ? '' : (g.caption ?? ''),
+				picture: resolvePicture(p),
+				ratio: ratioOfImage(p)
+			};
+		}),
 		related: Array.isArray(meta.related) ? meta.related : [],
 		titleColor: meta.title_color || meta.title_color_auto || undefined,
 		navText: manualNav ?? meta.nav_text_auto ?? 'light',
@@ -229,6 +295,8 @@ function toPost(path: string, mod: any): Post {
 		updated: meta.updated,
 		description: meta.description || undefined,
 		image: meta.image ? resolveImage(meta.image) : undefined,
+		imagePicture: meta.image ? resolvePicture(meta.image) : undefined,
+		imageRatio: meta.image ? ratioOfImage(meta.image) : 0,
 		project: meta.project || undefined,
 		tags: Array.isArray(meta.tags) ? meta.tags : [],
 		component: mod.default,
@@ -384,7 +452,9 @@ export function getRecently(limit?: number): RecentEntry[] {
 	for (const w of allWork) {
 		const title = w.title;
 		const href = `/work/${w.slug}/`;
-		entries.push({ date: w.date, action: 'added', kind: w.type, title, href, thumb: w.cover });
+		const thumb = w.cover;
+		const thumbPicture = w.coverPicture;
+		entries.push({ date: w.date, action: 'added', kind: w.type, title, href, thumb, thumbPicture });
 		if (w.updated && new Date(w.updated) > new Date(w.date)) {
 			entries.push({
 				date: w.updated,
@@ -392,7 +462,8 @@ export function getRecently(limit?: number): RecentEntry[] {
 				kind: w.type,
 				title,
 				href,
-				thumb: w.cover
+				thumb,
+				thumbPicture
 			});
 		}
 	}
@@ -400,7 +471,15 @@ export function getRecently(limit?: number): RecentEntry[] {
 		const project = p.project ? getWork(p.project) : undefined;
 		const title = p.title ?? (project ? `${project.title}` : (p.description ?? p.kind));
 		const href = `/blog/${p.slug}/`;
-		entries.push({ date: p.date, action: 'added', kind: p.kind, title, href, thumb: p.image });
+		entries.push({
+			date: p.date,
+			action: 'added',
+			kind: p.kind,
+			title,
+			href,
+			thumb: p.image,
+			thumbPicture: p.imagePicture
+		});
 		if (p.updated && new Date(p.updated) > new Date(p.date)) {
 			entries.push({
 				date: p.updated,
@@ -408,7 +487,8 @@ export function getRecently(limit?: number): RecentEntry[] {
 				kind: p.kind,
 				title,
 				href,
-				thumb: p.image
+				thumb: p.image,
+				thumbPicture: p.imagePicture
 			});
 		}
 	}
@@ -437,11 +517,19 @@ export interface HomeDoorCopy {
  *  delete or reorder a door whose destination is hardcoded. */
 export type HomeDoorKey = 'books' | 'comics' | 'illustrations' | 'blog' | 'about' | 'now';
 
+/** A landing scrap: the authored path is kept so `workForImage()` can still
+ *  match it back to the work it came from. */
+export interface StripImage {
+	path: string;
+	src: string;
+	picture?: Picture;
+}
+
 export interface HomePage {
 	/** Work the CMS singled out (featured_book, featured_comic), in that order. */
 	featured: WorkItem[];
 	/** Authored landing scraps — the ribbon that runs under the masthead. */
-	strip: string[];
+	strip: StripImage[];
 	hero: { greeting: string; blurb: string; primaryCta: string; secondaryCta: string };
 	sections: { work: string; workLink: string; doors: string; lately: string; latelyLink: string };
 	postcard: { eyebrow: string; headline: string };
@@ -507,9 +595,15 @@ export function getHome(): HomePage {
 		.filter((p): p is string => typeof p === 'string' && !!p)
 		.map(workForImage)
 		.filter((w): w is WorkItem => !!w);
-	const strip = (Array.isArray(meta.carousel) ? meta.carousel : [])
-		.map((c: any) => resolveImage(typeof c === 'string' ? c : (c?.image ?? '')))
-		.filter((src: string) => !!src);
+	const strip: StripImage[] = (Array.isArray(meta.carousel) ? meta.carousel : [])
+		.map((c: any) => (typeof c === 'string' ? c : (c?.image ?? '')))
+		.filter((path: string) => !!path)
+		.map((path: string) => ({
+			path,
+			src: resolveImage(path),
+			picture: resolvePicture(path)
+		}))
+		.filter((s: StripImage) => !!s.src);
 
 	const hero = meta.hero ?? {};
 	const sections = meta.sections ?? {};

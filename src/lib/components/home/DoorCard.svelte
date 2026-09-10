@@ -1,16 +1,23 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
+	import type { Picture } from '@sveltejs/enhanced-img';
+	import Image from '$lib/components/ui/Image.svelte';
 
 	interface Props {
 		href: string;
 		label: string;
 		note: string;
 		thumb: string;
+		thumbPicture?: Picture;
 		loading?: 'lazy' | 'eager';
 	}
 
-	let { href, label, note, thumb, loading = 'lazy' }: Props = $props();
+	let { href, label, note, thumb, thumbPicture, loading = 'lazy' }: Props = $props();
+
+	// Six across inside a 1440 shell, three on a tablet, two on a phone.
+	const SIZES =
+		'(min-width: 1440px) 220px, (min-width: 1024px) 16vw, (min-width: 640px) 31vw, 47vw';
 </script>
 
 <a
@@ -25,9 +32,10 @@
 	       motion-reduce:transform-none motion-reduce:transition-none"
 >
 	<AspectRatio ratio={1} class="overflow-hidden border-b border-border bg-muted">
-		<img
-			src={thumb}
+		<Image
+			src={thumbPicture ?? thumb}
 			alt=""
+			sizes={SIZES}
 			{loading}
 			class="h-full w-full object-cover transition-transform duration-500 ease-out
 			       group-hover:scale-[1.04] motion-reduce:transform-none"

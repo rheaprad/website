@@ -20,6 +20,40 @@
    optical size with no `size-adjust` needed. Ships Whistle's x-height is
    0.45 against the others' 0.50 — it wants ~4% more size to match. */
 
+/* ─── Metric-matched fallbacks ────────────────────────────────
+   Every face here is `font-display: swap`, so the first paint uses a fallback
+   and the real face replaces it. Without matched metrics that swap reflows the
+   page — and on this site it does it twice over, because PageHeader re-measures
+   its balloon against the title box and `gallery/shelf.ts` re-justifies every
+   row on `document.fonts.ready`.
+
+   Georgia Bold turns out to be a close match for Clauthbound once you compare
+   like with like: Clauthbound is caps-only (it maps a-z onto capitals), so the
+   ratios below come from laying out the same source string in both, not from
+   comparing a capital against a lowercase x. Measured with fontkit against
+   Georgia Bold's actual metrics (upm 2048, asc 1878, desc -449, gap 0).
+
+   `local()` means this face simply does not apply where Georgia is absent
+   (most Linux and Android), and the stack falls through to ui-serif as before. */
+@font-face {
+	font-family: 'Clauthbound Fallback';
+	src: local('Georgia Bold'), local('Georgia');
+	font-weight: 700 900;
+	size-adjust: 108.88%;
+	ascent-override: 91.85%;
+	descent-override: 18.37%;
+	line-gap-override: 14.7%;
+}
+@font-face {
+	font-family: 'Clauthbound Fallback';
+	src: local('Georgia Bold'), local('Georgia');
+	font-weight: 400 600;
+	size-adjust: 102.3%;
+	ascent-override: 97.75%;
+	descent-override: 19.55%;
+	line-gap-override: 15.64%;
+}
+
 @font-face {
 	font-family: 'Clauthbound';
 	src: url('../fonts/Clauthbound-Regular.woff2') format('woff2');

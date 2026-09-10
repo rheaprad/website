@@ -5,15 +5,15 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SectionHead from '$lib/components/SectionHead.svelte';
 	import Seo from '$lib/components/Seo.svelte';
+	import Image from '$lib/components/ui/Image.svelte';
 	import { pages } from '$lib/page-copy';
 
 	const copy = pages.about;
 
 	const { data } = $props<{ data: PageData }>();
-	const { metadata, component, images, enhanced } = $derived(data);
+	const { metadata, component, photoPicture, photoSrc, shareImage } = $derived(data);
 	const Bio = $derived(component);
 	const about = $derived(metadata ?? {});
-	const photoEnhanced = $derived(about.photo ? enhanced?.[about.photo] : undefined);
 
 	const socialLinks = $derived(
 		[
@@ -26,11 +26,6 @@
 	);
 
 	const seo = $derived(about.seo ?? {});
-	const shareImage = $derived(
-		(seo.image && (images[seo.image] || seo.image)) ||
-			(about.photo && (images[about.photo] || about.photo)) ||
-			''
-	);
 
 	// The same link treatment the footer uses, so "elsewhere" reads the same
 	// wherever the reader meets it.
@@ -112,23 +107,14 @@
 				<figure class="m-0">
 					<span class="taped block" style="--tilt:-1.5deg">
 						<span class="tape"></span>
-						{#if photoEnhanced}
-							<enhanced:img
-								src={photoEnhanced}
-								alt="Rhea Pradeep"
-								fetchpriority="high"
-								class="u-photo block aspect-[3/4] w-full object-cover"
-							/>
-						{:else}
-							<img
-								src={images[about.photo] || about.photo}
-								alt="Rhea Pradeep"
-								width="1200"
-								height="1600"
-								fetchpriority="high"
-								class="u-photo block aspect-[3/4] w-full object-cover"
-							/>
-						{/if}
+						<Image
+							src={photoPicture ?? photoSrc}
+							alt="Rhea Pradeep"
+							sizes="(min-width: 520px) 440px, calc(100vw - 48px)"
+							loading="eager"
+							fetchpriority="high"
+							class="u-photo block aspect-[3/4] w-full object-cover"
+						/>
 					</span>
 					{#if about.photo_caption}
 						<figcaption class="mt-6 type-meta">{about.photo_caption}</figcaption>

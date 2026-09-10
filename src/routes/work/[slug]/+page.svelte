@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { ImageWithSkeleton } from '$lib/components/ui/image-with-skeleton';
 	import { Lightbox, type LightboxItem } from '$lib/components/ui/lightbox';
-	import { getHeroColors } from '$lib/image-color';
+	import Image from '$lib/components/ui/Image.svelte';
 	import { navState, resetNav } from '$lib/nav.svelte';
 	import MetaList from '$lib/components/MetaList.svelte';
 	import SectionHead from '$lib/components/SectionHead.svelte';
@@ -25,23 +25,13 @@
 		return () => resetNav();
 	});
 
-	// Colours are baked into frontmatter at build time (instant, no flash).
-	// Client-side extraction only covers items added via the CMS between builds.
-	let fallbackColor = $state('');
-	$effect(() => {
-		if (!item.hero || item.titleColor) return;
-		let cancelled = false;
-		getHeroColors(item.hero).then(({ dominant, lightTop }) => {
-			if (cancelled) return;
-			if (dominant) fallbackColor = dominant;
-			if (isBook) navState.text = lightTop ? 'dark' : 'light';
-		});
-		return () => {
-			cancelled = true;
-		};
-	});
-
-	const titleColor = $derived(item.titleColor || fallbackColor || '');
+	// Colours are baked into frontmatter by `scripts/extract-book-colors.mjs`,
+	// which runs from `prebuild`. There used to be a client-side canvas fallback
+	// here "for items added via the CMS between builds" — but a CMS commit
+	// triggers a rebuild, and prebuild runs before it, so the branch never fired
+	// in production. It cost a second full-resolution fetch of the hero, a late
+	// recolour of the <h1>, and a nav-text flip on book pages.
+	const titleColor = $derived(item.titleColor || '');
 	const description = $derived(
 		item.seo.description ||
 			`${item.title}, ${[item.medium ?? item.type, String(item.year)].join(', ')}. By ${site.author}.`
@@ -51,9 +41,21 @@
 	let lbIndex = $state(0);
 	const lightboxItems = $derived<LightboxItem[]>(
 		item.gallery.length > 0
-			? item.gallery.map((g) => ({ src: g.src, title: item.title, caption: g.caption }))
+			? item.gallery.map((g) => ({
+					src: g.src,
+					picture: g.picture,
+					title: item.title,
+					caption: g.caption
+				}))
 			: item.hero
-				? [{ src: item.hero, title: item.title, caption: item.caption ?? '' }]
+				? [
+						{
+							src: item.hero,
+							picture: item.heroPicture,
+							title: item.title,
+							caption: item.caption ?? ''
+						}
+					]
 				: []
 	);
 
@@ -79,7 +81,14 @@
 	<!-- Full-bleed hero — starts at the very top, behind the transparent header.
 	     The floating card gives a glimpse of what this is; it scrolls away with the hero. -->
 	<div class="relative w-full">
-		<img src={item.hero} alt={item.title} class="block h-auto w-full" />
+		<Image
+			src={item.heroPicture ?? item.hero}
+			alt={item.title}
+			sizes="100vw"
+			loading="eager"
+			fetchpriority="high"
+			class="block h-auto w-full"
+		/>
 		<!-- Sticky card: rides the bottom of the viewport while the hero is on screen,
 		     then parks at the hero's bottom edge once we've scrolled past it. -->
 		<div class="pointer-events-none absolute inset-0 hidden justify-end p-4 sm:flex md:p-8">
@@ -106,7 +115,14 @@
 <article class="mx-auto max-w-[900px] px-6 pt-10 pb-4 md:px-10 md:pt-14">
 	{#if !isBook && item.hero}
 		<button type="button" onclick={() => openLightbox(0)} class="block w-full">
-			<img src={item.hero} alt={item.title} class="w-full" />
+			<Image
+				src={item.heroPicture ?? item.hero}
+				alt={item.title}
+				sizes="(min-width: 900px) 820px, (min-width: 768px) calc(100vw - 80px), calc(100vw - 48px)"
+				loading="eager"
+				fetchpriority="high"
+				class="w-full"
+			/>
 		</button>
 	{/if}
 
@@ -138,9 +154,10 @@
 					class="group mb-2 block w-full break-inside-avoid overflow-hidden md:mb-3 lg:mb-4"
 					aria-label={image.caption || item.title}
 				>
-					<img
-						src={image.src}
+					<Image
+						src={image.picture ?? image.src}
 						alt={image.caption || item.title}
+						sizes="(min-width: 1100px) 330px, (min-width: 1024px) 31vw, 46vw"
 						loading="lazy"
 						class="block w-full transition-transform duration-500 group-hover:scale-[1.03]"
 					/>
@@ -184,9 +201,10 @@
 					<a href="{base}/work/{other.slug}/" class="group block">
 						<div class="mb-3 overflow-hidden">
 							<ImageWithSkeleton
-								src={other.cover}
+								src={other.coverPicture ?? other.cover}
 								alt={other.title}
 								aspectRatio="3/4"
+								sizes="(min-width: 900px) 260px, (min-width: 768px) 30vw, 46vw"
 								class="transition-transform duration-300 group-hover:scale-[1.02]"
 							/>
 						</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Image from '$lib/components/ui/Image.svelte';
 	/**
 	 * A post, set as the kind of thing it is.
 	 *
@@ -57,12 +58,22 @@
 			     index shows, at the width of the page. -->
 			<figure class="taped mt-8" style="--tilt:-0.4deg">
 				<span class="tape" aria-hidden="true"></span>
-				<img src={post.image} alt={post.title ?? ''} class="u-photo block h-auto w-full" />
+				<Image
+					src={post.imagePicture ?? post.image}
+					alt={post.title ?? ''}
+					sizes="(min-width: 780px) 690px, (min-width: 768px) calc(100vw - 92px), calc(100vw - 60px)"
+					loading="eager"
+					fetchpriority="high"
+					class="u-photo block h-auto w-full"
+				/>
 			</figure>
 		{:else}
-			<img
-				src={post.image}
+			<Image
+				src={post.imagePicture ?? post.image}
 				alt={post.title ?? ''}
+				sizes="(min-width: 800px) 640px, (min-width: 768px) calc(100vw - 80px), calc(100vw - 48px)"
+				loading="eager"
+				fetchpriority="high"
 				class="u-photo mt-8 block h-auto w-full ring-1 ring-border"
 			/>
 		{/if}

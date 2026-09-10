@@ -1,14 +1,25 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { WorkItem } from '$lib/content';
+	import Image from '$lib/components/ui/Image.svelte';
 	import { tagLabel } from '$lib/format';
 
 	interface Props {
 		item: WorkItem;
 		loading?: 'lazy' | 'eager';
+		/** The one tile per page that is the LCP. */
+		priority?: boolean;
 	}
 
-	let { item, loading = 'lazy' }: Props = $props();
+	let { item, loading = 'lazy', priority = false }: Props = $props();
+
+	/**
+	 * A shelf cell is a whole row on a phone and up to ~1000px for a panorama on
+	 * a wide screen — `--row-max` runs 1/2/3/4 and `--row-h` 420/260/300/380,
+	 * inside a container capped at 1376.
+	 */
+	const SIZES =
+		'(min-width: 1280px) 1100px, (min-width: 768px) 62vw, (min-width: 640px) 72vw, calc(100vw - 40px)';
 
 	// tags[0] is always the implicit type tag, so tags[1] is the more telling
 	// one when the piece was actually tagged.
@@ -16,16 +27,17 @@
 </script>
 
 <!--
-	A wall cell: the image box is sized to the work's true aspect ratio, so no
+	A shelf cell: the image box is sized to the work's true aspect ratio, so no
 	comic panel or spread gets guillotined by a fixed crop, and a caption sits
-	under it. The `masonry` action reads `data-ratio`/`data-feature` to pack the
-	grid, and measures `[data-caption]` so the row span leaves room for the text.
+	under it. The `shelf` action reads `data-ratio`/`data-feature` to justify the
+	row, so both attributes must stay on the cell root.
 -->
 <a
 	href="{base}/work/{item.slug}/"
 	class="group block focus-visible:outline-none"
 	data-ratio={item.ratio}
 	data-feature={item.feature}
+	style="--ratio:{item.ratio}"
 >
 	<div
 		data-media
@@ -35,10 +47,12 @@
 		       motion-reduce:transition-none"
 		style="aspect-ratio:{item.ratio}"
 	>
-		<img
-			src={item.cover}
+		<Image
+			src={item.coverPicture ?? item.cover}
 			alt="Cover of {item.title}"
-			{loading}
+			sizes={SIZES}
+			loading={priority ? 'eager' : loading}
+			fetchpriority={priority ? 'high' : undefined}
 			class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out
 			       group-hover:scale-[1.03] motion-reduce:transform-none"
 		/>

@@ -10,6 +10,7 @@
 	 *
 	 * Dev-only, like /header-lab: noindex, and absent from the nav and sitemap.
 	 */
+	import './brandkit-fonts.css';
 	import SectionHead from '$lib/components/SectionHead.svelte';
 	import Postmark from '$lib/components/home/Postmark.svelte';
 
@@ -33,9 +34,21 @@
 	];
 
 	const bodies = [
-		{ id: 'instrument', name: 'Instrument Sans', note: 'Slightly narrow, real texture. Most character without shouting.' },
-		{ id: 'schibsted', name: 'Schibsted Grotesk', note: 'Editorial grotesque. Warm, even colour on the page.' },
-		{ id: 'jakarta', name: 'Plus Jakarta Sans', note: 'Rounder and friendlier. The softest of the four.' },
+		{
+			id: 'instrument',
+			name: 'Instrument Sans',
+			note: 'Slightly narrow, real texture. Most character without shouting.'
+		},
+		{
+			id: 'schibsted',
+			name: 'Schibsted Grotesk',
+			note: 'Editorial grotesque. Warm, even colour on the page.'
+		},
+		{
+			id: 'jakarta',
+			name: 'Plus Jakarta Sans',
+			note: 'Rounder and friendlier. The softest of the four.'
+		},
 		{ id: 'figtree', name: 'Figtree', note: 'Geometric and plain. The quiet control.' }
 	];
 
@@ -163,8 +176,8 @@
 	<div class="wrap">
 		<!-- Masthead -->
 		<header class="mb-20">
-			<p class="type-section deboss mb-4">Visual identity · draft 01</p>
-			<h1 class="type-display mb-5">Rhea Pradeep</h1>
+			<p class="deboss mb-4 type-section">Visual identity · draft 01</p>
+			<h1 class="mb-5 type-display">Rhea Pradeep</h1>
 			<p class="max-w-[54ch] text-[1.0625rem] leading-[1.7]">
 				Five faces from Secret Club, three palettes, and a set of paper devices. Nothing here
 				changes a layout — it changes what the layouts are made of. Flip the switches above; every
@@ -194,15 +207,16 @@
 			</div>
 
 			<div class="note mt-10">
-				<p class="type-title-sm mb-2">Two things worth knowing</p>
+				<p class="mb-2 type-title-sm">Two things worth knowing</p>
 				<p class="mb-3 text-[15px] leading-[1.65]">
 					<strong>The footer was failing.</strong> The old sage green under cream text measured about
 					2.4:1. Every palette here puts it above 8:1, because the one large colour field on the site
 					has to be readable.
 				</p>
 				<p class="text-[15px] leading-[1.65]">
-					<strong>Foil cannot be both.</strong> A real metallic on cream is low contrast — that is what
-					makes it look like metal. So <code>gild</code> is a fill you put dark ink on top of, and
+					<strong>Foil cannot be both.</strong> A real metallic on cream is low contrast — that is
+					what makes it look like metal. So <code>gild</code> is a fill you put dark ink on top of,
+					and
 					<code>gild-ink</code> is its darkened twin for anything that has to be read. Forcing one colour
 					to do both jobs turns brass into mud.
 				</p>
@@ -213,16 +227,16 @@
 		<section class="mb-24">
 			<SectionHead text="the faces" />
 			<p class="mt-6 mb-10 max-w-[56ch] text-[15px] leading-[1.65] text-muted-foreground">
-				Every Secret Club face is a display face — none of them is built for reading at length.
-				That is the whole reason the body face has to come from outside the folder.
+				Every Secret Club face is a display face — none of them is built for reading at length. That
+				is the whole reason the body face has to come from outside the folder.
 			</p>
 
 			{#each faces as f (f.name)}
 				<article class="face">
 					<div class="face-meta">
-						<p class="type-section deboss">{f.role}</p>
-						<p class="type-title mt-1">{f.name}</p>
-						<p class="type-meta mt-2">{f.cuts.join(' · ')}</p>
+						<p class="deboss type-section">{f.role}</p>
+						<p class="mt-1 type-title">{f.name}</p>
+						<p class="mt-2 type-meta">{f.cuts.join(' · ')}</p>
 					</div>
 					<div class="face-body">
 						<p class="face-big" style="font-family: {f.css}">Orullaigal</p>
@@ -238,13 +252,13 @@
 
 			<!-- Ornaments -->
 			<div class="note mt-4">
-				<p class="type-title-sm mb-2">The ornaments</p>
+				<p class="mb-2 type-title-sm">The ornaments</p>
 				<p class="mb-5 max-w-[56ch] text-[15px] leading-[1.65]">
 					Clauthbound is described as shipping “40+ icons”. It does not have an icon set — what it
 					has is <code>ss01</code>, a complete second capital alphabet, plus decorated cuts of
 					ordinary punctuation on <code>ss01</code>/<code>ss03</code>/<code>ss04</code>. Those
-					printer's marks are the ornament vocabulary, and they are enough for dividers, bullets
-					and a seal.
+					printer's marks are the ornament vocabulary, and they are enough for dividers, bullets and
+					a seal.
 				</p>
 				<div class="orns">
 					{#each ornaments as o, i (i)}
@@ -259,7 +273,7 @@
 					{/each}
 				</div>
 				<p class="mt-6 mb-2 type-meta">Second alphabet — the same word, ss01 on:</p>
-				<p class="alt-caps foil" style="font-family: var(--font-display); font-size: 2rem">
+				<p class="foil alt-caps" style="font-family: var(--font-display); font-size: 2rem">
 					Canidae
 				</p>
 			</div>
@@ -273,19 +287,50 @@
 				spread across components, so a heading's size depended on which file you happened to be in.
 			</p>
 			<div class="scale">
-				<div><code>.type-display</code><p class="type-display">Books</p></div>
-				<div><code>.type-statement</code><p class="type-statement">Rhea</p></div>
-				<div><code>.type-title-lg</code><p class="type-title-lg">The Cosmic Calendar</p></div>
-				<div><code>.type-title</code><p class="type-title">Who is Ready for Sadhya</p></div>
-				<div><code>.type-title-sm</code><p class="type-title-sm">Cell Block Tango</p></div>
-				<div><code>.type-section</code><p class="type-section">Selected work</p></div>
-				<div><code>.type-year</code><p class="type-year">2024</p></div>
+				<div>
+					<code>.type-display</code>
+					<p class="type-display">Books</p>
+				</div>
+				<div>
+					<code>.type-statement</code>
+					<p class="type-statement">Rhea</p>
+				</div>
+				<div>
+					<code>.type-title-lg</code>
+					<p class="type-title-lg">The Cosmic Calendar</p>
+				</div>
+				<div>
+					<code>.type-title</code>
+					<p class="type-title">Who is Ready for Sadhya</p>
+				</div>
+				<div>
+					<code>.type-title-sm</code>
+					<p class="type-title-sm">Cell Block Tango</p>
+				</div>
+				<div>
+					<code>.type-section</code>
+					<p class="type-section">Selected work</p>
+				</div>
+				<div>
+					<code>.type-year</code>
+					<p class="type-year">2024</p>
+				</div>
 				<div>
 					<code>.type-meta + .type-num</code>
-					<p><span class="type-meta">Children's picturebook · </span><span class="type-num">2025</span></p>
+					<p>
+						<span class="type-meta">Children's picturebook · </span><span class="type-num"
+							>2025</span
+						>
+					</p>
 				</div>
-				<div><code>.type-hand</code><p class="type-hand">that's me, aged nine</p></div>
-				<div><code>.type-stamp</code><p class="type-stamp text-[15px]">RECEIVED 14 MAR 2026</p></div>
+				<div>
+					<code>.type-hand</code>
+					<p class="type-hand">that's me, aged nine</p>
+				</div>
+				<div>
+					<code>.type-stamp</code>
+					<p class="type-stamp text-[15px]">RECEIVED 14 MAR 2026</p>
+				</div>
 				<div>
 					<code>body</code>
 					<p class="max-w-[58ch] text-[1.0625rem] leading-[1.75]">
@@ -295,13 +340,12 @@
 				</div>
 			</div>
 			<div class="note mt-10">
-				<p class="type-title-sm mb-2">Why metadata is set in two faces</p>
+				<p class="mb-2 type-title-sm">Why metadata is set in two faces</p>
 				<p class="text-[15px] leading-[1.65]">
 					None of the five display faces has tabular figures — I checked all of them, and the
 					existing <code>tabular-nums</code> on <code>.type-meta</code> has been a no-op all along. In
 					a catalogue, columns of dates and dimensions have to line up, so the numerals come from the
-					body face and only the words are set in Scorekard. Scorekard's charm is in its letters
-					anyway.
+					body face and only the words are set in Scorekard. Scorekard's charm is in its letters anyway.
 				</p>
 			</div>
 		</section>
@@ -316,7 +360,7 @@
 
 			<div class="objects">
 				<div class="obj">
-					<p class="type-meta mb-4">.foil / .deboss — existing type, pressed</p>
+					<p class="mb-4 type-meta">.foil / .deboss — existing type, pressed</p>
 					<p class="foil mb-2" style="font-family: var(--font-display); font-size: 1.75rem">
 						Bound &amp; folded
 					</p>
@@ -326,13 +370,13 @@
 				</div>
 
 				<div class="obj">
-					<p class="type-meta mb-4">.sticker — replaces .tactile on tags</p>
+					<p class="mb-4 type-meta">.sticker — replaces .tactile on tags</p>
 					<div class="flex flex-wrap gap-3">
 						<span class="sticker px-3 py-1 text-[13px]" style="--tilt:-2deg">concertina</span>
 						<span class="sticker px-3 py-1 text-[13px]" style="--tilt:1.5deg">picturebook</span>
 						<span class="sticker px-3 py-1 text-[13px]">risograph</span>
 					</div>
-					<p class="type-meta mt-4">.tactile — kept, for controls</p>
+					<p class="mt-4 type-meta">.tactile — kept, for controls</p>
 					<div class="mt-3 flex flex-wrap gap-3">
 						<span class="tactile bg-primary px-3 py-1 text-[13px] text-primary-foreground"
 							>See the work</span
@@ -342,14 +386,14 @@
 				</div>
 
 				<div class="obj">
-					<p class="type-meta mb-4">.datestamp — blog and log dates</p>
+					<p class="mb-4 type-meta">.datestamp — blog and log dates</p>
 					<p class="datestamp type-stamp text-[15px]">14 MAR 2026</p>
-					<p class="type-meta mt-5 mb-3">Postmark — unchanged, now on tokens</p>
+					<p class="mt-5 mb-3 type-meta">Postmark — unchanged, now on tokens</p>
 					<Postmark class="w-[110px] text-foreground opacity-25" />
 				</div>
 
 				<div class="obj">
-					<p class="type-meta mb-4">.taped — the tape now reads the palette</p>
+					<p class="mb-4 type-meta">.taped — the tape now reads the palette</p>
 					<div class="taped inline-block" style="--tilt:-2.5deg">
 						<span class="tape"></span>
 						<div class="h-[86px] w-[120px] bg-muted"></div>
@@ -357,22 +401,22 @@
 				</div>
 
 				<div class="obj">
-					<p class="type-meta mb-4">.riso — hover the block</p>
+					<p class="mb-4 type-meta">.riso — hover the block</p>
 					<div class="riso inline-block">
 						<div class="h-[86px] w-[120px] bg-muted"></div>
 					</div>
 				</div>
 
 				<div class="obj deckle" style="background: var(--brand)">
-					<p class="type-meta mb-3 !text-primary-foreground">.deckle — a torn foot on a field</p>
-					<p class="text-primary-foreground text-[15px] leading-[1.6]">
+					<p class="mb-3 type-meta !text-primary-foreground">.deckle — a torn foot on a field</p>
+					<p class="text-[15px] leading-[1.6] text-primary-foreground">
 						For the one or two places a panel of colour has to stop. Everywhere else the site
 						separates sections with air alone.
 					</p>
 				</div>
 			</div>
 
-			<p class="type-meta mt-16 mb-3">.ticker — a strip of set type between sections</p>
+			<p class="mt-16 mb-3 type-meta">.ticker — a strip of set type between sections</p>
 			<div class="ticker">
 				<div class="ticker-track">
 					{#each [0, 1] as dup (dup)}
@@ -396,7 +440,7 @@
 				{#each bodies as b (b.id)}
 					<div class="bodycard" class:on={body === b.id}>
 						<p class="type-title-sm">{b.name}</p>
-						<p class="type-meta mb-3">{b.note}</p>
+						<p class="mb-3 type-meta">{b.note}</p>
 						<p style="font-family: var(--font-body); font-size: 1rem; line-height: 1.7">
 							Time Frames is a concertina about the way an afternoon stretches and folds.
 						</p>
@@ -413,9 +457,7 @@
 
 		<footer class="pt-10 pb-24">
 			<p class="ornament-rule mb-8"><span class="ornament text-[20px]">§</span></p>
-			<p class="type-meta">
-				Draft for review · not linked from the site · noindex · /brandkit
-			</p>
+			<p class="type-meta">Draft for review · not linked from the site · noindex · /brandkit</p>
 		</footer>
 	</div>
 </div>

@@ -29,11 +29,15 @@ import sharp from 'sharp';
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
+// Every directory that can hold a work. `other` carries no .md today, but a
+// missing directory here means a work silently ships with no baked colour —
+// and since the client-side fallback was removed, nothing would recover it.
 const WORK_DIRS = [
 	'src/lib/content/art-page/books',
 	'src/lib/content/art-page/comics',
-	'src/lib/content/art-page/illustrations'
-];
+	'src/lib/content/art-page/illustrations',
+	'src/lib/content/art-page/other'
+].filter((d) => existsSync(d));
 const lum = (r, g, b) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 const contentPathToFile = (p) => p.replace(/^\//, '');
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -204,6 +208,7 @@ function upsert(src, key, value) {
 }
 
 let processed = 0;
+let skipped = 0;
 const files = WORK_DIRS.flatMap((dir) =>
 	readdirSync(dir)
 		.filter((n) => n.endsWith('.md'))
@@ -213,7 +218,13 @@ for (const { dir, f } of files) {
 	const path = join(dir, f);
 	let src = readFileSync(path, 'utf8');
 	const heroMatch = src.match(/^hero_image:\s*(.+)$/m) || src.match(/^cover_image:\s*(.+)$/m);
-	if (!heroMatch) continue;
+	if (!heroMatch) {
+		// Loud, because nothing catches this at runtime any more: the page will
+		// render its title in the default ink rather than the work's colour.
+		console.warn(`! ${f}: no hero_image or cover_image — no colour baked`);
+		skipped++;
+		continue;
+	}
 	const file = contentPathToFile(heroMatch[1].trim());
 	if (!existsSync(file)) {
 		console.warn(`! ${f}: hero not found (${file})`);
@@ -251,6 +262,9 @@ for (const { dir, f } of files) {
 		);
 	} catch (err) {
 		console.warn(`! ${f}: ${err.message}`);
+		skipped++;
 	}
 }
-console.log(`\nBaked colours for ${processed} work(s).`);
+console.log(
+	`\nBaked colours for ${processed} work(s).` + (skipped ? `  ${skipped} skipped — see above.` : '')
+);

@@ -73,7 +73,18 @@
 	>
 		{#if !isHome}
 			<a href="{base}/" class="flex flex-shrink-0 items-center gap-3">
-				<img class="h-8 w-8 rounded-full object-cover" src={portrait} alt="" />
+				<!-- A 32px slot. The source is 1080px, but at this size a ladder rung
+				     would cost more in requests than it saves; the dimensions are what
+				     matter here. -->
+				<img
+					class="h-8 w-8 rounded-full object-cover"
+					src={portrait}
+					alt=""
+					width="32"
+					height="32"
+					loading="eager"
+					decoding="async"
+				/>
 				<span
 					class="font-display text-[17px] font-semibold
 				       {overlay ? navTextClass : 'text-foreground'}"

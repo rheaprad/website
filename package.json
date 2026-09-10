@@ -37,6 +37,7 @@
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.14.0",
+		"fontkit": "^2.0.4",
 		"formsnap": "^2.0.1",
 		"globals": "^17.3.0",
 		"layerchart": "2.0.0-next.48",
@@ -66,7 +67,6 @@
 		"@fontsource-variable/josefin-sans": "^5.2.8",
 		"@hugeicons/core-free-icons": "^4.3.2",
 		"@hugeicons/svelte": "^1.1.5",
-		"bigger-picture": "^1.1.19",
 		"just-camel-case": "^6.2.0",
 		"unist-util-visit": "^5.1.0"
 	}

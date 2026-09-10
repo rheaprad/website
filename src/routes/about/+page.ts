@@ -1,30 +1,22 @@
+import { resolveImage, resolvePicture } from '$lib/content';
 import type { PageLoad } from './$types';
 
 export const prerender = true;
 
 export const load: PageLoad = async () => {
-	// Get markdown modules
 	const modules = import.meta.glob('/src/lib/content/about-page/**/*.md', { eager: true });
 	const aboutModule = Object.values(modules).find((m: any) => m.metadata) as any;
+	const metadata = aboutModule?.metadata ?? {};
+	const seo = metadata.seo ?? {};
 
-	// Get image glob for the about page
-	const images = import.meta.glob('/src/lib/content/about-page/**/*.{jpg,jpeg,png,webp}', {
-		query: '?url',
-		import: 'default',
-		eager: true
-	}) as Record<string, string>;
-
-	// Optimized (resized, responsive avif/webp) versions via @sveltejs/enhanced-img
-	const enhanced = import.meta.glob('/src/lib/content/about-page/**/*.{jpg,jpeg,png,webp}', {
-		query: '?enhanced',
-		import: 'default',
-		eager: true
-	}) as Record<string, unknown>;
-
+	// Images resolve through `$lib/content`, not a glob of our own. Two
+	// `?enhanced` globs over the same files generate two full sets of variants,
+	// and the map used to be serialised into this route's __data.json besides.
 	return {
 		component: aboutModule?.default,
-		metadata: aboutModule?.metadata ?? {},
-		images,
-		enhanced
+		metadata,
+		photoPicture: resolvePicture(metadata.photo ?? ''),
+		photoSrc: resolveImage(metadata.photo ?? ''),
+		shareImage: resolveImage(seo.image || metadata.photo || '')
 	};
 };

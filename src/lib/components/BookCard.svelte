@@ -58,8 +58,11 @@
 		].join(';')
 	);
 
-	// Two up on phones, three on tablets, four on desktop inside a 1440 shell.
-	const sizes = '(min-width: 1024px) 23vw, (min-width: 640px) 30vw, 45vw';
+	// One up on phones, three on tablets, four on desktop inside a 1440 shell.
+	// The image is `--bw` wide, at most 76cqw of the card, so at 1440 it is a
+	// 250px slot rather than the 326px the card itself occupies.
+	const sizes =
+		'(min-width: 1440px) 250px, (min-width: 1024px) 18vw, (min-width: 640px) 23vw, 76vw';
 </script>
 
 <a href="{base}/work/{item.slug}/" class="card group block focus-visible:outline-none">
@@ -68,7 +71,7 @@
 			<span class="grain" aria-hidden="true"></span>
 			<div class="object">
 				<Image
-					src={item.coverEnhanced ?? item.cover}
+					src={item.coverPicture ?? item.cover}
 					alt="Cover of {item.title}"
 					{loading}
 					{sizes}

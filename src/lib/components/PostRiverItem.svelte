@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Image from '$lib/components/ui/Image.svelte';
 	/**
 	 * One entry in the blog river, drawn as the kind of thing it actually is.
 	 *
@@ -63,7 +64,13 @@
 	<a {href} class="group block">
 		<figure class="taped scrap" style="--tilt:{tilt}deg">
 			<span class="tape" aria-hidden="true"></span>
-			<img src={post.image} alt={post.title ?? ''} loading="lazy" class="block h-auto w-full" />
+			<Image
+				src={post.imagePicture ?? post.image}
+				alt={post.title ?? ''}
+				sizes="(min-width: 880px) 630px, (min-width: 768px) calc(100vw - 172px), calc(100vw - 60px)"
+				loading="lazy"
+				class="block h-auto w-full"
+			/>
 		</figure>
 	</a>
 {/snippet}

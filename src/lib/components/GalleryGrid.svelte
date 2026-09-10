@@ -16,8 +16,10 @@
 	// beneath it — no piece can be ambiguous about which year it belongs to.
 	const groups = $derived(withYears ? getYearGroups(items) : [{ year: 0, items }]);
 
-	// Above-the-fold covers stay eager whichever section they land in.
-	const eager = $derived(new Set(items.slice(0, 6).map((i) => i.slug)));
+	// Above-the-fold covers stay eager whichever section they land in. Three,
+	// not six: past the first row these are competing with the LCP, not helping.
+	const eager = $derived(new Set(items.slice(0, 3).map((i) => i.slug)));
+	const lcp = $derived(items[0]?.slug);
 </script>
 
 {#each groups as group (group.year)}
@@ -27,7 +29,11 @@
 		{/if}
 		<div class="shelf" use:shelf={group.items}>
 			{#each group.items as item (item.slug)}
-				<WorkTile {item} loading={eager.has(item.slug) ? 'eager' : 'lazy'} />
+				<WorkTile
+					{item}
+					loading={eager.has(item.slug) ? 'eager' : 'lazy'}
+					priority={item.slug === lcp}
+				/>
 			{/each}
 		</div>
 	</section>

@@ -1,6 +1,10 @@
 <script lang="ts" module>
+	import type { Picture } from '@sveltejs/enhanced-img';
+
 	export type LightboxItem = {
+		/** Kept alongside `picture` for identity and any download affordance. */
 		src: string;
+		picture?: Picture;
 		title?: string;
 		caption?: string;
 		alt?: string;
@@ -9,7 +13,7 @@
 
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui';
-	import { fade } from 'svelte/transition';
+	import Image from '$lib/components/ui/Image.svelte';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import X from '@lucide/svelte/icons/x';
@@ -58,11 +62,9 @@
 	<DialogPrimitive.Portal>
 		<DialogPrimitive.Overlay
 			class="fixed inset-0 z-[100] bg-black/95 duration-150
-			       data-open:animate-in data-closed:animate-out data-open:fade-in-0 data-closed:fade-out-0"
+			       data-closed:animate-out data-closed:fade-out-0 data-open:animate-in data-open:fade-in-0"
 		/>
-		<DialogPrimitive.Content
-			class="fixed inset-0 z-[101] flex flex-col outline-none select-none"
-		>
+		<DialogPrimitive.Content class="fixed inset-0 z-[101] flex flex-col outline-none select-none">
 			{#if current}
 				<DialogPrimitive.Title class="sr-only">{current.title ?? 'Image'}</DialogPrimitive.Title>
 
@@ -104,14 +106,24 @@
 						</button>
 					{/if}
 
-					{#key current.src}
-						<img
-							src={current.src}
-							alt={current.alt ?? current.title ?? ''}
-							transition:fade={{ duration: 150 }}
-							class="max-h-full max-w-full object-contain shadow-2xl"
-						/>
-					{/key}
+					<!-- No {#key} here. Remounting the <img> on every arrow press
+					     guaranteed a blank frame while the next picture decoded. The
+					     immediate neighbours stay mounted instead, so stepping through
+					     a gallery is a display flip rather than a fetch. -->
+					{#each items as it, i (it.src)}
+						{#if Math.abs(i - index) <= 1}
+							<Image
+								src={it.picture ?? it.src}
+								alt={it.alt ?? it.title ?? ''}
+								sizes="100vw"
+								loading="eager"
+								fetchpriority={i === index ? 'high' : 'low'}
+								class="max-h-full max-w-full object-contain shadow-2xl {i === index
+									? ''
+									: 'hidden'}"
+							/>
+						{/if}
+					{/each}
 				</div>
 
 				<!-- Title / caption (its own row, never overlaps the image) -->
@@ -123,7 +135,9 @@
 							</p>
 						{/if}
 						{#if current.caption}
-							<p class="mx-auto mt-1 max-w-[720px] font-sans text-[13px] text-white/70 md:text-[14px]">
+							<p
+								class="mx-auto mt-1 max-w-[720px] font-sans text-[13px] text-white/70 md:text-[14px]"
+							>
 								{current.caption}
 							</p>
 						{/if}

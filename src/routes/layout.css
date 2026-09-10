@@ -3,18 +3,24 @@
 @import '../lib/styles/brand.css';
 @import '@fontsource-variable/shantell-sans';
 @import '@fontsource-variable/instrument-sans';
-@import '@fontsource-variable/schibsted-grotesk';
-@import '@fontsource-variable/plus-jakarta-sans';
-@import '@fontsource-variable/figtree';
 @import 'tw-animate-css';
 @import '../lib/styles/neat-annotations.css';
 
 @custom-variant dark (&:is(.dark *));
 
+/* <enhanced:img> compiles to <picture><source…><img>. `display: contents` takes
+   the wrapper out of layout entirely, so every rule that already sizes or
+   positions an `img` keeps working untouched — .ribbon-scrap img, .postcard-pic
+   img, .stamp img, and BookCard's percentage-height .object. */
+picture {
+	display: contents;
+}
+
 /* ─── Body face ───────────────────────────────────────────────
    The one role no Secret Club face can fill: every one of them is a display
-   face. Four sans candidates are loaded so /brandkit can compare them in
-   place; once a direction is picked, the other three imports and packages go.
+   face. Instrument Sans is the one that ships; the other three candidates are
+   imported by /brandkit itself, so a visitor to any other page does not pay for
+   a comparison they never see.
 
    The brief is a sans that can sit under Clauthbound without arguing with it:
    warm enough not to read as a dashboard, plain enough that the display face
@@ -132,7 +138,7 @@
 	   meta      Scorekard        captions, dates, dimensions, tags
 	   statement Wilco Loft Sans  the footer wordmark, once per page
 	   sans      the body face    everything that is read rather than seen */
-	--font-display: 'Clauthbound', ui-serif, Georgia, serif;
+	--font-display: 'Clauthbound', 'Clauthbound Fallback', ui-serif, Georgia, serif;
 	--font-title: 'Ships Whistle', ui-sans-serif, system-ui, sans-serif;
 	--font-hand: 'Shantell Sans Variable', 'Shantell Sans', cursive;
 	--font-stamp: 'Ships Whistle Rough', 'Ships Whistle', sans-serif;
@@ -363,39 +369,6 @@ body {
 	}
 }
 
-/* ─── The wall: an aspect-aware gallery grid ──────────────────
-   A Jen-Simmons-style intrinsic grid. Every cell declares its work's true
-   aspect ratio (via `--ratio` / `data-ratio`), so nothing is ever cropped:
-   panoramic comic strips run wide, tall pages run tall. Wide pieces and
-   curated "features" claim more columns for emphasis. Generous gaps give the
-   art room to breathe — these are pictures to be studied, not photos to pack.
-
-   Baseline (no JS): a plain intrinsic grid — one column per cell, each sized
-   to its ratio, rows aligned to their tallest cell (composed whitespace).
-   Enhanced (`is-packed`, added by the `masonry` action): fine row tracks +
-   dense auto-flow tighten the whitespace and let cells span columns/rows. */
-.wall {
-	--cols: 2;
-	--gap: 0.5rem;
-	--row: 0.5rem;
-	display: grid;
-	grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-	gap: var(--gap);
-	align-items: start;
-}
-@media (min-width: 768px) {
-	.wall {
-		--cols: 4;
-		--gap: 0.75rem;
-		--row: 0.75rem;
-	}
-}
-@media (min-width: 1280px) {
-	.wall {
-		--cols: 6;
-	}
-}
-
 /* Grouping is done with air alone — no rules, no counts. The gap above a year
    is several times the gap below it, so each heading reads as belonging to the
    shelf it introduces rather than sitting between two of them. */
@@ -413,22 +386,9 @@ body {
 		margin-bottom: 1.5rem;
 	}
 }
-/* A cell is its image box plus a caption, so the ratio lives on `[data-media]`
-   (set inline per work) rather than on the cell. Baseline (no JS) that gives a
-   plain grid of correctly-proportioned images with readable captions; the
-   action then measures the caption and assigns an exact row span. */
-.wall > * {
-	position: relative;
-}
-.wall.is-packed {
-	grid-auto-rows: var(--row);
-	grid-auto-flow: row dense;
-}
-
 /* ─── The shelf: justified rows of work ───────────────────────
-   Where the wall packs cells into fixed columns (and so leaves holes when a
-   year holds only two or three pieces), the shelf has no columns to leave
-   blank. Every piece in a row is set to one shared height, its width follows
+   Where a column-packed grid leaves holes when a year holds only two or three
+   pieces, the shelf has no columns to leave blank. Every piece in a row is set to one shared height, its width follows
    its own proportions, and the row is scaled to fill the measured width
    exactly — flush on both edges, nothing cropped, no empty cells.
 
@@ -482,7 +442,14 @@ body {
 	min-width: 0;
 }
 .shelf:not(.is-shelved) > * {
-	flex: 1 1 200px;
+	/* The action's arithmetic, approximated in CSS. `--ratio` carries the same
+	   number as `data-ratio`, so the prerendered shelf lands near where JS will
+	   put it: heights are right and rows break in roughly the same places.
+	   Rows are not justified until the action runs, but the relayout at
+	   hydration becomes a nudge instead of a different grid. */
+	flex: 0 1 auto;
+	width: calc(var(--row-h, 240px) * var(--ratio, 0.8));
+	max-width: 100%;
 }
 
 /* ─── Hand annotations ────────────────────────────────────

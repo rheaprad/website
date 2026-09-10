@@ -1,5 +1,6 @@
 import { getAllWork, getHome, getNow, getPosts, getRecently, getWork } from '$lib/content';
-import type { WorkItem } from '$lib/content';
+import type { Post, StripImage, WorkItem } from '$lib/content';
+import type { Picture } from '@sveltejs/enhanced-img';
 import { formatMonth } from '$lib/format';
 import type { PageLoad } from './$types';
 
@@ -7,6 +8,32 @@ import type { PageLoad } from './$types';
 const SHELF_SIZE = 9;
 /** How far back the combined feed reaches on the homepage. */
 const FEED_SIZE = 6;
+
+interface Door {
+	href: string;
+	label: string;
+	note: string;
+	thumb: string;
+	thumbPicture?: Picture;
+}
+
+/**
+ * A door's picture, from whichever kind of thing is fronting it. Each source
+ * carries both a URL and a responsive form, and they have to travel together —
+ * a door that kept only the string would be back to serving a full-size cover
+ * as a 216px tile.
+ */
+function thumbOf(source: WorkItem | Post | StripImage | undefined): {
+	thumb?: string;
+	thumbPicture?: Picture;
+} {
+	// Narrow on required keys — `image` is optional on Post, so `'image' in source`
+	// would not exclude it from the remaining union.
+	if (!source) return {};
+	if ('path' in source) return { thumb: source.src, thumbPicture: source.picture };
+	if ('cover' in source) return { thumb: source.cover, thumbPicture: source.coverPicture };
+	return { thumb: source.image, thumbPicture: source.imagePicture };
+}
 
 export const load: PageLoad = () => {
 	const home = getHome();
@@ -39,24 +66,19 @@ export const load: PageLoad = () => {
 		// rather than an icon, so the picture does the labelling and the line
 		// underneath only says what kind of thing you're about to open.
 		doors: [
-			{ href: '/books/', ...home.doors.books, thumb: of('book')[0]?.cover },
-			{
-				href: '/tags/comic/',
-				...home.doors.comics,
-				thumb: of('comic')[0]?.cover
-			},
+			{ href: '/books/', ...home.doors.books, ...thumbOf(of('book')[0]) },
+			{ href: '/tags/comic/', ...home.doors.comics, ...thumbOf(of('comic')[0]) },
 			{
 				href: '/tags/illustration/',
 				...home.doors.illustrations,
-				thumb: of('illustration')[0]?.cover
+				...thumbOf(of('illustration')[0])
 			},
 			{
 				href: '/blog/',
 				...home.doors.blog,
-				thumb:
-					(latestEssay ?? latestNote)?.image ?? posts.find((p) => p.image)?.image ?? home.strip[0]
+				...thumbOf(latestEssay ?? latestNote ?? posts.find((p) => p.image) ?? home.strip[0])
 			},
-			{ href: '/about/', ...home.doors.about, thumb: home.strip[1] },
+			{ href: '/about/', ...home.doors.about, ...thumbOf(home.strip[1]) },
 			{
 				href: '/now/',
 				label: home.doors.now.label,
@@ -64,8 +86,8 @@ export const load: PageLoad = () => {
 				note:
 					home.doors.now.note ||
 					(now?.updated ? `since ${formatMonth(now.updated)}` : "what I'm on"),
-				thumb: home.strip[2]
+				...thumbOf(home.strip[2])
 			}
-		].filter((d): d is { href: string; label: string; note: string; thumb: string } => !!d.thumb)
+		].filter((d): d is Door => !!d.thumb)
 	};
 };

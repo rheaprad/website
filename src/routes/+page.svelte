@@ -4,6 +4,7 @@
 	import { ArrowRight02Icon } from '@hugeicons/core-free-icons';
 	import portrait from '$lib/content/home-page/portrait_r.webp';
 	import Seo from '$lib/components/Seo.svelte';
+	import Image from '$lib/components/ui/Image.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SectionHead from '$lib/components/SectionHead.svelte';
 	import GalleryGrid from '$lib/components/GalleryGrid.svelte';
@@ -12,13 +13,19 @@
 	import DoorCard from '$lib/components/home/DoorCard.svelte';
 	import Postmark from '$lib/components/home/Postmark.svelte';
 	import { Badge } from '$lib/components/ui/badge';
-	import postcardPicture from '$lib/content/home-page/landing-01.webp';
+	import { resolveImage, resolvePicture } from '$lib/content';
 	import { formatDate } from '$lib/format';
 	import { site } from '$lib/seo/config';
 	import type { PageData } from './$types';
 
 	const { data }: { data: PageData } = $props();
 	const { strip, shelf, doors, feed, hero, sections, postcard } = $derived(data);
+
+	// Resolved through content.ts rather than imported with its own `?enhanced`
+	// query: a second query over the same file would generate a second full set
+	// of variants for no benefit.
+	const POSTCARD = '/src/lib/content/home-page/landing-01.webp';
+	const postcardPicture = resolvePicture(POSTCARD) ?? resolveImage(POSTCARD);
 </script>
 
 <Seo />
@@ -68,9 +75,13 @@
 		>
 			<span class="taped block w-[168px] md:w-[220px]" style="--tilt:-2.5deg">
 				<span class="tape"></span>
+				<!-- The page's LCP: say so, rather than letting it queue behind the
+				     ribbon below it. -->
 				<img
 					src={portrait}
 					alt="Rhea Pradeep"
+					loading="eager"
+					fetchpriority="high"
 					class="u-photo block aspect-square w-full object-cover"
 				/>
 			</span>
@@ -129,9 +140,10 @@
 						class="grid size-12 shrink-0 place-items-center overflow-hidden border border-border bg-muted md:size-14"
 					>
 						{#if entry.thumb}
-							<img
-								src={entry.thumb}
+							<Image
+								src={entry.thumbPicture ?? entry.thumb}
 								alt=""
+								sizes="(min-width: 768px) 56px, 48px"
 								loading="lazy"
 								class="h-full w-full object-cover transition-transform duration-500 ease-out
 								       group-hover:scale-[1.06] motion-reduce:transform-none"
@@ -197,13 +209,18 @@
 <section class="mx-auto w-full max-w-[1040px] px-6 pt-20 pb-4 md:px-10 md:pt-28">
 	<div class="postcard grid md:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
 		<div class="postcard-pic">
-			<img src={postcardPicture} alt="" loading="lazy" />
+			<Image
+				src={postcardPicture}
+				alt=""
+				sizes="(min-width: 1040px) 450px, (min-width: 768px) 43vw, calc(100vw - 48px)"
+				loading="lazy"
+			/>
 		</div>
 
 		<div class="postcard-note">
 			<div class="postcard-frank" aria-hidden="true">
 				<span class="stamp">
-					<img src={portrait} alt="" loading="lazy" />
+					<img src={portrait} alt="" width="1080" height="1080" loading="lazy" decoding="async" />
 				</span>
 				<Postmark class="postcard-postmark" />
 			</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Image from '$lib/components/ui/Image.svelte';
 	/**
 	 * The newest post, given the front page of the shelf.
 	 *
@@ -45,7 +46,14 @@
 			<a {href} class="group block">
 				<figure class="taped plate" style="--tilt:-0.5deg">
 					<span class="tape" aria-hidden="true"></span>
-					<img src={post.image} alt={post.title ?? ''} class="block h-auto w-full" />
+					<Image
+						src={post.imagePicture ?? post.image}
+						alt={post.title ?? ''}
+						sizes="(min-width: 880px) 360px, (min-width: 768px) 43vw, calc(100vw - 60px)"
+						loading="eager"
+						fetchpriority="high"
+						class="block h-auto w-full"
+					/>
 					<span
 						class="sticker absolute -top-3 -right-3 z-10 px-3 py-1 font-display text-[12px]
 						       font-bold tracking-[0.1em] text-foreground"

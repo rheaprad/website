@@ -11,8 +11,11 @@
 	 * seam. Heights are fixed and widths are left to the pictures, so nothing is
 	 * cropped, the same bargain the wall and the shelf make.
 	 */
+	import type { StripImage } from '$lib/content';
+	import Image from '$lib/components/ui/Image.svelte';
+
 	interface Props {
-		images: string[];
+		images: StripImage[];
 		/** Seconds for one full pass. Longer reads as calmer. */
 		duration?: number;
 	}
@@ -41,10 +44,26 @@
 {#if images.length}
 	<div class="ribbon" style="--ribbon-duration:{duration}s" aria-hidden="true">
 		<div class="ribbon-track">
-			{#each scraps as src, i (i)}
+			{#each scraps as scrap, i (i)}
 				<figure class="ribbon-scrap" style="--tilt:{TILTS[i % TILTS.length]}deg">
 					<span class="ribbon-tape"></span>
-					<img {src} alt="" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
+					<!-- Decoration, and it sits beside the masthead portrait that is the
+					     page's LCP. Nothing here is ever eager or high priority: the
+					     first four scraps used to be, which put ~4MB of aria-hidden
+					     images ahead of the content on the critical path.
+
+					     The width/height the picture carries is also what stops the
+					     track reflowing: `.ribbon-scrap img` is `height: var(--ribbon-h);
+					     width: auto`, so without an intrinsic ratio each scrap is 0px
+					     wide until its bytes land, and the drift animation translates
+					     by -50% of a width that keeps changing underneath it. -->
+					<Image
+						src={scrap.picture ?? scrap.src}
+						alt=""
+						sizes="(min-width: 768px) 260px, 180px"
+						loading="lazy"
+						fetchpriority="low"
+					/>
 				</figure>
 			{/each}
 		</div>
