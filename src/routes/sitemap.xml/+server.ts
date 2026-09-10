@@ -8,6 +8,7 @@ export const GET: RequestHandler = () => {
 	const urls: { path: string; lastmod?: string }[] = [
 		{ path: '/' },
 		{ path: '/work/' },
+		{ path: '/books/' },
 		{ path: '/tags/' },
 		{ path: '/blog/' },
 		{ path: '/blog/notes/' },

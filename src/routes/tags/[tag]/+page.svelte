@@ -8,14 +8,14 @@
 
 	const { data }: { data: PageData } = $props();
 	const label = $derived(tagLabel(data.tag));
-	const items = $derived(data.groups.flatMap((g) => g.items));
+	const items = $derived(data.items);
 	const otherTags = $derived(data.allTags.filter((t) => t !== data.tag));
 </script>
 
 <Seo title={label} description="Work tagged {label} by Rhea Pradeep." />
 
-<div class="px-1 pt-10 pb-16 md:px-2 md:pt-14">
-	<div class="mb-10 px-5 md:px-8">
+<div class="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-8 md:pt-14">
+	<div class="mb-10 md:mb-14">
 		<!-- no variant: seeded from the tag label, so each tag page gets its own stable balloon -->
 		<PageHeader title={label} />
 		<div class="mt-6 flex flex-wrap gap-2.5">
@@ -25,5 +25,5 @@
 		</div>
 	</div>
 
-	<GalleryGrid {items} withYears={false} class="grid-cols-2 md:grid-cols-3 xl:grid-cols-4" />
+	<GalleryGrid {items} withYears />
 </div>

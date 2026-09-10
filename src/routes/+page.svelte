@@ -25,7 +25,9 @@
 	<h1 class="mt-5 font-display text-[40px] leading-[1.05] font-bold md:text-[56px]">
 		<a href="{base}/" class="u-url p-name">{site.name}</a>
 	</h1>
-	<p class="p-note mx-auto mt-4 max-w-[48ch] text-[15px] leading-[1.65] text-muted-foreground md:text-[16px]">
+	<p
+		class="p-note mx-auto mt-4 max-w-[48ch] text-[15px] leading-[1.65] text-muted-foreground md:text-[16px]"
+	>
 		{site.description}
 	</p>
 </section>
@@ -38,30 +40,32 @@
 		{/each}
 
 		<!-- Recently cell: an editorial tile that lives in the wall like any work. -->
-		<div
-			class="overflow-hidden bg-primary text-primary-foreground"
-			style="--ratio:1.15"
-			data-ratio="1.15"
-			data-cols="2"
-		>
-			<div class="absolute inset-0 flex flex-col p-5 md:p-6">
-				<SectionHead text="recently" tone="inverse" />
-				<ul class="flex min-h-0 flex-1 flex-col justify-evenly overflow-hidden">
-					{#each recently.slice(0, 4) as entry (entry.href + entry.action + entry.date)}
-						<li class="leading-snug">
-							<time class="type-meta block !text-primary-foreground/70" datetime={entry.date}>
-								{formatDate(entry.date)} · {entry.action} {entry.kind}
-							</time>
-							<a
-								href={base + entry.href}
-								class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
-							>
-								{entry.title}
-							</a>
-						</li>
-					{/each}
-				</ul>
-				<a href="{base}/log/" class="text-[13px] underline underline-offset-3">full site log</a>
+		<div data-ratio="1.15" data-cols="2">
+			<div
+				data-media
+				class="relative w-full overflow-hidden bg-primary text-primary-foreground"
+				style="aspect-ratio:1.15"
+			>
+				<div class="absolute inset-0 flex flex-col p-5 md:p-6">
+					<SectionHead text="recently" tone="inverse" />
+					<ul class="flex min-h-0 flex-1 flex-col justify-evenly overflow-hidden">
+						{#each recently.slice(0, 4) as entry (entry.href + entry.action + entry.date)}
+							<li class="leading-snug">
+								<time class="block type-meta !text-primary-foreground/70" datetime={entry.date}>
+									{formatDate(entry.date)} · {entry.action}
+									{entry.kind}
+								</time>
+								<a
+									href={base + entry.href}
+									class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
+								>
+									{entry.title}
+								</a>
+							</li>
+						{/each}
+					</ul>
+					<a href="{base}/log/" class="text-[13px] underline underline-offset-3">full site log</a>
+				</div>
 			</div>
 		</div>
 
@@ -71,47 +75,50 @@
 
 		<!-- Blog cell -->
 		{#if latestNote || latestEssay}
-			<div
-				class="overflow-hidden bg-foreground text-background"
-				style="--ratio:1.15"
-				data-ratio="1.15"
-				data-cols="2"
-			>
-				<div class="absolute inset-0 flex flex-col p-5 md:p-6">
-					<SectionHead text="from the blog" tone="inverse" />
-					<div class="flex min-h-0 flex-1 flex-col justify-evenly overflow-hidden">
-						{#if latestNote}
-							<div class="leading-snug">
-								<time class="type-meta block !text-background/60" datetime={latestNote.post.date}>
-									{formatDate(latestNote.post.date)} · note
-								</time>
-								<a
-									href="{base}/blog/{latestNote.post.slug}/"
-									class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
-								>
-									{latestNote.post.title ??
-										(latestNote.projectTitle ? `From ${latestNote.projectTitle}` : 'Sketchbook note')}
-								</a>
-							</div>
-						{/if}
-						{#if latestEssay}
-							<div class="leading-snug">
-								<time class="type-meta block !text-background/60" datetime={latestEssay.date}>
-									{formatDate(latestEssay.date)} · essay
-								</time>
-								<a
-									href="{base}/blog/{latestEssay.slug}/"
-									class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
-								>
-									{latestEssay.title}
-								</a>
-								{#if latestEssay.description}
-									<p class="mt-1 text-[13px] opacity-70">{latestEssay.description}</p>
-								{/if}
-							</div>
-						{/if}
+			<div data-ratio="1.15" data-cols="2">
+				<div
+					data-media
+					class="relative w-full overflow-hidden bg-foreground text-background"
+					style="aspect-ratio:1.15"
+				>
+					<div class="absolute inset-0 flex flex-col p-5 md:p-6">
+						<SectionHead text="from the blog" tone="inverse" />
+						<div class="flex min-h-0 flex-1 flex-col justify-evenly overflow-hidden">
+							{#if latestNote}
+								<div class="leading-snug">
+									<time class="block type-meta !text-background/60" datetime={latestNote.post.date}>
+										{formatDate(latestNote.post.date)} · note
+									</time>
+									<a
+										href="{base}/blog/{latestNote.post.slug}/"
+										class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
+									>
+										{latestNote.post.title ??
+											(latestNote.projectTitle
+												? `From ${latestNote.projectTitle}`
+												: 'Sketchbook note')}
+									</a>
+								</div>
+							{/if}
+							{#if latestEssay}
+								<div class="leading-snug">
+									<time class="block type-meta !text-background/60" datetime={latestEssay.date}>
+										{formatDate(latestEssay.date)} · essay
+									</time>
+									<a
+										href="{base}/blog/{latestEssay.slug}/"
+										class="font-display text-[16px] font-semibold underline-offset-3 hover:underline md:text-[18px]"
+									>
+										{latestEssay.title}
+									</a>
+									{#if latestEssay.description}
+										<p class="mt-1 text-[13px] opacity-70">{latestEssay.description}</p>
+									{/if}
+								</div>
+							{/if}
+						</div>
+						<a href="{base}/blog/" class="text-[13px] underline underline-offset-3">the blog</a>
 					</div>
-					<a href="{base}/blog/" class="text-[13px] underline underline-offset-3">the blog</a>
 				</div>
 			</div>
 		{/if}

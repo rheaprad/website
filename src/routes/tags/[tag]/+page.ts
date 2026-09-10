@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getTag, getTagIndex, getYearGroups } from '$lib/content';
+import { getTag, getTagIndex } from '$lib/content';
 import type { PageLoad } from './$types';
 
 export function entries() {
@@ -13,7 +13,7 @@ export const load: PageLoad = ({ params }) => {
 	}
 	return {
 		tag: entry.tag,
-		groups: getYearGroups(entry.items),
+		items: entry.items,
 		allTags: getTagIndex().map(({ tag }) => tag)
 	};
 };

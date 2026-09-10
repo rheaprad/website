@@ -13,8 +13,8 @@
 	description="The complete catalog of Rhea Pradeep's books, comics and illustrations."
 />
 
-<div class="px-1 pt-10 pb-16 md:px-2 md:pt-14">
-	<div class="mb-10 px-5 md:px-8">
+<div class="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-8 md:pt-14">
+	<div class="mb-10 md:mb-14">
 		<PageHeader title="Work" variant="speech" />
 		<div class="mt-6 flex flex-wrap gap-2.5">
 			{#each data.tags as tag (tag)}

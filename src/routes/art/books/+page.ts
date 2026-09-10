@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
-// Old route — the books index now lives at /tags/book/.
+// Old route — the books index now lives at /books/.
 export const load = () => {
-	redirect(301, '/tags/book/');
+	redirect(301, '/books/');
 };

@@ -1,51 +1,34 @@
 <script lang="ts">
-	import type { WorkItem } from '$lib/content';
+	import { getYearGroups, type WorkItem } from '$lib/content';
 	import WorkTile from '$lib/components/WorkTile.svelte';
-	import { masonry } from '$lib/gallery/masonry';
+	import { shelf } from '$lib/gallery/shelf';
 
 	interface Props {
 		items: WorkItem[];
-		/** Insert a year spine wherever the year changes. */
+		/** Break the shelf into one section per year, each under its own heading. */
 		withYears?: boolean;
 		class?: string;
 	}
 
 	let { items, withYears = true, class: className = '' }: Props = $props();
 
-	type Cell = { kind: 'year'; year: number } | { kind: 'work'; item: WorkItem };
+	// One shelf per year, so a year heading always owns exactly the works
+	// beneath it — no piece can be ambiguous about which year it belongs to.
+	const groups = $derived(withYears ? getYearGroups(items) : [{ year: 0, items }]);
 
-	const cells = $derived.by<Cell[]>(() => {
-		if (!withYears) return items.map((item) => ({ kind: 'work', item }));
-		const out: Cell[] = [];
-		let year: number | undefined;
-		for (const item of items) {
-			if (item.year !== year) {
-				year = item.year;
-				out.push({ kind: 'year', year });
-			}
-			out.push({ kind: 'work', item });
-		}
-		return out;
-	});
+	// Above-the-fold covers stay eager whichever section they land in.
+	const eager = $derived(new Set(items.slice(0, 6).map((i) => i.slug)));
 </script>
 
-<div class="wall {className}" use:masonry>
-	{#each cells as cell, i (cell.kind === 'year' ? `y${cell.year}` : cell.item.slug)}
-		{#if cell.kind === 'year'}
-			<!-- The year, printed like a spine on the shelf. -->
-			<div
-				class="flex items-center justify-center bg-primary"
-				style="--ratio:0.42"
-				data-ratio="0.42"
-			>
-				<span
-					class="font-display text-[44px] font-bold text-primary-foreground [writing-mode:vertical-rl] md:text-[56px]"
-				>
-					{cell.year}
-				</span>
-			</div>
-		{:else}
-			<WorkTile item={cell.item} loading={i < 6 ? 'eager' : 'lazy'} />
+{#each groups as group (group.year)}
+	<section class="year-group {className}">
+		{#if withYears}
+			<h2 class="type-year">{group.year}</h2>
 		{/if}
-	{/each}
-</div>
+		<div class="shelf" use:shelf={group.items}>
+			{#each group.items as item (item.slug)}
+				<WorkTile {item} loading={eager.has(item.slug) ? 'eager' : 'lazy'} />
+			{/each}
+		</div>
+	</section>
+{/each}

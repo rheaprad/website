@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import EmailLink from '$lib/components/EmailLink.svelte';
-	import { site } from '$lib/seo/config';
-	import artStrip from '$lib/content/home-page/landing-01.webp';
+
 
 	const columns = [
 		{
 			heading: 'Index',
 			links: [
 				{ href: `${base}/work/`, label: 'All work' },
-				{ href: `${base}/tags/book/`, label: 'Books' },
+				{ href: `${base}/books/`, label: 'Books' },
 				{ href: `${base}/tags/comic/`, label: 'Comics' },
 				{ href: `${base}/tags/illustration/`, label: 'Illustrations' },
 				{ href: `${base}/tags/`, label: 'All tags' }
@@ -20,7 +19,6 @@
 			links: [
 				{ href: `${base}/blog/`, label: 'Blog' },
 				{ href: `${base}/now/`, label: 'Now' },
-				{ href: `${base}/log/`, label: 'Site log' },
 				{ href: `${base}/rss.xml`, label: 'RSS' }
 			]
 		}
@@ -35,7 +33,7 @@
 </script>
 
 <footer class="mt-16 bg-primary text-primary-foreground">
-	<div class="mx-auto max-w-[1100px] px-6 pt-12 md:px-10 md:pt-16 lg:px-16">
+	<div class="mx-auto max-w-[1100px] px-6 py-12 md:px-10 md:pt-16 lg:px-16">
 		<div class="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3">
 			{#each columns as col (col.heading)}
 				<nav aria-label={col.heading}>
@@ -87,25 +85,4 @@
 			</nav>
 		</div>
 	</div>
-
-	<!-- The signature -->
-	<div class="h-card overflow-hidden px-2 pt-10 pb-2 md:pt-14">
-		<a href="{base}/" class="u-url block text-center">
-			<span
-				class="p-name block font-display text-[13.5vw] leading-[0.95] font-bold whitespace-nowrap"
-			>
-				{site.name}
-			</span>
-		</a>
-	</div>
-
-	<!-- A spread from the shelves to end on -->
-	<a href="{base}/work/" aria-label="Browse the work" class="group block">
-		<img
-			src={artStrip}
-			alt="Spread from one of Rhea Pradeep's books"
-			loading="lazy"
-			class="block h-[160px] w-full object-cover transition-[filter] duration-300 group-hover:brightness-105 md:h-[220px]"
-		/>
-	</a>
 </footer>

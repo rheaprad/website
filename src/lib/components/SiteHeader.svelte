@@ -21,8 +21,9 @@
 	const isHome = $derived(page.url.pathname === '/');
 
 	const navLinks = [
+	  { href: `${base}/`, label: 'Home' },
 		{ href: `${base}/work/`, label: 'Work' },
-		{ href: `${base}/tags/book/`, label: 'Books' },
+		{ href: `${base}/books/`, label: 'Books' },
 		{ href: `${base}/blog/`, label: 'Blog' },
 		{ href: `${base}/about/`, label: 'About' },
 		{ href: `${base}/now/`, label: 'Now' }

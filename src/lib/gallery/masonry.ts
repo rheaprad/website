@@ -20,10 +20,14 @@ export function spanCols(ratio: number, feature: boolean, cols: number): number 
  * Turns a `.wall` grid into an intrinsic, crop-free masonry. Each direct child
  * carries `data-ratio` (and optionally `data-feature` or an explicit
  * `data-cols`); from the measured column width we derive the exact row span so
- * the cell matches the work's true proportions. Recomputes on resize, which
- * also catches the `--cols` breakpoint changes.
+ * the cell matches the work's true proportions. A cell may also hold a
+ * `[data-caption]` block below its `[data-media]` box — that text is measured
+ * and added to the span, so captions never collide with the row beneath.
+ *
+ * Recomputes on resize (which also catches the `--cols` breakpoint changes),
+ * once webfonts settle, and whenever the passed-in items change.
  */
-export const masonry: Action = (node: HTMLElement) => {
+export const masonry: Action<HTMLElement, unknown> = (node: HTMLElement) => {
 	function layout() {
 		const style = getComputedStyle(node);
 		// `--cols` is unitless; gap and the row unit must be read from resolved
@@ -31,8 +35,7 @@ export const masonry: Action = (node: HTMLElement) => {
 		const cols = parseInt(style.getPropertyValue('--cols')) || 1;
 		const gap = parseFloat(style.rowGap) || 0;
 		const row = parseFloat(style.gridAutoRows) || 1;
-		const padX =
-			(parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+		const padX = (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
 		const colW = (node.clientWidth - padX - (cols - 1) * gap) / cols;
 		if (colW <= 0) return;
 
@@ -42,8 +45,17 @@ export const masonry: Action = (node: HTMLElement) => {
 			const want = cell.dataset.cols ? parseInt(cell.dataset.cols) : spanCols(ratio, feature, cols);
 			const c = Math.max(1, Math.min(cols, want));
 			const cellW = c * colW + (c - 1) * gap;
-			const cellH = cellW / ratio;
-			const rowSpan = Math.max(1, Math.round((cellH + gap) / (row + gap)));
+
+			// The ratio governs the image box, not the whole cell. Measure the
+			// caption directly rather than subtracting, so the reading doesn't
+			// depend on the span we're in the middle of replacing.
+			const media = cell.querySelector<HTMLElement>('[data-media]');
+			const capH = cell.querySelector<HTMLElement>('[data-caption]')?.offsetHeight ?? 0;
+			const mediaH = cellW / ratio;
+			if (media) media.style.height = `${mediaH}px`;
+
+			const cellH = mediaH + capH;
+			const rowSpan = Math.max(1, Math.ceil((cellH + gap) / (row + gap)));
 			cell.style.gridColumnEnd = `span ${c}`;
 			cell.style.gridRowEnd = `span ${rowSpan}`;
 		}
@@ -53,6 +65,8 @@ export const masonry: Action = (node: HTMLElement) => {
 	const ro = new ResizeObserver(layout);
 	ro.observe(node);
 	layout();
+	// Caption height shifts when Josefin Sans / Inter swap in.
+	document.fonts?.ready.then(layout);
 
 	return {
 		update: layout,

@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit';
+import { getAllWork } from '$lib/content';
+import type { PageLoad } from './$types';
 
-// Old route — the books index now lives at /tags/book/.
-export const load = () => {
-	redirect(301, '/tags/book/');
-};
+export const load: PageLoad = () => ({
+	items: getAllWork().filter((w) => w.type === 'book')
+});
