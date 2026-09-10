@@ -44,9 +44,13 @@
 		/>
 	</div>
 	<div data-caption class="px-0.5 pt-2">
-		<h3 class="truncate font-display text-[14px] leading-snug font-semibold md:text-[15px]">
+		<!-- Wraps rather than truncates: a phone cell is narrower than the title
+		     of half the work on this wall, and a clipped title is worse than a
+		     title on two lines. Only from the tablet shelf up, where a cell is
+		     wide enough to hold one, is a single line enforced. -->
+		<h3 class="font-display text-lg leading-snug font-semibold text-pretty sm:truncate md:text-xl">
 			{item.title}
 		</h3>
-		<p class="truncate type-meta">{meta}</p>
+		<p class="type-meta first-letter:uppercase sm:truncate">{meta}</p>
 	</div>
 </a>

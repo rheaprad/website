@@ -4,6 +4,6 @@ import type { PageLoad } from './$types';
 export const load: PageLoad = () => {
 	return {
 		items: getAllWork(),
-		tags: getTagIndex().map(({ tag }) => tag)
+		tags: getTagIndex().map(({ tag, count }) => ({ tag, count }))
 	};
 };

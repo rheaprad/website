@@ -16,7 +16,9 @@
 
 	<!-- Equal-sized plates in an even grid: 2 up on phones, 4 on desktop. Each
 	     card carries its own backdrop, drawn from that book's dominant colour. -->
-	<div class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 md:gap-x-6 md:gap-y-10 lg:grid-cols-4">
+	<div
+		class="grid grid-cols-1 gap-x-5 gap-y-9 sm:grid-cols-3 md:gap-x-6 md:gap-y-10 lg:grid-cols-4"
+	>
 		{#each data.items as item, i (item.slug)}
 			<BookCard {item} loading={i < 8 ? 'eager' : 'lazy'} />
 		{/each}

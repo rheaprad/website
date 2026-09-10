@@ -2,12 +2,6 @@
 	import { base } from '$app/paths';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 
-	/**
-	 * A way in. Each door into the rest of the site is fronted by a real piece
-	 * of work rather than an icon, so the picture does the labelling and the
-	 * word underneath only confirms it. Shares the pressed-card feel of
-	 * BookCard so the two never read as different systems.
-	 */
 	interface Props {
 		href: string;
 		label: string;
@@ -39,10 +33,12 @@
 			       group-hover:scale-[1.04] motion-reduce:transform-none"
 		/>
 	</AspectRatio>
-	<div class="px-3 py-2.5">
-		<h3 class="truncate font-display text-[15px] leading-snug font-semibold lowercase md:text-base">
+	<div class="px-3 py-2.5 md:px-3.5 md:py-3">
+		<h3
+			class="font-display text-[17px] leading-snug font-semibold lowercase sm:truncate md:text-xl"
+		>
 			{label}
 		</h3>
-		<p class="truncate type-meta">{note}</p>
+		<p class="type-meta sm:truncate">{note}</p>
 	</div>
 </a>

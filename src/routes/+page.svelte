@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { HugeiconsIcon } from '@hugeicons/svelte';
+	import { ArrowRight02Icon } from '@hugeicons/core-free-icons';
 	import portrait from '$lib/content/home-page/portrait_r.webp';
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
@@ -30,16 +32,9 @@
 		class="flex flex-col-reverse items-start gap-10 md:flex-row md:items-center md:justify-between md:gap-14"
 	>
 		<div class="min-w-0 md:max-w-[34rem]">
-			<a href="{base}/" class="u-url p-name inline-block">
-				<PageHeader title={site.name} variant="speech" />
+			<a href="{base}/" class="u-url p-name mb-4 inline-block">
+				<PageHeader title="Hi, I'm Rhea!" variant="speech" />
 			</a>
-
-			<Badge
-				variant="outline"
-				class="mt-7 h-auto px-2.5 py-1 font-display text-[13px] tracking-wide"
-			>
-				{site.tagline}
-			</Badge>
 
 			<p
 				class="p-note mt-4 max-w-[46ch] text-[15px] leading-[1.7] text-muted-foreground md:text-base"
@@ -52,20 +47,22 @@
 					href="{base}/work/"
 					class="tactile bg-primary px-5 py-2.5 font-display text-[16px] font-semibold text-primary-foreground"
 				>
-					See the work
+					See my work
 				</a>
 				<a
 					href="{base}/about/"
 					class="font-display text-[16px] font-semibold underline-offset-4 hover:underline"
 				>
-					More about me
+					About me
 				</a>
 			</div>
 		</div>
 
-		<!-- Portrait, taped to the page with a note in the margin. -->
+		<!-- Portrait, taped to the page with a note in the margin — below it on a
+		     wide page, out to the right on a phone, where the space under the
+		     picture belongs to the balloon. -->
 		<span
-			class="ann ann-n ann-no-mark shrink-0"
+			class="ann ann-n ann-sm-w ann-no-mark shrink-0"
 			data-note="that's me"
 			style="--ann-color: var(--color-primary)"
 		>
@@ -93,9 +90,10 @@
 		<SectionHead text="selected work" />
 		<a
 			href="{base}/work/"
-			class="font-display text-[15px] font-semibold underline-offset-4 hover:underline md:text-base"
+			class="inline-flex items-center gap-1.5 font-display text-[15px] font-semibold underline-offset-4 hover:underline md:text-base"
 		>
-			all work →
+			all work
+			<HugeiconsIcon icon={ArrowRight02Icon} size={18} aria-hidden="true" />
 		</a>
 	</div>
 
@@ -106,7 +104,7 @@
 	 Everything the header hides behind a menu, laid out as pictures. -->
 <section class="mx-auto w-full max-w-[1440px] px-5 pt-20 md:px-8 md:pt-28">
 	<SectionHead text="wander in" />
-	<div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:mt-8 md:gap-4 lg:grid-cols-6">
+	<div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:mt-8 lg:grid-cols-6">
 		{#each doors as door (door.href)}
 			<DoorCard {...door} />
 		{/each}
@@ -170,11 +168,11 @@
 					</span>
 
 					<span
-						class="hidden shrink-0 text-[17px] text-muted-foreground transition-transform duration-150
+						class="hidden shrink-0 text-muted-foreground transition-transform duration-150
 						       group-hover:translate-x-0.5 group-hover:text-foreground motion-reduce:transition-none sm:block"
 						aria-hidden="true"
 					>
-						→
+						<HugeiconsIcon icon={ArrowRight02Icon} size={17} />
 					</span>
 				</a>
 			</li>
@@ -210,7 +208,7 @@
 				<Postmark class="postcard-postmark" />
 			</div>
 
-			<p class="type-section text-muted-foreground">say hello</p>
+			<p class="type-section text-muted-foreground">say hello!</p>
 
 			<h2
 				class="mt-3 max-w-[14ch] font-display text-[clamp(1.6rem,4vw,2.5rem)] leading-[1.08] font-bold"
@@ -220,7 +218,7 @@
 
 			<p class="mt-5 max-w-[34ch] text-[15px] leading-[2.25] md:text-base">
 				Write to
-				<span class="ann ann-amber ann-circle whitespace-nowrap">
+				<span class="ann ann-amber whitespace-nowrap">
 					<EmailLink
 						email="hello@rheapradeep.com"
 						side="top"

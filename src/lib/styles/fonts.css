@@ -1,0 +1,185 @@
+/* ─── Secret Club faces (SimpleBits), self-hosted ──────────────
+   Licensed webfonts, woff2 only. Four families do five jobs:
+
+   Clauthbound   display   — foil-stamped cloth book covers, c.1930–55.
+                             CAPS ONLY: it has no lowercase glyphs, and maps
+                             a–z onto the capitals, so "Books" renders BOOKS.
+                             Type it lowercase and let the font shout.
+   Ships Whistle titles     — monoline sans off the Woods Hole ferry. Real
+                             lowercase and a true italic, so it carries the
+                             mixed-case titles Clauthbound can't.
+   …Rough        the hand   — the same face with the ink bleeding. This is why
+                             the site needs no separate handwriting font: the
+                             margin note is the title face, under-inked.
+   Scorekard     meta       — imperfect lettering off a paper baseball
+                             scorecard. The caption voice.
+   Wilco Loft    statement  — all-caps, high contrast, from the GUITAR sign in
+                             Wilco's loft. Used once per page at most.
+
+   All five share upm 1000 and a 0.70 cap height, so they mix at a common
+   optical size with no `size-adjust` needed. Ships Whistle's x-height is
+   0.45 against the others' 0.50 — it wants ~4% more size to match. */
+
+@font-face {
+	font-family: 'Clauthbound';
+	src: url('../fonts/Clauthbound-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Clauthbound';
+	src: url('../fonts/Clauthbound-Semibold.woff2') format('woff2');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Clauthbound';
+	src: url('../fonts/Clauthbound-Bold.woff2') format('woff2');
+	font-weight: 700 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Ships Whistle — clean cut. The shipped "Bold" declares usWeightClass 500;
+   it is remapped to 700 here so `font-weight: bold` reaches it. */
+@font-face {
+	font-family: 'Ships Whistle';
+	src: url('../fonts/ShipsWhistle-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ships Whistle';
+	src: url('../fonts/ShipsWhistle-Italic.woff2') format('woff2');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ships Whistle';
+	src: url('../fonts/ShipsWhistle-Bold.woff2') format('woff2');
+	font-weight: 500 700;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ships Whistle';
+	src: url('../fonts/ShipsWhistle-BoldItalic.woff2') format('woff2');
+	font-weight: 500 700;
+	font-style: italic;
+	font-display: swap;
+}
+
+/* Ships Whistle — rough cut. A separate family rather than a weight, because
+   roughness is a texture, not an emphasis: nothing should reach it by
+   bolding. Roughly 3.5× the file size of the clean cut (the outlines carry
+   the deckle), so it is only ever loaded for short runs of text. */
+@font-face {
+	font-family: 'Ships Whistle Rough';
+	src: url('../fonts/ShipsWhistle-Rough.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ships Whistle Rough';
+	src: url('../fonts/ShipsWhistle-ItalicRough.woff2') format('woff2');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ships Whistle Rough';
+	src: url('../fonts/ShipsWhistle-BoldRough.woff2') format('woff2');
+	font-weight: 500 700;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ships Whistle Rough';
+	src: url('../fonts/ShipsWhistle-BoldItalicRough.woff2') format('woff2');
+	font-weight: 500 700;
+	font-style: italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Scorekard';
+	src: url('../fonts/Scorekard-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Scorekard';
+	src: url('../fonts/Scorekard-Semibold.woff2') format('woff2');
+	font-weight: 500 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Scorekard';
+	src: url('../fonts/Scorekard-Bold.woff2') format('woff2');
+	font-weight: 700 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Wilco Loft Sans. The four cuts are named for register, not weight —
+   Treble is the lightest, Bass the heaviest — mapped onto 400/500/600/800. */
+@font-face {
+	font-family: 'Wilco Loft Sans';
+	src: url('../fonts/WilcoLoftSans-Treble.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Wilco Loft Sans';
+	src: url('../fonts/WilcoLoftSans-Midrange.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Wilco Loft Sans';
+	src: url('../fonts/WilcoLoftSans-LowEnd.woff2') format('woff2');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Wilco Loft Sans';
+	src: url('../fonts/WilcoLoftSans-Bass.woff2') format('woff2');
+	font-weight: 700 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* ─── Ornaments ───────────────────────────────────────────────
+   There is no dingbat set in these fonts. What Clauthbound has instead is
+   `ss01`, a complete second capital alphabet plus decorated cuts of
+   * @ & © ® § ° † ‡ ( ) . — ’ , and two further asterisks on ss03/ss04.
+   Those printer's marks are the ornament vocabulary — see `.ornament` and
+   `.alt-caps` in layout.css. `dlig` also carries L_A L_E L_O L_U ligatures. */
+@utility alt-caps {
+	font-feature-settings: 'ss01' 1;
+}
+@utility ornament {
+	font-family: var(--font-display);
+	font-feature-settings: 'ss01' 1;
+	line-height: 1;
+}
+@utility ornament-alt {
+	font-family: var(--font-display);
+	font-feature-settings: 'ss03' 1;
+	line-height: 1;
+}
+@utility ornament-alt2 {
+	font-family: var(--font-display);
+	font-feature-settings: 'ss04' 1;
+	line-height: 1;
+}

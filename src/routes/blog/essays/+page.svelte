@@ -8,4 +8,9 @@
 
 <Seo title="Essays" description="Long-form writing by Rhea Pradeep." />
 
-<BlogIndex title="Essays" sub="Longer pieces of writing" items={data.items} active="essay" />
+<BlogIndex
+	title="Essays"
+	items={data.items}
+	counts={data.counts}
+	active="essay"
+/>

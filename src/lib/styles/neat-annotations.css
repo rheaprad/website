@@ -3,153 +3,216 @@
    Labels look best with the Shantell Sans font (falls back to system cursive). */
 
 .ann {
-  --ann-color: oklch(0.62 0.005 30);
-  --ann-mark: light-dark(color-mix(in oklch, var(--ann-color) 10%, transparent), oklch(from var(--ann-color) l calc(c * 1.35) h / 24%));
-  --ann-font: 'Shantell Sans', cursive;
-  --ann-target-gap: 5px;
-  --ann-label-gap: 6px;
-  --ann-lower-label-gap: -4px;
-  --ann-label-max-width: 150px;
-  --ann-arrow-x: 0px;
-  --ann-text-x: 0px;
-  --ann-arrow-y: 0px;
-  --ann-text-y: 5px;
-  --ann-rotate: -4deg;
-  position: relative;
-  display: inline-block;
-  overflow: visible;
-  line-height: 1.15;
-  border-radius: 3px;
-  background: var(--ann-mark);
-  box-shadow:
-    -0.3em 0 0 0 var(--ann-mark),
-    0.3em 0 0 0 var(--ann-mark);
+	--ann-color: var(--ink-2, oklch(0.62 0.005 30));
+	--ann-mark: light-dark(
+		color-mix(in oklch, var(--ann-color) 10%, transparent),
+		oklch(from var(--ann-color) l calc(c * 1.35) h / 24%)
+	);
+	--ann-font: 'Shantell Sans', cursive;
+	--ann-target-gap: 5px;
+	--ann-label-gap: 6px;
+	--ann-lower-label-gap: -4px;
+	--ann-label-max-width: 150px;
+	--ann-arrow-x: 0px;
+	--ann-text-x: 0px;
+	--ann-arrow-y: 0px;
+	--ann-text-y: 5px;
+	--ann-rotate: -4deg;
+	position: relative;
+	display: inline-block;
+	overflow: visible;
+	line-height: 1.15;
+	border-radius: 3px;
+	background: var(--ann-mark);
+	box-shadow:
+		-0.3em 0 0 0 var(--ann-mark),
+		0.3em 0 0 0 var(--ann-mark);
 }
 
 .ann::after {
-  content: attr(data-note);
-  position: absolute;
-  z-index: 4;
-  width: max-content;
-  max-width: var(--ann-label-max-width);
-  transform: rotate(var(--ann-rotate));
-  font-family: var(--ann-font);
-  font-size: 0.95rem;
-  font-weight: 400;
-  line-height: 1.05;
-  color: var(--ann-color);
-  opacity: .9;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  pointer-events: none;
+	content: attr(data-note);
+	position: absolute;
+	z-index: 4;
+	width: max-content;
+	max-width: var(--ann-label-max-width);
+	transform: rotate(var(--ann-rotate));
+	font-family: var(--ann-font);
+	font-size: 0.95rem;
+	font-weight: 400;
+	line-height: 1.05;
+	color: var(--ann-color);
+	opacity: 0.9;
+	white-space: normal;
+	overflow-wrap: anywhere;
+	pointer-events: none;
 }
 
 .ann::before {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  width: 46px;
-  height: 38px;
-  transform-origin: 50% 50%;
-  -webkit-mask: var(--_ann-arrow-mask) center / contain no-repeat;
-  mask: var(--_ann-arrow-mask) center / contain no-repeat;
-  background: var(--ann-color);
-  opacity: .9;
-  pointer-events: none;
+	content: '';
+	position: absolute;
+	z-index: 3;
+	width: 46px;
+	height: 38px;
+	transform-origin: 50% 50%;
+	-webkit-mask: var(--_ann-arrow-mask) center / contain no-repeat;
+	mask: var(--_ann-arrow-mask) center / contain no-repeat;
+	background: var(--ann-color);
+	opacity: 0.9;
+	pointer-events: none;
 }
 
 .ann:not([data-note])::before,
 .ann:not([data-note])::after,
-.ann[data-note=""]::before,
-.ann[data-note=""]::after { display: none; }
-
-.ann-amber { --ann-color: #b8751a; --ann-mark: light-dark(color-mix(in oklch, #ffb000 14%, transparent), color-mix(in oklch, #ffb000 22%, transparent)); }
-.ann-blue { --ann-color: #3b72c4; }
-.ann-green { --ann-color: #2f8f5b; }
-.ann-red { --ann-color: #c45a38; }
-.ann-purple { --ann-color: #8657c8; }
-.ann-rainbow {
-  --ann-color: oklch(0.65 0.28 var(--ann-rainbow-hue, 350deg));
+.ann[data-note='']::before,
+.ann[data-note='']::after {
+	display: none;
 }
-.ann-no-mark { --ann-mark: transparent; }
+
+/* Pen colours. Local change: these were five fixed hex values from upstream,
+   which meant the marker in the margin ignored the palette entirely. They now
+   name roles in the brand ramp, so the pen changes with the paper. The two
+   upstream names with no role (purple, rainbow) keep literal values. */
+.ann-amber {
+	--ann-color: var(--gild-ink, #b8751a);
+	--ann-mark: color-mix(in oklch, var(--gild, #ffb000) 18%, transparent);
+}
+.ann-blue {
+	--ann-color: var(--cool, #3b72c4);
+	--ann-mark: color-mix(in oklch, var(--cool, #3b72c4) 16%, transparent);
+}
+.ann-green {
+	--ann-color: var(--brand, #2f8f5b);
+	--ann-mark: color-mix(in oklch, var(--brand, #2f8f5b) 16%, transparent);
+}
+.ann-red {
+	--ann-color: var(--hot, #c45a38);
+	--ann-mark: color-mix(in oklch, var(--hot, #c45a38) 16%, transparent);
+}
+.ann-purple {
+	--ann-color: #8657c8;
+}
+.ann-rainbow {
+	--ann-color: oklch(0.65 0.28 var(--ann-rainbow-hue, 350deg));
+}
+.ann-no-mark {
+	--ann-mark: transparent;
+}
 
 @property --ann-rainbow-hue {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 350deg;
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 350deg;
 }
 
-@keyframes ann-rainbow-cycle { to { --ann-rainbow-hue: 710deg; } }
+@keyframes ann-rainbow-cycle {
+	to {
+		--ann-rainbow-hue: 710deg;
+	}
+}
 @media (prefers-reduced-motion: no-preference) {
-  .ann-rainbow { animation: ann-rainbow-cycle 3s linear infinite; }
+	.ann-rainbow {
+		animation: ann-rainbow-cycle 3s linear infinite;
+	}
 }
 
 @media (forced-colors: active) {
-  .ann::before {
-    background: CanvasText;
-    forced-color-adjust: none;
-  }
+	.ann::before {
+		background: CanvasText;
+		forced-color-adjust: none;
+	}
 }
 
 .ann-n::before {
-  left: calc(50% - 23px + var(--ann-arrow-x));
-  top: calc(100% + var(--ann-target-gap) - 4px + var(--ann-arrow-y));
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M23 35 C22 26 22 15 23 4' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M17 10 L23 3 L29 10' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(50% - 23px + var(--ann-arrow-x));
+	top: calc(100% + var(--ann-target-gap) - 4px + var(--ann-arrow-y));
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M23 35 C22 26 22 15 23 4' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M17 10 L23 3 L29 10' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-n::after { left: calc(50% + var(--ann-text-x)); top: calc(100% + var(--ann-target-gap) + 31px + var(--ann-lower-label-gap) + var(--ann-text-y)); transform: translateX(-50%) rotate(var(--ann-rotate)); }
+.ann-n::after {
+	left: calc(50% + var(--ann-text-x));
+	top: calc(100% + var(--ann-target-gap) + 31px + var(--ann-lower-label-gap) + var(--ann-text-y));
+	transform: translateX(-50%) rotate(var(--ann-rotate));
+}
 
 .ann-ne::before {
-  left: calc(50% - 40px + var(--ann-arrow-x));
-  top: calc(100% + var(--ann-target-gap) - 6px + var(--ann-arrow-y));
-  transform: translateX(-10%);
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 32 C16 30 28 18 40 6' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M30 10 L40 6 L36 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(50% - 40px + var(--ann-arrow-x));
+	top: calc(100% + var(--ann-target-gap) - 6px + var(--ann-arrow-y));
+	transform: translateX(-10%);
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 32 C16 30 28 18 40 6' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M30 10 L40 6 L36 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-ne::after { left: calc(50% - 34px + var(--ann-text-x)); top: calc(100% + var(--ann-target-gap) + 26px + var(--ann-lower-label-gap) + var(--ann-text-y)); transform: translateX(-60%) rotate(var(--ann-rotate)); }
+.ann-ne::after {
+	left: calc(50% - 34px + var(--ann-text-x));
+	top: calc(100% + var(--ann-target-gap) + 26px + var(--ann-lower-label-gap) + var(--ann-text-y));
+	transform: translateX(-60%) rotate(var(--ann-rotate));
+}
 
 .ann-e::before {
-  left: calc(-1 * var(--ann-target-gap) - 43px + var(--ann-arrow-x));
-  top: calc(50% - 19px + var(--ann-arrow-y));
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 19 C15 18 31 18 43 19' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M36 13 L43 19 L36 25' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(-1 * var(--ann-target-gap) - 43px + var(--ann-arrow-x));
+	top: calc(50% - 19px + var(--ann-arrow-y));
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 19 C15 18 31 18 43 19' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M36 13 L43 19 L36 25' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-e::after { right: calc(100% + var(--ann-target-gap) + 39px + var(--ann-label-gap) - var(--ann-text-x)); top: calc(50% - 5px + var(--ann-text-y)); transform: translateY(-50%) rotate(var(--ann-rotate)); }
+.ann-e::after {
+	right: calc(100% + var(--ann-target-gap) + 39px + var(--ann-label-gap) - var(--ann-text-x));
+	top: calc(50% - 5px + var(--ann-text-y));
+	transform: translateY(-50%) rotate(var(--ann-rotate));
+}
 
 .ann-se::before {
-  left: calc(50% - 40px + var(--ann-arrow-x));
-  top: calc(-1 * var(--ann-target-gap) - 32px + var(--ann-arrow-y));
-  transform: translateX(-10%);
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 6 C16 8 28 20 40 32' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M36 22 L40 32 L30 28' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(50% - 40px + var(--ann-arrow-x));
+	top: calc(-1 * var(--ann-target-gap) - 32px + var(--ann-arrow-y));
+	transform: translateX(-10%);
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 6 C16 8 28 20 40 32' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M36 22 L40 32 L30 28' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-se::after { left: calc(50% - 34px + var(--ann-text-x)); bottom: calc(100% + var(--ann-target-gap) + 26px + var(--ann-label-gap) - var(--ann-text-y)); transform: translateX(-60%) rotate(var(--ann-rotate)); }
+.ann-se::after {
+	left: calc(50% - 34px + var(--ann-text-x));
+	bottom: calc(100% + var(--ann-target-gap) + 26px + var(--ann-label-gap) - var(--ann-text-y));
+	transform: translateX(-60%) rotate(var(--ann-rotate));
+}
 
 .ann-s::before {
-  left: calc(50% - 23px + var(--ann-arrow-x));
-  top: calc(-1 * var(--ann-target-gap) - 35px + var(--ann-arrow-y));
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M23 4 C22 13 22 24 23 35' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M17 29 L23 36 L29 29' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(50% - 23px + var(--ann-arrow-x));
+	top: calc(-1 * var(--ann-target-gap) - 35px + var(--ann-arrow-y));
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M23 4 C22 13 22 24 23 35' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M17 29 L23 36 L29 29' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-s::after { left: calc(50% + var(--ann-text-x)); bottom: calc(100% + var(--ann-target-gap) + 31px + var(--ann-label-gap) - var(--ann-text-y)); transform: translateX(-50%) rotate(var(--ann-rotate)); }
+.ann-s::after {
+	left: calc(50% + var(--ann-text-x));
+	bottom: calc(100% + var(--ann-target-gap) + 31px + var(--ann-label-gap) - var(--ann-text-y));
+	transform: translateX(-50%) rotate(var(--ann-rotate));
+}
 
 .ann-sw::before {
-  left: calc(50% - 6px + var(--ann-arrow-x));
-  top: calc(-1 * var(--ann-target-gap) - 32px + var(--ann-arrow-y));
-  transform: translateX(10%);
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 6 C30 8 18 20 6 32' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M10 22 L6 32 L16 28' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(50% - 6px + var(--ann-arrow-x));
+	top: calc(-1 * var(--ann-target-gap) - 32px + var(--ann-arrow-y));
+	transform: translateX(10%);
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 6 C30 8 18 20 6 32' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M10 22 L6 32 L16 28' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-sw::after { left: calc(50% + 34px + var(--ann-text-x)); bottom: calc(100% + var(--ann-target-gap) + 26px + var(--ann-label-gap) - var(--ann-text-y)); transform: translateX(-40%) rotate(var(--ann-rotate)); }
+.ann-sw::after {
+	left: calc(50% + 34px + var(--ann-text-x));
+	bottom: calc(100% + var(--ann-target-gap) + 26px + var(--ann-label-gap) - var(--ann-text-y));
+	transform: translateX(-40%) rotate(var(--ann-rotate));
+}
 
 .ann-w::before {
-  left: calc(100% + var(--ann-target-gap) - 3px + var(--ann-arrow-x));
-  top: calc(50% - 19px + var(--ann-arrow-y));
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43 19 C32 18 15 18 3 19' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M10 13 L3 19 L10 25' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(100% + var(--ann-target-gap) - 3px + var(--ann-arrow-x));
+	top: calc(50% - 19px + var(--ann-arrow-y));
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43 19 C32 18 15 18 3 19' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M10 13 L3 19 L10 25' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-w::after { left: calc(100% + var(--ann-target-gap) + 40px + var(--ann-label-gap) + var(--ann-text-x)); top: calc(50% - 5px + var(--ann-text-y)); transform: translateY(-50%) rotate(var(--ann-rotate)); }
+.ann-w::after {
+	left: calc(100% + var(--ann-target-gap) + 40px + var(--ann-label-gap) + var(--ann-text-x));
+	top: calc(50% - 5px + var(--ann-text-y));
+	transform: translateY(-50%) rotate(var(--ann-rotate));
+}
 
 .ann-nw::before {
-  left: calc(50% - 6px + var(--ann-arrow-x));
-  top: calc(100% + var(--ann-target-gap) - 6px + var(--ann-arrow-y));
-  transform: translateX(10%);
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 32 C30 30 18 18 6 6' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M16 10 L6 6 L10 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	left: calc(50% - 6px + var(--ann-arrow-x));
+	top: calc(100% + var(--ann-target-gap) - 6px + var(--ann-arrow-y));
+	transform: translateX(10%);
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 32 C30 30 18 18 6 6' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M16 10 L6 6 L10 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-.ann-nw::after { left: calc(50% + 34px + var(--ann-text-x)); top: calc(100% + var(--ann-target-gap) + 26px + var(--ann-lower-label-gap) + var(--ann-text-y)); transform: translateX(-40%) rotate(var(--ann-rotate)); }
+.ann-nw::after {
+	left: calc(50% + 34px + var(--ann-text-x));
+	top: calc(100% + var(--ann-target-gap) + 26px + var(--ann-lower-label-gap) + var(--ann-text-y));
+	transform: translateX(-40%) rotate(var(--ann-rotate));
+}
 
 /* ─────────────────────────────────────────────────────────────────────────
    LOCAL ADDITION (not upstream): .ann-circle
@@ -171,24 +234,50 @@
 
    Re-apply this block if neat-annotations.css is ever updated from upstream. */
 .ann-circle {
-  --ann-ring-x: 1.15em;
-  --ann-ring-y: 0.55em;
-  --ann-ring-rotate: -1.5deg;
-  --ann-ring-opacity: .85;
+	--ann-ring-x: 1.25em;
+	--ann-ring-y: 0.85em;
+	--ann-ring-rotate: -1.5deg;
+	--ann-ring-opacity: 0.85;
 }
 
 .ann.ann-circle::before {
-  display: block;
-  left: calc(-1 * var(--ann-ring-x));
-  right: calc(-1 * var(--ann-ring-x));
-  top: calc(-1 * var(--ann-ring-y));
-  bottom: calc(-1 * var(--ann-ring-y));
-  width: auto;
-  height: auto;
-  transform: rotate(var(--ann-ring-rotate));
-  --_ann-arrow-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' preserveAspectRatio='none'%3E%3Cpath d='M164 21 C149 8 99 2 57 9 19 15 4 33 11 49 c8 19 66 29 113 22 38-6 64-21 61-37 -2-12-17-19-34-23' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E");
-  -webkit-mask: var(--_ann-arrow-mask) center / 100% 100% no-repeat;
-  mask: var(--_ann-arrow-mask) center / 100% 100% no-repeat;
-  background: var(--ann-color);
-  opacity: var(--ann-ring-opacity);
+	display: block;
+	left: calc(-1 * var(--ann-ring-x));
+	right: calc(-1 * var(--ann-ring-x));
+	top: calc(-1 * var(--ann-ring-y));
+	bottom: calc(-1 * var(--ann-ring-y));
+	width: auto;
+	height: auto;
+	transform: rotate(var(--ann-ring-rotate));
+	--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80' preserveAspectRatio='none'%3E%3Cpath d='M164 21 C149 8 99 2 57 9 19 15 4 33 11 49 c8 19 66 29 113 22 38-6 64-21 61-37 -2-12-17-19-34-23' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E");
+	-webkit-mask: var(--_ann-arrow-mask) center / 100% 100% no-repeat;
+	mask: var(--_ann-arrow-mask) center / 100% 100% no-repeat;
+	background: var(--ann-color);
+	opacity: var(--ann-ring-opacity);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   LOCAL ADDITION (not upstream): .ann-sm-w
+
+   A direction that changes with the viewport. Under a picture is the natural
+   place for a note on a wide page, but on a phone that column is already
+   spoken for — the balloon and the opening line sit there — and a note hung
+   below pushes the whole introduction down the screen. `.ann-sm-w` steps the
+   note round to the right of its target on small screens and hands the arrow
+   back to whichever direction the element also carries once there is room.
+   Written after the direction rules so it wins on equal specificity.
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+	.ann-sm-w::before {
+		left: calc(100% + var(--ann-target-gap) - 3px + var(--ann-arrow-x));
+		top: calc(50% - 19px + var(--ann-arrow-y));
+		--_ann-arrow-mask: url("data:image/svg+xml,%3Csvg width='46' height='38' viewBox='0 0 46 38' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43 19 C32 18 15 18 3 19' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M10 13 L3 19 L10 25' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	}
+	.ann-sm-w::after {
+		left: calc(100% + var(--ann-target-gap) + 40px + var(--ann-label-gap) + var(--ann-text-x));
+		right: auto;
+		top: calc(50% - 5px + var(--ann-text-y));
+		bottom: auto;
+		transform: translateY(-50%) rotate(var(--ann-rotate));
+	}
 }

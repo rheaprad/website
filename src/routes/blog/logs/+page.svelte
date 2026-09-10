@@ -10,7 +10,7 @@
 
 <BlogIndex
 	title="Process logs"
-	sub="Work-in-progress entries, each tied to a project"
 	items={data.items}
+	counts={data.counts}
 	active="log"
 />

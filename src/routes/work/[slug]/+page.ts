@@ -1,11 +1,5 @@
 import { error } from '@sveltejs/kit';
-import {
-	getAdjacent,
-	getAllWork,
-	getPostsForProject,
-	getRelated,
-	getWork
-} from '$lib/content';
+import { getAdjacent, getAllWork, getPostsForProject, getRelated, getWork } from '$lib/content';
 import type { PageLoad } from './$types';
 
 export function entries() {

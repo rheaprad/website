@@ -78,6 +78,11 @@ export interface Post {
 	tags: string[];
 	component: Component;
 	seo: SeoOverrides;
+	/** Plain-text opening of the body — what the index shows when a post has
+	 *  no authored description. Notes rarely have one. */
+	excerpt: string;
+	/** Body word count, for the essay's reading estimate. */
+	words: number;
 }
 
 export interface RecentEntry {
@@ -97,6 +102,16 @@ const postModules = import.meta.glob('/src/lib/content/blog-page/*.md', { eager:
 	string,
 	any
 >;
+// The same posts again as raw source. svelte-markdown hands back a compiled
+// component and its frontmatter, and neither can be read as text — so an
+// index has no way to preview a post that wasn't given a description. Four
+// files at build time on a fully prerendered site; it costs nothing.
+const postSources = import.meta.glob('/src/lib/content/blog-page/*.md', {
+	query: '?raw',
+	import: 'default',
+	eager: true
+}) as Record<string, string>;
+
 const nowModules = import.meta.glob('/src/lib/content/now-page/*.md', { eager: true }) as Record<
 	string,
 	any
@@ -173,8 +188,39 @@ function toWorkItem(path: string, mod: any): WorkItem {
 	};
 }
 
+/**
+ * Markdown reduced to the sentence a reader would actually see. Frontmatter,
+ * fences, images, headings and HTML go entirely; links, emphasis and inline
+ * code keep their words and lose their punctuation. Deliberately blunt — it
+ * feeds a two-line preview and a reading estimate, not a search index.
+ */
+function toPlainText(raw: string): string {
+	return raw
+		.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '') // frontmatter
+		.replace(/```[\s\S]*?```/g, ' ') // fenced code
+		.replace(/^\s{0,3}(?:[-*_]\s*){3,}$/gm, ' ') // thematic breaks
+		.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // images
+		.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links keep their text
+		.replace(/<[^>]+>/g, ' ') // html and svelte tags
+		.replace(/^\s{0,3}>+\s?/gm, '') // blockquote marks
+		.replace(/^\s{0,3}#{1,6}\s+/gm, '') // headings
+		.replace(/^\s{0,3}(?:[-*+]|\d+\.)\s+/gm, '') // list markers
+		.replace(/[*_~`]/g, '')
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+/** First ~180 characters, cut at a word boundary rather than mid-syllable. */
+function toExcerpt(plain: string, max = 180): string {
+	if (plain.length <= max) return plain;
+	const cut = plain.slice(0, max);
+	const space = cut.lastIndexOf(' ');
+	return (space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[,;:.\s]+$/, '') + '…';
+}
+
 function toPost(path: string, mod: any): Post {
 	const meta = mod.metadata ?? {};
+	const plain = toPlainText(postSources[path] ?? '');
 	return {
 		slug: slugOf(path),
 		kind: meta.kind ?? 'note',
@@ -186,7 +232,9 @@ function toPost(path: string, mod: any): Post {
 		project: meta.project || undefined,
 		tags: Array.isArray(meta.tags) ? meta.tags : [],
 		component: mod.default,
-		seo: meta.seo ?? {}
+		seo: meta.seo ?? {},
+		excerpt: toExcerpt(plain),
+		words: plain ? plain.split(' ').length : 0
 	};
 }
 
@@ -236,6 +284,18 @@ export function getLogsForProject(slug: string): Post[] {
 		.filter((p) => p.kind === 'log' && p.project === slug)
 		.slice()
 		.reverse();
+}
+
+/**
+ * Where a log entry falls in its project's diary — "entry 3 of 7". A log is
+ * one instalment of a sequence, and saying so is most of what separates it
+ * from a note that happens to mention a project.
+ */
+export function getLogPosition(post: Post): { index: number; total: number } | undefined {
+	if (post.kind !== 'log' || !post.project) return undefined;
+	const logs = getLogsForProject(post.project);
+	const i = logs.findIndex((l) => l.slug === post.slug);
+	return i === -1 ? undefined : { index: i + 1, total: logs.length };
 }
 
 export function getPostsForProject(slug: string): Post[] {
@@ -326,16 +386,30 @@ export function getRecently(limit?: number): RecentEntry[] {
 		const href = `/work/${w.slug}/`;
 		entries.push({ date: w.date, action: 'added', kind: w.type, title, href, thumb: w.cover });
 		if (w.updated && new Date(w.updated) > new Date(w.date)) {
-			entries.push({ date: w.updated, action: 'updated', kind: w.type, title, href, thumb: w.cover });
+			entries.push({
+				date: w.updated,
+				action: 'updated',
+				kind: w.type,
+				title,
+				href,
+				thumb: w.cover
+			});
 		}
 	}
 	for (const p of allPosts) {
 		const project = p.project ? getWork(p.project) : undefined;
-		const title = p.title ?? (project ? `${project.title}` : p.description ?? p.kind);
+		const title = p.title ?? (project ? `${project.title}` : (p.description ?? p.kind));
 		const href = `/blog/${p.slug}/`;
 		entries.push({ date: p.date, action: 'added', kind: p.kind, title, href, thumb: p.image });
 		if (p.updated && new Date(p.updated) > new Date(p.date)) {
-			entries.push({ date: p.updated, action: 'updated', kind: p.kind, title, href, thumb: p.image });
+			entries.push({
+				date: p.updated,
+				action: 'updated',
+				kind: p.kind,
+				title,
+				href,
+				thumb: p.image
+			});
 		}
 	}
 	entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

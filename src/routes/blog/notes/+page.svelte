@@ -10,7 +10,7 @@
 
 <BlogIndex
 	title="Notes"
-	sub="Short posts straight from the sketchbook"
 	items={data.items}
+	counts={data.counts}
 	active="note"
 />

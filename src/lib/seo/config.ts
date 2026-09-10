@@ -11,7 +11,7 @@ export const site = {
 	/** Shown as the browser tab title / OG title when a page has no title of its own. */
 	tagline: 'Illustrator & Visual Artist',
 	description:
-		'Rhea Pradeep is an Indian illustrator and visual artist working across comics, ' +
+		'I am an Indian illustrator and visual artist working across comics, ' +
 		'picture books, character design and bookmaking.',
 	/** Default social share image, resolved against `url`. Regenerate via scripts/make-sharecard.mjs. */
 	defaultImage: '/sharecard.jpg',

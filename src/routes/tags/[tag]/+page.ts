@@ -14,6 +14,6 @@ export const load: PageLoad = ({ params }) => {
 	return {
 		tag: entry.tag,
 		items: entry.items,
-		allTags: getTagIndex().map(({ tag }) => tag)
+		tags: getTagIndex().map(({ tag, count }) => ({ tag, count }))
 	};
 };

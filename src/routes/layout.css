@@ -1,92 +1,153 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/josefin-sans';
-@import '@fontsource-variable/inter';
+@import '../lib/styles/fonts.css';
+@import '../lib/styles/brand.css';
 @import '@fontsource-variable/shantell-sans';
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource-variable/schibsted-grotesk';
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/figtree';
 @import 'tw-animate-css';
 @import '../lib/styles/neat-annotations.css';
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-	--color-overscroll-top: oklch(0.985 0.004 95);
-	--color-overscroll-bottom: oklch(0.985 0.004 95);
+/* ─── Body face ───────────────────────────────────────────────
+   The one role no Secret Club face can fill: every one of them is a display
+   face. Four sans candidates are loaded so /brandkit can compare them in
+   place; once a direction is picked, the other three imports and packages go.
 
-	--radius: 0.125rem;
-	--background: oklch(0.985 0.004 95);
-	--foreground: oklch(0.24 0.012 95);
-	--card: oklch(0.985 0.004 95);
-	--card-foreground: oklch(0.24 0.012 95);
-	--popover: oklch(0.995 0.002 95);
-	--popover-foreground: oklch(0.24 0.012 95);
-	--primary: oklch(0.619 0.0719 155.11);
-	--primary-foreground: oklch(0.985 0.004 95);
-	--secondary: oklch(0.94 0.005 95);
-	--secondary-foreground: oklch(0.24 0.012 95);
-	--muted: oklch(0.955 0.004 95);
-	--muted-foreground: oklch(0.5 0.012 95);
-	--accent: oklch(0.619 0.0719 155.11);
-	--accent-foreground: oklch(0.985 0.004 95);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.885 0.006 95);
-	--input: oklch(0.885 0.006 95);
-	--ring: oklch(0.619 0.0719 155.11);
-	--chart-1: oklch(0.646 0.222 41.116);
-	--chart-2: oklch(0.6 0.118 184.704);
-	--chart-3: oklch(0.398 0.07 227.392);
-	--chart-4: oklch(0.828 0.189 84.429);
-	--chart-5: oklch(0.769 0.188 70.08);
-	--sidebar: oklch(0.985 0.004 95);
-	--sidebar-foreground: oklch(0.24 0.012 95);
-	--sidebar-primary: oklch(0.619 0.0719 155.11);
-	--sidebar-primary-foreground: oklch(0.985 0.004 95);
-	--sidebar-accent: oklch(0.955 0.004 95);
-	--sidebar-accent-foreground: oklch(0.24 0.012 95);
-	--sidebar-border: oklch(0.885 0.006 95);
-	--sidebar-ring: oklch(0.619 0.0719 155.11);
+   The brief is a sans that can sit under Clauthbound without arguing with it:
+   warm enough not to read as a dashboard, plain enough that the display face
+   keeps carrying the personality.
+
+   `[data-body]` is what makes the comparison live — because `@theme inline`
+   substitutes the value rather than a `var(--font-sans)` reference, the
+   `font-sans` utility resolves against whichever element sets --font-body. */
+:root,
+[data-body='instrument'] {
+	--font-body: 'Instrument Sans Variable', system-ui, sans-serif;
+}
+[data-body='schibsted'] {
+	--font-body: 'Schibsted Grotesk Variable', system-ui, sans-serif;
+}
+[data-body='jakarta'] {
+	--font-body: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+}
+[data-body='figtree'] {
+	--font-body: 'Figtree Variable', system-ui, sans-serif;
 }
 
+/* ─── Token mapping ───────────────────────────────────────────
+   The shadcn/Tailwind surface, mapped onto the brand ramps in brand.css.
+   Nothing here holds a literal colour — that indirection is what lets
+   /brandkit swap a palette by setting one attribute.
+
+   The selector is `:root, [data-palette]` rather than `:root` alone on
+   purpose: custom properties substitute at computed-value time, so a
+   descendant that redefines --paper does NOT change a --background that was
+   resolved up at :root. Re-declaring the mapping on the same element that
+   carries the ramp is what makes a scoped preview possible. */
+:root,
+[data-palette] {
+	--color-overscroll-top: var(--paper);
+	--color-overscroll-bottom: var(--paper);
+
+	--radius: 0.125rem;
+
+	--background: var(--paper);
+	--foreground: var(--ink);
+	--card: var(--paper-2);
+	--card-foreground: var(--ink);
+	--popover: var(--paper-2);
+	--popover-foreground: var(--ink);
+
+	/* primary is the one large colour field; accent is now a genuinely
+	   separate voice rather than a duplicate of it, which is what lets the
+	   footer, the focus ring and an ornament stop competing for one hue. */
+	--primary: var(--brand);
+	--primary-foreground: var(--paper);
+	--secondary: var(--paper-3);
+	--secondary-foreground: var(--ink);
+	--muted: var(--paper-3);
+	--muted-foreground: var(--ink-2);
+	--accent: var(--gild-ink);
+	--accent-foreground: var(--paper);
+	--destructive: var(--hot);
+
+	--border: var(--rule);
+	--input: var(--rule);
+	--ring: var(--gild-ink);
+
+	--sidebar: var(--paper);
+	--sidebar-foreground: var(--ink);
+	--sidebar-primary: var(--brand);
+	--sidebar-primary-foreground: var(--paper);
+	--sidebar-accent: var(--paper-3);
+	--sidebar-accent-foreground: var(--ink);
+	--sidebar-border: var(--rule);
+	--sidebar-ring: var(--gild-ink);
+}
+
+/* ─── Night ───────────────────────────────────────────────────
+   The same paper, after dark — not a different material. The previous block
+   swung to a cool blue-grey (hue 264) that shared nothing with the warm ramp
+   above, which is part of why it never got switched on. Here the hue family
+   holds and only the lightness inverts, so tape still looks like tape and
+   foil still looks like brass.
+
+   Still dormant: nothing adds `.dark` to <html> yet. Kept coherent so that
+   turning it on later is a decision, not a rebuild. */
 .dark {
-	--background: oklch(0.145 0 0);
-	--foreground: oklch(0.985 0 0);
-	--card: oklch(0.25 0.03 264);
-	--card-foreground: oklch(0.985 0 0);
-	--popover: oklch(0.25 0.03 264);
-	--popover-foreground: oklch(0.985 0 0);
-	--primary: oklch(1 0 0);
-	--primary-foreground: oklch(0.25 0.03 264);
-	--secondary: oklch(0.3 0 0);
-	--secondary-foreground: oklch(0.985 0 0);
-	--muted: oklch(0.3 0 0);
-	--muted-foreground: oklch(0.75 0 0);
-	--accent: oklch(0.6 0.15 142);
-	--accent-foreground: oklch(0.145 0 0);
-	--destructive: oklch(0.704 0.191 22.216);
-	--border: oklch(1 0 0 / 10%);
-	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.6 0.15 142);
-	--chart-1: oklch(0.488 0.243 264.376);
-	--chart-2: oklch(0.696 0.17 162.48);
-	--chart-3: oklch(0.769 0.188 70.08);
-	--chart-4: oklch(0.627 0.265 303.9);
-	--chart-5: oklch(0.645 0.246 16.439);
-	--sidebar: oklch(0.25 0.03 264);
-	--sidebar-foreground: oklch(0.985 0 0);
-	--sidebar-primary: oklch(0.6 0.15 142);
-	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.3 0 0);
-	--sidebar-accent-foreground: oklch(0.985 0 0);
-	--sidebar-border: oklch(1 0 0 / 10%);
-	--sidebar-ring: oklch(0.6 0.15 142);
+	--paper: oklch(0.196 0.012 68);
+	--paper-2: oklch(0.242 0.014 68);
+	--paper-3: oklch(0.288 0.014 68);
+	--ink: oklch(0.938 0.012 84);
+	--ink-2: oklch(0.722 0.014 78);
+	--rule: oklch(0.352 0.014 70);
+
+	--brand: oklch(0.735 0.078 162);
+	--brand-wash: oklch(0.312 0.032 162);
+	--primary-foreground: oklch(0.196 0.012 68);
+
+	--gild: oklch(0.762 0.094 79);
+	--gild-ink: oklch(0.792 0.094 79);
+	--gild-wash: oklch(0.322 0.038 80);
+	--accent-foreground: oklch(0.196 0.012 68);
+
+	--hot: oklch(0.702 0.122 33);
+	--hot-wash: oklch(0.318 0.042 34);
+	--cool: oklch(0.742 0.058 249);
+	--cool-wash: oklch(0.302 0.026 247);
+
+	--tape: oklch(0.582 0.05 92 / 0.42);
+	--tape-edge: oklch(0.682 0.048 92 / 0.3);
 }
 
 @theme inline {
-	--font-sans: 'Inter Variable', sans-serif;
-	--font-display: 'Josefin Sans Variable', sans-serif;
+	/* ── Type roles ──
+	   display   Clauthbound      page titles, years, section labels. CAPS ONLY.
+	   title     Ships Whistle    work and card titles, prose headings
+	   hand      Shantell Sans    margin notes and annotations — the written voice
+	   stamp     …Whistle Rough   date stamps and franks — struck, not written
+	   meta      Scorekard        captions, dates, dimensions, tags
+	   statement Wilco Loft Sans  the footer wordmark, once per page
+	   sans      the body face    everything that is read rather than seen */
+	--font-display: 'Clauthbound', ui-serif, Georgia, serif;
+	--font-title: 'Ships Whistle', ui-sans-serif, system-ui, sans-serif;
+	--font-hand: 'Shantell Sans Variable', 'Shantell Sans', cursive;
+	--font-stamp: 'Ships Whistle Rough', 'Ships Whistle', sans-serif;
+	--font-meta: 'Scorekard', ui-sans-serif, system-ui, sans-serif;
+	--font-statement: 'Wilco Loft Sans', ui-sans-serif, system-ui, sans-serif;
+	--font-sans: var(--font-body);
 
-	--radius-sm: calc(var(--radius) - 4px);
-	--radius-md: calc(var(--radius) - 2px);
-	--radius-lg: var(--radius);
-	--radius-xl: calc(var(--radius) + 4px);
+	/* --radius is 2px and the site is square; the old --radius-sm computed to
+	   calc(2px - 4px), i.e. a negative length that silently failed. The scale
+	   now only ever goes up from the base. */
+	--radius-sm: var(--radius);
+	--radius-md: calc(var(--radius) + 2px);
+	--radius-lg: calc(var(--radius) + 4px);
+	--radius-xl: calc(var(--radius) + 7px);
+
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -105,11 +166,24 @@
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
-	--color-chart-1: var(--chart-1);
-	--color-chart-2: var(--chart-2);
-	--color-chart-3: var(--chart-3);
-	--color-chart-4: var(--chart-4);
-	--color-chart-5: var(--chart-5);
+
+	/* The brand ramps, reachable as utilities (text-foil, bg-hot-wash, …) so
+	   a one-off doesn't have to reach past the token layer into raw oklch. */
+	--color-paper: var(--paper);
+	--color-paper-raised: var(--paper-2);
+	--color-paper-well: var(--paper-3);
+	--color-ink: var(--ink);
+	--color-ink-soft: var(--ink-2);
+	--color-cloth: var(--brand);
+	--color-cloth-wash: var(--brand-wash);
+	--color-foil: var(--gild);
+	--color-foil-ink: var(--gild-ink);
+	--color-foil-wash: var(--gild-wash);
+	--color-hot: var(--hot);
+	--color-hot-wash: var(--hot-wash);
+	--color-cool: var(--cool);
+	--color-cool-wash: var(--cool-wash);
+
 	--color-sidebar: var(--sidebar);
 	--color-sidebar-foreground: var(--sidebar-foreground);
 	--color-sidebar-primary: var(--sidebar-primary);
@@ -130,34 +204,83 @@ body {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
-/* ─── Catalog type roles ──────────────────────────────────── */
+/* ─── Catalog type roles ──────────────────────────────────────
+   Roles, not sizes. Before this there were four utilities and about twenty
+   loose `text-[15px]` / `text-[24px]` values spread across components, so a
+   heading's size depended on which file you were in. Everything below is a
+   job on the page; components ask for the job.
 
-/* Page titles and work titles. */
+   Clauthbound has no lowercase glyphs at all — it maps a–z onto the capitals
+   — so every display role is set in caps whatever case the source is in, and
+   is tracked positively to suit. Ships Whistle carries anything that has to
+   stay mixed-case. */
+
+/* Page titles and work titles. Caps, with the L_A/L_E/L_O/L_U ligatures on. */
 @utility type-display {
 	font-family: var(--font-display);
 	font-weight: 600;
 	font-size: clamp(1.75rem, 4vw, 2.75rem);
-	line-height: 1.1;
-	letter-spacing: -0.01em;
+	line-height: 1.08;
+	letter-spacing: 0.005em;
+	font-feature-settings: 'dlig' 1;
+}
+
+/* The one oversized moment per page: the footer wordmark. */
+@utility type-statement {
+	font-family: var(--font-statement);
+	font-weight: 700;
+	font-size: clamp(2.5rem, 9vw, 6rem);
+	line-height: 0.92;
+	letter-spacing: 0.01em;
+}
+
+/* Work titles, card headings, prose h2. Mixed case, so Ships Whistle. */
+@utility type-title-lg {
+	font-family: var(--font-title);
+	font-weight: 700;
+	font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+	line-height: 1.18;
+}
+@utility type-title {
+	font-family: var(--font-title);
+	font-weight: 700;
+	font-size: 1.1875rem;
+	line-height: 1.25;
+}
+@utility type-title-sm {
+	font-family: var(--font-title);
+	font-weight: 700;
+	font-size: 1rem;
+	line-height: 1.3;
 }
 
 /* Section labels: "Recently", year numerals, column headings. */
 @utility type-section {
 	font-family: var(--font-display);
-	font-weight: 500;
-	font-size: 0.9375rem;
+	font-weight: 600;
+	font-size: 0.875rem;
 	line-height: 1.2;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
+	letter-spacing: 0.1em;
 }
 
-/* Metadata: dates, dimensions, media, counts. Tabular so columns align. */
+/* Metadata: dates, dimensions, media, counts.
+   None of the five display faces has tabular figures — `tabular-nums` was a
+   no-op on the old Josefin setting too — so the numerals come from the body
+   face, which does, and only the words are set in Scorekard. Columns of
+   dates and dimensions have to line up; that is not negotiable for a
+   catalogue, and Scorekard's charm is in its letters anyway. */
 @utility type-meta {
+	font-family: var(--font-meta);
+	font-size: 1.125rem;
+	line-height: 1.5;
+	letter-spacing: 0.012em;
+	color: var(--muted-foreground);
+}
+@utility type-num {
 	font-family: var(--font-sans);
+	font-variant-numeric: tabular-nums;
 	font-size: 0.8125rem;
 	line-height: 1.5;
-	font-variant-numeric: tabular-nums;
-	color: var(--color-muted-foreground);
 }
 
 /* Archive year: the structural anchor above each section of the wall. Set
@@ -167,9 +290,27 @@ body {
 	font-weight: 700;
 	font-size: clamp(2.25rem, 5vw, 3.75rem);
 	line-height: 1;
-	letter-spacing: -0.02em;
-	font-variant-numeric: tabular-nums;
-	color: var(--color-primary);
+	letter-spacing: 0.01em;
+	color: var(--primary);
+}
+
+/* The hand: margin notes and anything that should read as written rather than
+   set. Shantell Sans — kept, because a rubber stamp and a pen are not the
+   same voice, and swapping the pen for a roughened display face lost the
+   handwriting entirely. */
+@utility type-hand {
+	font-family: var(--font-hand);
+	font-weight: 400;
+	font-size: 1rem;
+	line-height: 1.4;
+}
+
+/* Struck rather than written: date stamps, franks, anything under-inked. */
+@utility type-stamp {
+	font-family: var(--font-stamp);
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	line-height: 1.2;
 }
 
 @layer base {
@@ -190,17 +331,23 @@ body {
 	.leader {
 		flex: 1 1 auto;
 		min-width: 1.5rem;
-		border-bottom: 2px dotted var(--color-border);
+		border-bottom: 2px dotted var(--border);
 		transform: translateY(-0.3em);
 	}
 
-	/* Tactile control: inked outline, hard offset shadow, presses down. */
+	/* Tactile control: inked outline, hard offset shadow, presses down.
+
+   The edge is always ink, never a brand hue. A hard offset shadow reads as
+   the outline the shape was drawn with, so tinting it a second colour makes
+   two different objects out of one button — which is exactly what a green
+   shadow under a blue fill looked like. Ink works against every palette, and
+   against a filled or an unfilled face. */
 	.tactile {
-		--ink: oklch(0.33 0.05 155);
+		--edge: var(--ink);
 		display: inline-block;
-		border: 1.5px solid var(--ink);
+		border: 1.5px solid var(--edge);
 		border-radius: 9999px;
-		box-shadow: 3px 3px 0 0 var(--ink);
+		box-shadow: 3px 3px 0 0 var(--edge);
 		transition:
 			transform 120ms ease,
 			box-shadow 120ms ease,
@@ -208,11 +355,11 @@ body {
 	}
 	.tactile:hover {
 		transform: translate(1px, 1px);
-		box-shadow: 2px 2px 0 0 var(--ink);
+		box-shadow: 2px 2px 0 0 var(--edge);
 	}
 	.tactile:active {
 		transform: translate(3px, 3px);
-		box-shadow: 0 0 0 0 var(--ink);
+		box-shadow: 0 0 0 0 var(--edge);
 	}
 }
 
@@ -294,13 +441,27 @@ body {
    Baseline (no JS): a plain wrapping flex row, each piece sized by the
    `aspect-ratio` its own tile declares. */
 .shelf {
-	--row-h: 200px;
-	--row-max: 2;
-	--row-stretch: 1.5;
+	/* A phone column is 350px wide: two pieces side by side leaves each of them
+	   about 165px, which is a thumbnail, not a picture — and a caption set under
+	   a 165px box has nowhere to put a title. So a phone gets one piece per row,
+	   full measure. `--row-stretch` is opened up to match: with one piece to a
+	   row, the last row is no more special than any other and must not be
+	   clamped to a smaller height than the rows above it. */
+	--row-h: 420px;
+	--row-max: 1;
+	--row-stretch: 3;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.75rem;
+	gap: 1.5rem;
 	align-items: flex-start;
+}
+@media (min-width: 640px) {
+	.shelf {
+		--row-h: 260px;
+		--row-max: 2;
+		--row-stretch: 1.5;
+		gap: 1rem;
+	}
 }
 @media (min-width: 768px) {
 	.shelf {
@@ -327,11 +488,12 @@ body {
 /* ─── Hand annotations ────────────────────────────────────
    neat-annotations draws the arrow and the label; all that's set here is the
    hand it writes in, so a note in the margin looks like the same pen that drew
-   the concertina marks and the balloons. Ink is left alone: the colour
+   the concertina marks and the balloons. That is now literally true: the hand
+   is the title face's rough cut, not an unrelated handwriting font. Ink is left alone: the colour
    variants are single-class rules like `.ann` itself, so overriding
    `--ann-color` here would quietly beat `.ann-amber`. Each use sets its own. */
 .ann {
-	--ann-font: 'Shantell Sans Variable', 'Shantell Sans', cursive;
+	--ann-font: var(--font-hand);
 }
 
 /* ─── Taped paper ─────────────────────────────────────────
@@ -341,12 +503,12 @@ body {
    because a wall of art doesn't need the wall to perform. */
 .taped {
 	position: relative;
-	background: var(--color-background);
+	background: var(--background);
 	padding: 6px;
 	rotate: var(--tilt, -2deg);
 	box-shadow:
-		0 0 0 1px var(--color-border),
-		3px 5px 16px oklch(0 0 0 / 0.12);
+		0 0 0 1px var(--border),
+		3px 5px 16px color-mix(in oklab, var(--ink) 14%, transparent);
 }
 .tape {
 	position: absolute;
@@ -356,8 +518,8 @@ body {
 	height: 1.1rem;
 	translate: -50% 0;
 	rotate: -4deg;
-	background: oklch(0.87 0.055 95 / 0.6);
-	box-shadow: inset 0 0 0 1px oklch(0.76 0.05 95 / 0.4);
+	background: var(--tape);
+	box-shadow: inset 0 0 0 1px var(--tape-edge);
 }
 
 /* ─── The ribbon: scraps drifting past under the masthead ──
@@ -406,8 +568,26 @@ body {
 		transform: translate3d(calc(-50% - var(--ribbon-gap) / 2), 0, 0);
 	}
 }
+/* The scraps lean, and each is held up by its own strip of tape. Both were
+   already being asked for by Ribbon.svelte — it sets `--tilt` per scrap and
+   renders a `.ribbon-tape` span — but neither had a rule here, so the row
+   has been running flat and untaped. */
 .ribbon-scrap {
+	position: relative;
 	flex: 0 0 auto;
+	rotate: var(--tilt, 0deg);
+}
+.ribbon-tape {
+	position: absolute;
+	top: -0.5rem;
+	left: 50%;
+	width: 2.25rem;
+	height: 0.85rem;
+	translate: -50% 0;
+	rotate: var(--tape-tilt, -5deg);
+	background: var(--tape);
+	box-shadow: inset 0 0 0 1px var(--tape-edge);
+	pointer-events: none;
 }
 .ribbon-scrap img {
 	display: block;
@@ -442,25 +622,18 @@ body {
 	rotate: -1.1deg;
 	border-radius: 9px;
 	/* Card stock: a touch warmer and lighter than the page it rests on. */
-	background: oklch(0.992 0.009 92);
+	background: var(--paper-2);
 	box-shadow:
-		0 0 0 1px oklch(0.8 0.014 92),
-		0 1px 1px oklch(0 0 0 / 0.07),
-		0 3px 6px oklch(0 0 0 / 0.07),
-		12px 20px 40px oklch(0 0 0 / 0.14);
-}
-:global(.dark) .postcard {
-	background: oklch(0.24 0.008 92);
-	box-shadow:
-		0 0 0 1px oklch(0.4 0.01 92),
-		0 3px 6px oklch(0 0 0 / 0.4),
-		12px 20px 40px oklch(0 0 0 / 0.5);
+		0 0 0 1px var(--border),
+		0 1px 1px color-mix(in oklab, var(--ink) 8%, transparent),
+		0 3px 6px color-mix(in oklab, var(--ink) 8%, transparent),
+		12px 20px 40px color-mix(in oklab, var(--ink) 16%, transparent);
 }
 
 .postcard-pic {
 	position: relative;
 	min-height: 12rem;
-	background: var(--color-muted);
+	background: var(--muted);
 }
 .postcard-pic img {
 	position: absolute;
@@ -476,7 +649,7 @@ body {
 	inset-inline: 0;
 	bottom: 0;
 	height: 1px;
-	background: oklch(0.8 0.014 92);
+	background: var(--border);
 }
 
 .postcard-note {
@@ -509,7 +682,7 @@ body {
 	background-image: repeating-linear-gradient(
 		to bottom,
 		transparent 0 1.2rem,
-		oklch(0.8 0.014 92) 1.2rem calc(1.2rem + 1px)
+		var(--border) 1.2rem calc(1.2rem + 1px)
 	);
 }
 @media (min-width: 768px) {
@@ -544,12 +717,8 @@ body {
 	display: block;
 	padding: 5px;
 	rotate: 3.5deg;
-	background: oklch(0.998 0.004 92);
-	box-shadow: inset 0 0 0 1px oklch(0.86 0.012 92);
-}
-:global(.dark) .stamp {
-	background: oklch(0.3 0.008 92);
-	box-shadow: inset 0 0 0 1px oklch(0.42 0.01 92);
+	background: var(--paper-2);
+	box-shadow: inset 0 0 0 1px var(--border);
 }
 .stamp img {
 	display: block;
@@ -563,7 +732,7 @@ body {
 	inset: -5px;
 	pointer-events: none;
 	--notch: 4.5px;
-	--card: oklch(0.992 0.009 92);
+	--card: var(--paper-2);
 	background:
 		radial-gradient(circle var(--notch) at 50% 0, var(--card) 96%, transparent) 0 0 / 11px 10px
 			repeat-x,
@@ -574,9 +743,6 @@ body {
 		radial-gradient(circle var(--notch) at 100% 50%, var(--card) 96%, transparent) 100% 0 / 10px
 			11px repeat-y;
 }
-:global(.dark) .stamp::after {
-	--card: oklch(0.24 0.008 92);
-}
 /* Struck across the stamp and out onto the card, off true and under-inked. */
 .postcard-postmark {
 	position: absolute;
@@ -584,7 +750,7 @@ body {
 	right: 0.9rem;
 	width: 5.75rem;
 	rotate: -13deg;
-	color: var(--color-foreground);
+	color: var(--foreground);
 	opacity: 0.2;
 	pointer-events: none;
 }
@@ -628,7 +794,7 @@ body {
 	font-size: 1rem;
 }
 .prose a {
-	color: var(--color-primary);
+	color: var(--primary);
 	text-decoration: underline;
 	text-underline-offset: 3px;
 	text-decoration-thickness: 1px;
@@ -640,9 +806,9 @@ body {
 	font-weight: 600;
 }
 .prose blockquote {
-	border-left: 2px solid var(--color-primary);
+	border-left: 2px solid var(--primary);
 	padding-left: 1.25rem;
-	color: var(--color-muted-foreground);
+	color: var(--muted-foreground);
 }
 .prose ul,
 .prose ol {
@@ -666,27 +832,219 @@ body {
 	display: block;
 	font-size: 0.8125rem;
 	line-height: 1.5;
-	color: var(--color-muted-foreground);
+	color: var(--muted-foreground);
 	margin-top: 0.5rem;
 }
 .prose hr {
 	border: 0;
-	border-top: 1px solid var(--color-border);
+	border-top: 1px solid var(--border);
 	margin-top: 2.5rem;
 	margin-bottom: 2.5rem;
 }
 .prose code {
 	font-size: 0.875em;
-	background: var(--color-muted);
+	background: var(--muted);
 	padding: 0.125rem 0.375rem;
 	border-radius: var(--radius);
 }
 .prose pre {
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--border);
 	padding: 1rem;
 	overflow-x: auto;
 }
 .prose pre code {
 	background: none;
 	padding: 0;
+}
+
+/* ─── Foil and deboss ─────────────────────────────────────────
+   What Clauthbound is drawn from: type pressed into cloth and filled with
+   gold. Two directions of the same idea — foil catches the light from above,
+   a blind stamp only casts a shadow into itself.
+
+   The highlight sits above the letter and the shadow below, which is the
+   whole trick: reverse them and the type reads as raised instead of sunk.
+   Foil is deliberately low contrast against paper — that is what makes it
+   read as metal rather than ink — so it is only ever used at display sizes
+   or for ornament. Anything that has to be read at 13px uses --color-foil-ink. */
+.foil {
+	color: var(--gild-ink);
+	text-shadow:
+		0 1px 0 color-mix(in oklab, var(--gild) 55%, var(--paper)),
+		0 -1px 0 color-mix(in oklab, var(--ink) 26%, transparent);
+}
+.deboss {
+	color: color-mix(in oklab, var(--ink) 62%, var(--paper));
+	text-shadow:
+		0 1px 0 color-mix(in oklab, var(--paper-2) 92%, transparent),
+		0 -1px 1px color-mix(in oklab, var(--ink) 22%, transparent);
+}
+
+/* A printer's ornament, centred with air either side. The glyphs come from
+   Clauthbound's ss01/ss03/ss04 alternates — see the note in fonts.css; there
+   is no dingbat set, the ornaments are decorated cuts of * @ & § ° † ‡. */
+.ornament-rule {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	color: var(--gild-ink);
+}
+.ornament-rule::before,
+.ornament-rule::after {
+	content: '';
+	flex: 1 1 auto;
+	height: 1px;
+	background: linear-gradient(
+		to right,
+		transparent,
+		var(--border) 15%,
+		var(--border) 85%,
+		transparent
+	);
+}
+
+/* ─── Die-cut sticker ─────────────────────────────────────────
+   A peel-off label rather than a button: a white bleed cut around the shape,
+   then a soft shadow under it. The keyline is what sells it — a sticker is
+   cut a little wider than its artwork, and that pale margin is the cut. */
+.sticker {
+	position: relative;
+	display: inline-block;
+	border-radius: 9999px;
+	background: var(--paper-2);
+	box-shadow:
+		0 0 0 3px var(--paper-2),
+		0 0 0 4px color-mix(in oklab, var(--ink) 12%, transparent),
+		1px 2px 4px color-mix(in oklab, var(--ink) 16%, transparent);
+	rotate: var(--tilt, 0deg);
+	transition:
+		transform 140ms ease,
+		box-shadow 140ms ease;
+}
+.sticker:hover {
+	transform: translateY(-1px);
+	box-shadow:
+		0 0 0 3px var(--paper-2),
+		0 0 0 4px color-mix(in oklab, var(--ink) 12%, transparent),
+		2px 4px 8px color-mix(in oklab, var(--ink) 20%, transparent);
+}
+
+/* ─── Date stamp ──────────────────────────────────────────────
+   A date struck with a rubber stamp: off true, under-inked, and set in the
+   rough cut so the edges break up. Same logic as the postmark, at the size
+   of a line of metadata. */
+.datestamp {
+	display: inline-block;
+	font-family: var(--font-stamp);
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	color: var(--hot);
+	opacity: 0.72;
+	rotate: var(--tilt, -2deg);
+}
+
+/* ─── Deckled edge ────────────────────────────────────────────
+   A torn paper edge for the foot of a colour field. The site's usual rule is
+   that sections are separated by air alone; this is for the one or two places
+   that want a real edge — where a panel of colour has to stop. */
+.deckle {
+	--deckle-h: 10px;
+	position: relative;
+}
+.deckle::after {
+	content: '';
+	position: absolute;
+	inset-inline: 0;
+	bottom: calc(var(--deckle-h) * -1 + 1px);
+	height: var(--deckle-h);
+	background: inherit;
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='10' preserveAspectRatio='none' viewBox='0 0 240 10'%3E%3Cpath fill='%23000' d='M0 0h240v3.1l-7 1.9-6-2.4-8 3.1-5-1.2-9 2.6-6-2.1-7 3.4-8-1.7-6 2.2-9-2.8-5 1.4-8 3-7-2.3-6 1.1-9-2.4-5 2.9-8-1.4-7 2.1-6-2.7-9 1.8-5-1.1-8 2.6-7-2.2-6 1.3-9-1.9-5 2.4-8-1.6-7 1.9-6-2.5-9 1.4-5-0.9-8 2.3-7-2-6 1.2-9-1.7-5 2.2-8-1.5-7 1.8-6-2.3-9 1.2-5-0.8-8 2.1-7-1.8-6 1z'/%3E%3C/svg%3E");
+	mask-size: 240px var(--deckle-h);
+	mask-repeat: repeat-x;
+}
+
+/* ─── Riso offset ─────────────────────────────────────────────
+   A second pass printed a hair out of register. On a screen it costs one
+   pseudo-element and no repaint of the image itself, and it is the cheapest
+   thing on this list that unmistakably says "printed".
+
+   Decorative, so it stays still when motion is unwelcome. */
+.riso {
+	position: relative;
+	isolation: isolate;
+}
+.riso::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: var(--hot);
+	opacity: 0;
+	translate: 0 0;
+	transition:
+		translate 260ms cubic-bezier(0.22, 0.7, 0.2, 1),
+		opacity 260ms ease;
+}
+.riso:hover::before,
+.riso:focus-within::before {
+	opacity: 0.85;
+	translate: -5px 5px;
+}
+@media (prefers-reduced-motion: reduce) {
+	.riso::before {
+		transition: none;
+	}
+	.riso:hover::before,
+	.riso:focus-within::before {
+		translate: 0 0;
+		opacity: 0;
+	}
+}
+
+/* ─── Ticker ──────────────────────────────────────────────────
+   A thin strip of set type running between sections, in the caption face.
+   Reuses the ribbon's timing and its reduced-motion bargain rather than
+   inventing a second marquee. */
+.ticker {
+	overflow: hidden;
+	border-block: 1px solid var(--border);
+	padding-block: 0.6rem;
+	background: var(--paper-2);
+	mask-image: linear-gradient(
+		to right,
+		transparent,
+		#000 4rem,
+		#000 calc(100% - 4rem),
+		transparent
+	);
+}
+.ticker-track {
+	display: flex;
+	width: max-content;
+	gap: 2.5rem;
+	font-family: var(--font-meta);
+	font-size: 0.8125rem;
+	letter-spacing: 0.14em;
+	color: var(--ink-2);
+	animation: ticker-drift var(--ticker-duration, 48s) linear infinite;
+}
+.ticker:hover .ticker-track {
+	animation-play-state: paused;
+}
+@keyframes ticker-drift {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(calc(-50% - 1.25rem), 0, 0);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.ticker {
+		overflow-x: auto;
+		mask-image: none;
+	}
+	.ticker-track {
+		animation: none;
+	}
 }

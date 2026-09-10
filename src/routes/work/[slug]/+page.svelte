@@ -79,18 +79,24 @@
 	     The floating card gives a glimpse of what this is; it scrolls away with the hero. -->
 	<div class="relative w-full">
 		<img src={item.hero} alt={item.title} class="block h-auto w-full" />
-		<div
-			class="absolute right-4 bottom-4 hidden max-w-[320px] rounded-md bg-background/95 p-5
-			       shadow-[0_8px_30px_rgb(0_0_0/0.18)] backdrop-blur-sm sm:block md:right-8 md:bottom-8"
-		>
-			<p class="font-display text-[20px] leading-tight font-bold">{item.title}</p>
-			<p class="type-meta mt-1.5">
-				{[String(item.year), item.medium ?? item.type, item.dimensions].filter(Boolean).join(' · ')}
-			</p>
-			<div class="mt-3 flex flex-wrap gap-2">
-				{#each item.tags as tag (tag)}
-					<TagChip {tag} />
-				{/each}
+		<!-- Sticky card: rides the bottom of the viewport while the hero is on screen,
+		     then parks at the hero's bottom edge once we've scrolled past it. -->
+		<div class="pointer-events-none absolute inset-0 hidden justify-end p-4 sm:flex md:p-8">
+			<div
+				class="pointer-events-auto sticky bottom-4 mt-auto h-fit max-w-[320px] rounded-md bg-background/95 p-5 shadow-[0_8px_30px_rgb(0_0_0/0.18)]
+				       backdrop-blur-sm md:bottom-8"
+			>
+				<p class="font-display text-[20px] leading-tight font-bold">{item.title}</p>
+				<p class="mt-1.5 type-meta">
+					{[String(item.year), item.medium ?? item.type, item.dimensions]
+						.filter(Boolean)
+						.join(' · ')}
+				</p>
+				<div class="mt-3 flex flex-wrap gap-2">
+					{#each item.tags as tag (tag)}
+						<TagChip {tag} />
+					{/each}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -150,14 +156,17 @@
 			<ul class="mt-6 space-y-3">
 				{#each posts as post (post.slug)}
 					<li class="flex items-baseline gap-2">
-						<time class="type-meta w-24 flex-shrink-0" datetime={post.date}>
+						<time class="w-24 flex-shrink-0 type-meta" datetime={post.date}>
 							{formatDate(post.date)}
 						</time>
-						<a href="{base}/blog/{post.slug}/" class="min-w-0 truncate text-[15px] transition-colors hover:text-primary">
+						<a
+							href="{base}/blog/{post.slug}/"
+							class="min-w-0 truncate text-[15px] transition-colors hover:text-primary"
+						>
 							{post.title ?? post.description ?? formatDate(post.date)}
 						</a>
 						<span class="leader"></span>
-						<span class="type-meta flex-shrink-0">
+						<span class="flex-shrink-0 type-meta">
 							{post.kind === 'log' ? 'process log' : post.kind}
 						</span>
 					</li>
@@ -169,7 +178,7 @@
 	{#if related.length > 0}
 		<section class="mt-14">
 			<SectionHead text="related work" />
-			<div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:gap-x-6">
+			<div class="mt-6 grid grid-cols-2 gap-x-5 gap-y-9 md:grid-cols-3 lg:gap-x-6">
 				{#each related as other (other.slug)}
 					<a href="{base}/work/{other.slug}/" class="group block">
 						<div class="mb-3 overflow-hidden">
@@ -180,10 +189,12 @@
 								class="transition-transform duration-300 group-hover:scale-[1.02]"
 							/>
 						</div>
-						<p class="font-display text-[15px] font-semibold transition-colors group-hover:text-primary">
+						<p
+							class="font-display text-[15px] font-semibold transition-colors group-hover:text-primary"
+						>
 							{other.title}
 						</p>
-						<p class="type-meta mt-0.5">{other.year} · {other.medium ?? other.type}</p>
+						<p class="mt-0.5 type-meta">{other.year} · {other.medium ?? other.type}</p>
 					</a>
 				{/each}
 			</div>

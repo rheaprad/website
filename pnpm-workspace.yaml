@@ -1,3 +1,4 @@
 allowBuilds:
+  '@hugeicons/svelte': false
   esbuild: true
   sharp: true

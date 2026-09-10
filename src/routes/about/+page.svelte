@@ -1,12 +1,9 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { PageData } from './$types';
-	import linkedinIcon from '$lib/assets/icons/LinkedIn.png';
-	import instagramIcon from '$lib/assets/icons/Instagram.png';
-	import mailIcon from '$lib/assets/icons/Mail.png';
-	import behanceIcon from '$lib/assets/icons/Behance.png';
-	import blueskyIcon from '$lib/assets/icons/Bluesky.png';
-	import resumeIcon from '$lib/assets/Resume_Icon.png';
 	import EmailLink from '$lib/components/EmailLink.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SectionHead from '$lib/components/SectionHead.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 
 	const { data } = $props<{ data: PageData }>();
@@ -17,16 +14,11 @@
 
 	const socialLinks = $derived(
 		[
-			{ key: 'instagram', href: about.instagram, icon: instagramIcon, label: 'Instagram' },
-			{ key: 'linkedin', href: about.linkedin, icon: linkedinIcon, label: 'LinkedIn' },
-			{
-				key: 'email',
-				href: about.email ? `mailto:${about.email}` : '',
-				icon: mailIcon,
-				label: 'Email'
-			},
-			{ key: 'behance', href: about.behance, icon: behanceIcon, label: 'Behance' },
-			{ key: 'bluesky', href: about.bluesky, icon: blueskyIcon, label: 'Bluesky' }
+			{ key: 'instagram', href: about.instagram, label: 'Instagram' },
+			{ key: 'linkedin', href: about.linkedin, label: 'LinkedIn' },
+			{ key: 'email', href: about.email ? `mailto:${about.email}` : '', label: 'Email' },
+			{ key: 'behance', href: about.behance, label: 'Behance' },
+			{ key: 'bluesky', href: about.bluesky, label: 'Bluesky' }
 		].filter((s) => s.href)
 	);
 
@@ -36,6 +28,11 @@
 			(about.photo && (images[about.photo] || about.photo)) ||
 			''
 	);
+
+	// The same link treatment the footer uses, so "elsewhere" reads the same
+	// wherever the reader meets it.
+	const linkClass =
+		'text-[14px] underline-offset-4 transition-colors hover:text-primary hover:underline';
 
 	// Click-to-copy for mailto links that live inside the markdown bio.
 	// The prose is raw HTML, so we delegate from the container instead of
@@ -91,43 +88,53 @@
 	noindex={seo.noindex}
 />
 
+<!-- The page titles itself the way every other page does — a hand-inked
+	 balloon — and the photograph is taped up rather than dropped in a frame, so
+	 the reader meets the same paper here as on the home page. -->
 <article
-	class="mx-auto max-w-[1100px] px-6 pt-10 pb-12
-	       md:px-10 md:pt-14 md:pb-20 lg:px-16"
+	class="h-card mx-auto max-w-[1100px] px-6 pt-10 pb-16
+	       md:px-10 md:pt-16 md:pb-24 lg:px-16"
 >
-	<div class="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-[80px]">
-		<!-- Left: photo, resume button, socials -->
-		<div class="w-full lg:w-2/5 lg:shrink-0">
+	<div class="mb-11 md:mb-16">
+		<!-- A narration box: the comics idiom for an aside about the character. -->
+		<PageHeader title="About" variant="caption" />
+		<!-- Names the h-card this page carries; the balloon above is drawn, not
+		     text a parser can read. -->
+		<a href="{base}/about/" class="u-url p-name hidden">Rhea Pradeep</a>
+	</div>
+
+	<div class="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-[72px]">
+		<!-- Left: photo, resume, socials -->
+		<div class="w-full max-w-[440px] lg:w-2/5 lg:shrink-0">
 			{#if about.photo}
 				<figure class="m-0">
-					{#if photoEnhanced}
-						<enhanced:img
-							src={photoEnhanced}
-							alt="Rhea Pradeep"
-							fetchpriority="high"
-							class="aspect-[3/4] w-full object-cover"
-						/>
-					{:else}
-						<img
-							src={images[about.photo] || about.photo}
-							alt="Rhea Pradeep"
-							width="1200"
-							height="1600"
-							fetchpriority="high"
-							class="aspect-[3/4] w-full object-cover"
-						/>
-					{/if}
+					<span class="taped block" style="--tilt:-1.5deg">
+						<span class="tape"></span>
+						{#if photoEnhanced}
+							<enhanced:img
+								src={photoEnhanced}
+								alt="Rhea Pradeep"
+								fetchpriority="high"
+								class="u-photo block aspect-[3/4] w-full object-cover"
+							/>
+						{:else}
+							<img
+								src={images[about.photo] || about.photo}
+								alt="Rhea Pradeep"
+								width="1200"
+								height="1600"
+								fetchpriority="high"
+								class="u-photo block aspect-[3/4] w-full object-cover"
+							/>
+						{/if}
+					</span>
 					{#if about.photo_caption}
-						<figcaption
-							class="mt-3 font-sans text-[13px] text-muted-foreground italic md:text-[14px]"
-						>
-							{about.photo_caption}
-						</figcaption>
+						<figcaption class="mt-6 type-meta">{about.photo_caption}</figcaption>
 					{/if}
 				</figure>
 			{:else}
 				<div class="flex aspect-[3/4] w-full items-center justify-center bg-muted">
-					<span class="text-muted-foreground">Photo</span>
+					<span class="type-meta">Photo</span>
 				</div>
 			{/if}
 
@@ -136,48 +143,44 @@
 					href={about.resume}
 					target="_blank"
 					rel="noopener noreferrer"
-					aria-label="Resume"
-					class="mt-10 block w-[240px] max-w-full transition-transform hover:scale-[1.03]"
+					class="tactile mt-9 bg-primary px-5 py-2.5 font-display text-[16px] font-semibold text-primary-foreground"
 				>
-					<img src={resumeIcon} alt="Resume" class="h-auto w-full" />
+					Résumé (PDF)
 				</a>
 			{/if}
 
 			{#if socialLinks.length}
-				<div class="mt-8 flex justify-start gap-4">
-					{#each socialLinks as s (s.key)}
-						{#if s.href.startsWith('mailto:')}
-							<EmailLink
-								email={s.href.slice('mailto:'.length)}
-								label={s.label}
-								side="top"
-								class="block h-[52px] w-[52px] transition-transform hover:scale-110"
-							>
-								<img src={s.icon} alt={s.label} class="h-full w-full object-contain" />
-							</EmailLink>
-						{:else}
-							<a
-								href={s.href}
-								aria-label={s.label}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="block h-[52px] w-[52px] transition-transform hover:scale-110"
-							>
-								<img src={s.icon} alt={s.label} class="h-full w-full object-contain" />
-							</a>
-						{/if}
-					{/each}
+				<div class="mt-12">
+					<SectionHead text="elsewhere" />
+					<ul class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+						{#each socialLinks as s (s.key)}
+							<li>
+								{#if s.href.startsWith('mailto:')}
+									<EmailLink
+										email={s.href.slice('mailto:'.length)}
+										label={s.label}
+										side="top"
+										class={linkClass}
+									>
+										{s.label}
+									</EmailLink>
+								{:else}
+									<a href={s.href} target="_blank" rel="noopener noreferrer me" class={linkClass}>
+										{s.label}
+									</a>
+								{/if}
+							</li>
+						{/each}
+					</ul>
 				</div>
 			{/if}
 		</div>
 
-		<!-- Right: bio content -->
-		<div class="max-w-3xl min-w-0 flex-1">
+		<!-- Right: the bio, set as the site's long-form prose so it reads like a
+		     post rather than a page of its own invention. -->
+		<div class="min-w-0 flex-1">
 			{#if Bio}
-				<div
-					bind:this={proseEl}
-					class="about-prose font-sans text-[15px] leading-[1.65] font-normal md:text-[17px]"
-				>
+				<div bind:this={proseEl} class="prose p-note max-w-[68ch]">
 					<Bio />
 				</div>
 			{/if}
@@ -195,30 +198,3 @@
 		Copied!
 	</div>
 {/if}
-
-<style>
-	.about-prose :global(h2) {
-		color: var(--primary);
-		font-size: 1.25rem;
-		font-weight: 400;
-		margin-top: 2rem;
-		margin-bottom: 1rem;
-	}
-
-	.about-prose :global(h2:first-child) {
-		margin-top: 0;
-	}
-
-	.about-prose :global(p) {
-		margin-bottom: 1.25rem;
-	}
-
-	.about-prose :global(a) {
-		text-decoration: underline;
-		text-underline-offset: 2px;
-	}
-
-	.about-prose :global(a:hover) {
-		opacity: 0.7;
-	}
-</style>

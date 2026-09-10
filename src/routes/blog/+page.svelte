@@ -8,9 +8,4 @@
 
 <Seo title="Blog" description="Notes, process logs and essays by Rhea Pradeep." />
 
-<BlogIndex
-	title="Blog"
-	sub="Sketchbook notes, process logs and the occasional essay"
-	items={data.items}
-	active="all"
-/>
+<BlogIndex title="Blog" items={data.items} counts={data.counts} active="all" />

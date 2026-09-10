@@ -1,0 +1,114 @@
+/* ─── Brand ramps ─────────────────────────────────────────────
+   The raw palette, one layer below the shadcn tokens in layout.css. Nothing
+   here is consumed directly by a component; layout.css maps these onto
+   --background / --brand / --border and the rest, and the paper devices
+   (.tape, .postcard, .stamp, .tactile) read them by name. That indirection is
+   the whole point: it is what lets a palette be swapped by changing one
+   attribute instead of hunting fourteen hard-coded oklch() values.
+
+   Three directions are defined. `[data-palette]` selects one, so /brandkit can
+   flip between them live; the winner becomes the :root default and the other
+   two blocks get deleted.
+
+   Every ramp obeys the same contract, because layout.css assumes it:
+     --paper        the page
+     --paper-2      a card or panel sitting on the page (warmer, lighter)
+     --paper-3      a well or placeholder (cooler, darker)
+     --ink          body text
+     --ink-2        captions and metadata — must clear 4.5:1 on --paper
+     --rule         hairlines and keylines
+     --brand        the one large colour field (footer, active nav, CTA);
+                    must clear 4.5:1 under --paper as text
+     --brand-wash    a tint of it for washes and hovers
+     --gild       the metallic/warm second voice: foil, washes, large
+                    ornaments. A FILL, not a mark — real gold on cream is low
+                    contrast, and forcing it to 4.5:1 turns brass into mud.
+                    Put dark ink on top of it, never it on top of paper.
+     --gild-ink   the same hue darkened until it is legible as a mark:
+                    ornaments at small sizes, underlines, foil-coloured text
+     --hot          the alarm colour: emphasis, the circled note, tags
+     --cool         the third voice: links in prose, quiet chips
+     --tape         translucent masking tape
+     --tape-edge    the darker gum line at its edge */
+
+[data-palette='cloth'] {
+	--brand-name: 'Bookcloth & Foil';
+
+	--paper: oklch(1 0 0);
+	--paper-2: oklch(0.989 0.005 88);
+	--paper-3: oklch(0.949 0.012 86);
+	--ink: oklch(0.235 0.014 62);
+	--ink-2: oklch(0.492 0.016 62);
+	--rule: oklch(0.885 0.014 84);
+
+	/* Bookcloth green. Deep enough to carry cream text in the footer — the
+	   old sage at L 0.62 was about 2.4:1 and failed. */
+	--brand: oklch(0.372 0.049 162);
+	--brand-wash: oklch(0.912 0.021 162);
+
+	/* Brass foil, for stamped ornaments and rules. Never for body text. */
+	--gild: oklch(0.652 0.096 79);
+	--gild-ink: oklch(0.54 0.096 79);
+	--gild-wash: oklch(0.918 0.032 82);
+
+	--hot: oklch(0.463 0.113 33);
+	--hot-wash: oklch(0.902 0.031 40);
+	--cool: oklch(0.536 0.055 249);
+	--cool-wash: oklch(0.907 0.021 245);
+
+	--tape: oklch(0.878 0.052 92 / 0.62);
+	--tape-edge: oklch(0.772 0.048 92 / 0.42);
+}
+
+:root,
+[data-palette='riso'] {
+	--brand-name: 'Riso Studio';
+
+	--paper: oklch(1 0 0);
+	--paper-2: oklch(0.991 0.004 84);
+	--paper-3: oklch(0.952 0.009 82);
+	--ink: oklch(0.212 0.004 60);
+	--ink-2: oklch(0.478 0.006 60);
+	--rule: oklch(0.888 0.009 82);
+
+	--brand: oklch(0.442 0.086 141);
+	--brand-wash: oklch(0.918 0.032 141);
+
+	--gild: oklch(0.771 0.144 68);
+	--gild-ink: oklch(0.553 0.144 68);
+	--gild-wash: oklch(0.938 0.048 76);
+
+	--hot: oklch(0.573 0.208 12);
+	--hot-wash: oklch(0.912 0.048 8);
+	--cool: oklch(0.409 0.152 259);
+	--cool-wash: oklch(0.906 0.038 254);
+
+	--tape: oklch(0.892 0.042 88 / 0.6);
+	--tape-edge: oklch(0.788 0.04 88 / 0.42);
+}
+
+[data-palette='sadhya'] {
+	--brand-name: 'Sadhya';
+
+	--paper: oklch(1 0 0);
+	--paper-2: oklch(0.988 0.008 92);
+	--paper-3: oklch(0.947 0.018 90);
+	--ink: oklch(0.228 0.02 62);
+	--ink-2: oklch(0.486 0.022 62);
+	--rule: oklch(0.886 0.016 88);
+
+	--brand: oklch(0.442 0.086 141);
+	--brand-wash: oklch(0.918 0.032 141);
+
+	--gild: oklch(0.742 0.136 79);
+	--gild-ink: oklch(0.545 0.136 79);
+	--gild-wash: oklch(0.932 0.046 82);
+
+	--hot: oklch(0.505 0.152 30);
+	--hot-wash: oklch(0.906 0.038 32);
+	--cool: oklch(0.386 0.076 263);
+	--cool-wash: oklch(0.899 0.028 258);
+
+	--tape: oklch(0.884 0.058 94 / 0.6);
+	--tape-edge: oklch(0.778 0.052 94 / 0.42);
+}

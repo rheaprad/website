@@ -3,18 +3,6 @@
 	import Image from '$lib/components/ui/Image.svelte';
 	import type { WorkItem } from '$lib/content';
 
-	/**
-	 * A book staged for the shelf.
-	 *
-	 * The cover is presented as a physical object resting on a lit backdrop:
-	 * never cropped, lipped so a pale edge still separates, and lit from the
-	 * upper left by the same source that throws its shadow down and to the
-	 * right. The backdrop takes the book's own dominant colour, pulled into a
-	 * narrow lightness band so ten unrelated books still read as one set.
-	 *
-	 * No type is set on the card face — this is a mockup of an object, not a
-	 * redesign of the artwork.
-	 */
 	interface Props {
 		item: WorkItem;
 		/** Card aspect ratio (w/h). Square keeps portrait and landscape books
@@ -29,19 +17,8 @@
 
 	const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
-	/**
-	 * How much of the card the book may occupy, as a percentage of the frame.
-	 * The margin is the whole point: a book photographed for a catalogue sits
-	 * in air, and cropping to the edge turns an object back into a texture.
-	 */
 	const SAFE = { w: 76, h: 72 };
 
-	/**
-	 * Fit the cover's true proportions into the safe area, never cropping.
-	 * Everything resolves in `cqw` — one unit is 1% of the card's width — so
-	 * the staging scales with the grid and the maths stays in one currency
-	 * even when the frame isn't square.
-	 */
 	const geo = $derived.by(() => {
 		const ratio = item.ratio > 0 ? item.ratio : 0.8;
 		const availW = SAFE.w;
@@ -102,11 +79,15 @@
 	</div>
 
 	<div class="px-0.5 pt-2.5">
-		<h2 class="font-display truncate text-[15px] leading-snug font-semibold md:text-base">
+		<!-- Same rule as the wall: wrap on a phone, one line once a cell is wide
+		     enough to keep the promise. -->
+		<h2
+			class="font-display text-[17px] leading-snug font-semibold text-pretty sm:truncate md:text-xl"
+		>
 			{item.title}
 		</h2>
 		{#if meta}
-			<p class="type-meta mt-0.5 truncate">{meta}</p>
+			<p class="mt-0.5 type-meta sm:truncate">{meta}</p>
 		{/if}
 	</div>
 </a>
