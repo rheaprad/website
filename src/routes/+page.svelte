@@ -18,7 +18,7 @@
 	import type { PageData } from './$types';
 
 	const { data }: { data: PageData } = $props();
-	const { strip, shelf, doors, feed } = $derived(data);
+	const { strip, shelf, doors, feed, hero, sections, postcard } = $derived(data);
 </script>
 
 <Seo />
@@ -33,13 +33,13 @@
 	>
 		<div class="min-w-0 md:max-w-[34rem]">
 			<a href="{base}/" class="u-url p-name mb-4 inline-block">
-				<PageHeader title="Hi, I'm Rhea!" variant="speech" />
+				<PageHeader title={hero.greeting} variant="speech" />
 			</a>
 
 			<p
 				class="p-note mt-4 max-w-[46ch] text-[15px] leading-[1.7] text-muted-foreground md:text-base"
 			>
-				{site.description}
+				{hero.blurb || site.description}
 			</p>
 
 			<div class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -47,13 +47,13 @@
 					href="{base}/work/"
 					class="tactile bg-primary px-5 py-2.5 font-display text-[16px] font-semibold text-primary-foreground"
 				>
-					See my work
+					{hero.primaryCta}
 				</a>
 				<a
 					href="{base}/about/"
 					class="font-display text-[16px] font-semibold underline-offset-4 hover:underline"
 				>
-					About me
+					{hero.secondaryCta}
 				</a>
 			</div>
 		</div>
@@ -87,12 +87,12 @@
 	 reader meets it. Nothing but art lives in here. -->
 <section class="mx-auto w-full max-w-[1440px] px-5 md:px-8">
 	<div class="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 md:mb-9">
-		<SectionHead text="selected work" />
+		<SectionHead text={sections.work} />
 		<a
 			href="{base}/work/"
 			class="inline-flex items-center gap-1.5 font-display text-[15px] font-semibold underline-offset-4 hover:underline md:text-base"
 		>
-			all work
+			{sections.workLink}
 			<HugeiconsIcon icon={ArrowRight02Icon} size={18} aria-hidden="true" />
 		</a>
 	</div>
@@ -103,7 +103,7 @@
 <!-- ─── Doors ───────────────────────────────────────────────────
 	 Everything the header hides behind a menu, laid out as pictures. -->
 <section class="mx-auto w-full max-w-[1440px] px-5 pt-20 md:px-8 md:pt-28">
-	<SectionHead text="wander in" />
+	<SectionHead text={sections.doors} />
 	<div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:mt-8 lg:grid-cols-6">
 		{#each doors as door (door.href)}
 			<DoorCard {...door} />
@@ -119,7 +119,7 @@
 	 competes. A piece with no picture of its own gets a pen mark instead of an
 	 empty grey square. -->
 <section class="mx-auto w-full max-w-[820px] px-5 pt-20 md:px-8 md:pt-28">
-	<SectionHead text="lately" />
+	<SectionHead text={sections.lately} />
 
 	<ul class="mt-5 border-t border-border md:mt-7">
 		{#each feed as entry (entry.href + entry.action + entry.date)}
@@ -183,7 +183,7 @@
 		href="{base}/blog/"
 		class="mt-4 inline-block text-[14px] underline underline-offset-3 hover:no-underline"
 	>
-		everything I've written
+		{sections.latelyLink}
 	</a>
 </section>
 
@@ -208,34 +208,34 @@
 				<Postmark class="postcard-postmark" />
 			</div>
 
-			<p class="type-section text-muted-foreground">say hello!</p>
+			<p class="type-section text-muted-foreground">{postcard.eyebrow}</p>
 
 			<h2
 				class="mt-3 max-w-[14ch] font-display text-[clamp(1.6rem,4vw,2.5rem)] leading-[1.08] font-bold"
 			>
-				Commissions, collaborations, or just a nice note.
+				{postcard.headline}
 			</h2>
 
 			<p class="mt-5 max-w-[34ch] text-[15px] leading-[2.25] md:text-base">
 				Write to
 				<span class="ann ann-amber whitespace-nowrap">
 					<EmailLink
-						email="hello@rheapradeep.com"
+						email={site.email}
 						side="top"
 						class="font-display text-[16px] font-semibold md:text-[18px]"
 					>
-						hello@rheapradeep.com
+						{site.email}
 					</EmailLink>
 				</span>, or come find me on
 				<a
-					href="https://www.instagram.com/rhepository/"
+					href={site.socials.instagram}
 					target="_blank"
 					rel="noopener noreferrer me"
 					class="underline underline-offset-4 hover:no-underline">Instagram</a
 				>
 				and
 				<a
-					href="https://www.behance.net/rheapradeep"
+					href={site.socials.behance}
 					target="_blank"
 					rel="noopener noreferrer me"
 					class="underline underline-offset-4 hover:no-underline">Behance</a

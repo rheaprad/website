@@ -5,8 +5,11 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import { tagLabel } from '$lib/format';
 	import type { PageData } from './$types';
+	import { pages } from '$lib/page-copy';
 
 	const { data }: { data: PageData } = $props();
+
+	const copy = pages.work;
 
 	const filters = $derived([
 		{ href: `${base}/work/`, label: 'everything', count: data.items.length, active: true },
@@ -18,14 +21,11 @@
 	]);
 </script>
 
-<Seo
-	title="Work"
-	description="The complete catalog of Rhea Pradeep's books, comics and illustrations."
-/>
+<Seo title={copy.title} description={copy.description} />
 
 <div class="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-8 md:pt-14">
 	<div class="mb-12 md:mb-16">
-		<PageMasthead title="Work" variant="speech" {filters} />
+		<PageMasthead title={copy.title} sub={copy.sub} variant="speech" {filters} />
 	</div>
 
 	<GalleryGrid items={data.items} withYears />

@@ -7,12 +7,15 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import { formatDate } from '$lib/format';
 	import type { PageData } from './$types';
+	import { pages } from '$lib/page-copy';
+
+	const copy = pages.now;
 
 	const { data }: { data: PageData } = $props();
 	const { now } = $derived(data);
 </script>
 
-<Seo title="Now" description="What Rhea Pradeep is working on right now." />
+<Seo title={copy.title} description={copy.description} />
 
 <!-- A page with one thing to say, so it is set like the blog: the same measure,
 	 the same margins, the balloon title every other page wears. The date is the

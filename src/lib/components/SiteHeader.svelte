@@ -7,6 +7,7 @@
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { prefersReducedMotion } from 'svelte/motion';
+	import { site } from '$lib/seo/config';
 
 	// Pages (e.g. work details) can make the header a transparent overlay.
 	// SSR reads page.data.nav; the client refines via the navState store.
@@ -77,7 +78,7 @@
 					class="font-display text-[17px] font-semibold
 				       {overlay ? navTextClass : 'text-foreground'}"
 				>
-					Rhea Pradeep
+					{site.name}
 				</span>
 			</a>
 		{/if}

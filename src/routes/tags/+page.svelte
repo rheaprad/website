@@ -4,14 +4,17 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import { tagLabel } from '$lib/format';
 	import type { PageData } from './$types';
+	import { pages } from '$lib/page-copy';
+
+	const copy = pages.tags;
 
 	const { data }: { data: PageData } = $props();
 </script>
 
-<Seo title="Tags" description="Rhea Pradeep's work, indexed by tag." />
+<Seo title={copy.title} description={copy.description} />
 
 <div class="mx-auto max-w-[720px] px-6 py-10 md:px-10 md:py-14">
-	<PageHeader title="Tags" variant="burst" />
+	<PageHeader title={copy.title} sub={copy.sub} variant="burst" />
 
 	<ul class="mt-10 space-y-3">
 		{#each data.tags as { tag, count, yearRange } (tag)}

@@ -2,14 +2,18 @@
 	import BlogIndex from '$lib/components/BlogIndex.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import type { PageData } from './$types';
+	import { pages } from '$lib/page-copy';
+
+	const copy = pages.essays;
 
 	const { data }: { data: PageData } = $props();
 </script>
 
-<Seo title="Essays" description="Long-form writing by Rhea Pradeep." />
+<Seo title={copy.title} description={copy.description} />
 
 <BlogIndex
-	title="Essays"
+	title={copy.title}
+	sub={copy.sub}
 	items={data.items}
 	counts={data.counts}
 	active="essay"

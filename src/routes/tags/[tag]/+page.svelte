@@ -5,6 +5,7 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import { tagLabel } from '$lib/format';
 	import type { PageData } from './$types';
+	import { site } from '$lib/seo/config';
 
 	const { data }: { data: PageData } = $props();
 	const label = $derived(tagLabel(data.tag));
@@ -22,7 +23,7 @@
 	]);
 </script>
 
-<Seo title={label} description="Work tagged {label} by Rhea Pradeep." />
+<Seo title={label} description="Work tagged {label} by {site.author}." />
 
 <div class="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-8 md:pt-14">
 	<div class="mb-12 md:mb-16">

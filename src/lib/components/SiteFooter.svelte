@@ -1,11 +1,11 @@
 <script lang="ts">
-
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { base } from '$app/paths';
 	import EmailLink from '$lib/components/EmailLink.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { site } from '$lib/seo/config';
 
 	const columns = [
 		{
@@ -29,11 +29,11 @@
 	];
 
 	const elsewhere = [
-		{ href: 'https://www.instagram.com/rhepository/', label: 'Instagram' },
-		{ href: 'https://linkedin.com/in/rheapradeep', label: 'LinkedIn' },
-		{ href: 'https://bsky.app/profile/rheapradeep.com', label: 'Bluesky' },
-		{ href: 'https://www.behance.net/rheapradeep', label: 'Behance' }
-	];
+		{ href: site.socials.instagram, label: 'Instagram' },
+		{ href: site.socials.linkedin, label: 'LinkedIn' },
+		{ href: site.socials.bluesky, label: 'Bluesky' },
+		{ href: site.socials.behance, label: 'Behance' }
+	].filter((l) => !!l.href);
 
 	type SignOff = { text: string; link?: { label: string; href: string } };
 	const signOffs: SignOff[] = [
@@ -41,8 +41,7 @@
 		{ text: 'Treat people with kindness.' },
 		{ text: 'Not currently managing a Cinnabon in Omaha.' },
 		{ text: 'No half measures.' },
-		{ text: "You've reached the long and winding bottom of the page." },
-
+		{ text: "You've reached the long and winding bottom of the page." }
 	];
 	let signOff = $state(signOffs[0]);
 	onMount(() => {
@@ -85,7 +84,7 @@
 			>
 				<div class="grid grid-cols-2 gap-x-8 gap-y-7 md:grid-cols-[1.1fr_auto_auto_auto]">
 					<div class="col-span-2 md:col-span-1">
-						<p class="font-display text-[17px] font-semibold">Rhea Pradeep</p>
+						<p class="font-display text-[17px] font-semibold">{site.name}</p>
 						{#key signOff}
 							<p
 								in:fade={{ duration: prefersReducedMotion.current ? 0 : 300 }}
@@ -105,13 +104,13 @@
 
 						<p class="mt-4 {headingClass}">Say hello</p>
 						<EmailLink
-							email="hello@rheapradeep.com"
+							email={site.email}
 							label="Email"
 							side="top"
 							class="mt-1 inline-block font-display text-[15px] font-semibold underline-offset-4
 							       transition-colors hover:text-primary hover:underline"
 						>
-							hello@rheapradeep.com
+							{site.email}
 						</EmailLink>
 					</div>
 
@@ -145,7 +144,7 @@
 				class="mt-4 flex flex-col-reverse items-center gap-3 text-[11px]
 				       sm:flex-row sm:justify-between"
 			>
-				<p class="opacity-80">© {year} Rhea Pradeep</p>
+				<p class="opacity-80">© {year} {site.name}</p>
 				<Button
 					variant="outline"
 					size="sm"

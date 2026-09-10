@@ -20,7 +20,7 @@ gallery:
     caption: ""
   - image: /src/lib/content/art-page/books/who-is-ready-for-sadhya/30_31.webp
     caption: ""
-other_projects:
+related:
   - house-of-memories
   - cell-block-tango
 nav_theme: Auto

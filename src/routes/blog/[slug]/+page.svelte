@@ -20,6 +20,7 @@
 	import { formatDate } from '$lib/format';
 	import { kindVoice } from '$lib/post-kind';
 	import type { PageData } from './$types';
+	import { site } from '$lib/seo/config';
 
 	const { data }: { data: PageData } = $props();
 	const { post, projectTitle, projectSlug, position, diary, prevNext } = $derived(data);
@@ -45,7 +46,7 @@
 
 <article class="h-entry mx-auto {measure} px-6 pt-10 pb-16 md:px-10 md:pt-14 md:pb-20">
 	<span class="p-author h-card hidden">
-		<a class="u-url p-name" href="{base}/about/">Rhea Pradeep</a>
+		<a class="u-url p-name" href="{base}/about/">{site.name}</a>
 	</span>
 
 	<PostHeader {post} {projectTitle} {projectSlug} {position} />

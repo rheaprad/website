@@ -165,7 +165,7 @@ function toWorkItem(path: string, mod: any): WorkItem {
 		pages: meta.pages || undefined,
 		caption: meta.caption || undefined,
 		cover,
-		ratio: Number(meta.cover_ratio ?? meta.cover_ratio_auto) || 0.8,
+		ratio: Number(meta.cover_ratio) || Number(meta.cover_ratio_auto) || 0.8,
 		feature: meta.feature === true,
 		plate: {
 			// Neutral warm mid-tone when a piece hasn't been analysed yet.
@@ -427,12 +427,60 @@ export function getNow(): NowPage | undefined {
 	return { updated: mod.metadata?.updated ?? '', component: mod.default };
 }
 
+export interface HomeDoorCopy {
+	label: string;
+	note: string;
+}
+
+/** The six doors, as fixed keys. Their hrefs and thumbnails are computed in
+ *  `routes/+page.ts`; only the wording is authored, so an editor can't add,
+ *  delete or reorder a door whose destination is hardcoded. */
+export type HomeDoorKey = 'books' | 'comics' | 'illustrations' | 'blog' | 'about' | 'now';
+
 export interface HomePage {
 	/** Work the CMS singled out (featured_book, featured_comic), in that order. */
 	featured: WorkItem[];
 	/** Authored landing scraps — the ribbon that runs under the masthead. */
 	strip: string[];
+	hero: { greeting: string; blurb: string; primaryCta: string; secondaryCta: string };
+	sections: { work: string; workLink: string; doors: string; lately: string; latelyLink: string };
+	postcard: { eyebrow: string; headline: string };
+	doors: Record<HomeDoorKey, HomeDoorCopy>;
 }
+
+const HOME_DEFAULTS = {
+	hero: {
+		greeting: "Hi, I'm Rhea!",
+		/** Blank by default: the masthead paragraph falls back to `site.description`. */
+		blurb: '',
+		primaryCta: 'See my work',
+		secondaryCta: 'About me'
+	},
+	sections: {
+		work: 'selected work',
+		workLink: 'all work',
+		doors: 'wander in',
+		lately: 'lately',
+		latelyLink: "everything I've written"
+	},
+	postcard: {
+		eyebrow: 'say hello!',
+		headline: 'Commissions, collaborations, or just a nice note.'
+	},
+	doors: {
+		books: { label: 'books', note: 'bound & folded' },
+		comics: { label: 'comics', note: 'panels & pages' },
+		illustrations: { label: 'illustrations', note: 'single images' },
+		blog: { label: 'the blog', note: 'notes & essays' },
+		about: { label: 'about', note: 'who I am' },
+		// Blank by default: `routes/+page.ts` computes "since {month}" from the Now page.
+		now: { label: 'now', note: '' }
+	}
+} as const;
+
+/** A CMS string that is missing, null, empty or all-whitespace is no string at all. */
+const homeStr = (v: unknown, fallback: string): string =>
+	typeof v === 'string' && v.trim() ? v.trim() : fallback;
 
 /**
  * Map an authored image path back to the work it belongs to. The CMS names a
@@ -462,5 +510,43 @@ export function getHome(): HomePage {
 	const strip = (Array.isArray(meta.carousel) ? meta.carousel : [])
 		.map((c: any) => resolveImage(typeof c === 'string' ? c : (c?.image ?? '')))
 		.filter((src: string) => !!src);
-	return { featured, strip };
+
+	const hero = meta.hero ?? {};
+	const sections = meta.sections ?? {};
+	const postcard = meta.postcard ?? {};
+	const doors = meta.doors ?? {};
+	const door = (key: HomeDoorKey): HomeDoorCopy => ({
+		label: homeStr(doors[key]?.label, HOME_DEFAULTS.doors[key].label),
+		note: homeStr(doors[key]?.note, HOME_DEFAULTS.doors[key].note)
+	});
+
+	return {
+		featured,
+		strip,
+		hero: {
+			greeting: homeStr(hero.greeting, HOME_DEFAULTS.hero.greeting),
+			blurb: homeStr(hero.blurb, HOME_DEFAULTS.hero.blurb),
+			primaryCta: homeStr(hero.primary_cta, HOME_DEFAULTS.hero.primaryCta),
+			secondaryCta: homeStr(hero.secondary_cta, HOME_DEFAULTS.hero.secondaryCta)
+		},
+		sections: {
+			work: homeStr(sections.work, HOME_DEFAULTS.sections.work),
+			workLink: homeStr(sections.work_link, HOME_DEFAULTS.sections.workLink),
+			doors: homeStr(sections.doors, HOME_DEFAULTS.sections.doors),
+			lately: homeStr(sections.lately, HOME_DEFAULTS.sections.lately),
+			latelyLink: homeStr(sections.lately_link, HOME_DEFAULTS.sections.latelyLink)
+		},
+		postcard: {
+			eyebrow: homeStr(postcard.eyebrow, HOME_DEFAULTS.postcard.eyebrow),
+			headline: homeStr(postcard.headline, HOME_DEFAULTS.postcard.headline)
+		},
+		doors: {
+			books: door('books'),
+			comics: door('comics'),
+			illustrations: door('illustrations'),
+			blog: door('blog'),
+			about: door('about'),
+			now: door('now')
+		}
+	};
 }

@@ -1,0 +1,24 @@
+{
+	"name": "Rhea Pradeep",
+	"tagline": "Illustrator & Visual Artist",
+	"author": "Rhea Pradeep",
+	"description": "I am an Indian illustrator and visual artist working across comics, picture books, character design and bookmaking.",
+	"keywords": [
+		"Rhea Pradeep",
+		"illustrator",
+		"visual artist",
+		"comics",
+		"picture books",
+		"graphic novels",
+		"character design",
+		"bookmaking"
+	],
+	"default_image": "/sharecard.jpg",
+	"contact_email": "rheapradeep01@gmail.com",
+	"socials": {
+		"instagram": "https://www.instagram.com/rhepository/",
+		"linkedin": "https://linkedin.com/in/rheapradeep",
+		"bluesky": "https://bsky.app/profile/rheapradeep.com",
+		"behance": "https://www.behance.net/rheapradeep"
+	}
+}

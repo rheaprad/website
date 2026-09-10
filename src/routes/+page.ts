@@ -32,35 +32,38 @@ export const load: PageLoad = () => {
 		strip: home.strip,
 		shelf,
 		feed,
+		hero: home.hero,
+		sections: home.sections,
+		postcard: home.postcard,
 		// Entry points into the rest of the site, each fronted by a real piece
 		// rather than an icon, so the picture does the labelling and the line
 		// underneath only says what kind of thing you're about to open.
 		doors: [
-			{ href: '/books/', label: 'books', note: 'bound & folded', thumb: of('book')[0]?.cover },
+			{ href: '/books/', ...home.doors.books, thumb: of('book')[0]?.cover },
 			{
 				href: '/tags/comic/',
-				label: 'comics',
-				note: 'panels & pages',
+				...home.doors.comics,
 				thumb: of('comic')[0]?.cover
 			},
 			{
 				href: '/tags/illustration/',
-				label: 'illustrations',
-				note: 'single images',
+				...home.doors.illustrations,
 				thumb: of('illustration')[0]?.cover
 			},
 			{
 				href: '/blog/',
-				label: 'the blog',
-				note: 'notes & essays',
+				...home.doors.blog,
 				thumb:
 					(latestEssay ?? latestNote)?.image ?? posts.find((p) => p.image)?.image ?? home.strip[0]
 			},
-			{ href: '/about/', label: 'about', note: 'who I am', thumb: home.strip[1] },
+			{ href: '/about/', ...home.doors.about, thumb: home.strip[1] },
 			{
 				href: '/now/',
-				label: 'now',
-				note: now?.updated ? `since ${formatMonth(now.updated)}` : "what I'm on",
+				label: home.doors.now.label,
+				// The CMS note wins; blank falls back to the Now page's own date.
+				note:
+					home.doors.now.note ||
+					(now?.updated ? `since ${formatMonth(now.updated)}` : "what I'm on"),
 				thumb: home.strip[2]
 			}
 		].filter((d): d is { href: string; label: string; note: string; thumb: string } => !!d.thumb)

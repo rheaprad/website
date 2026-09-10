@@ -17,6 +17,7 @@
 	import PostLead from '$lib/components/PostLead.svelte';
 	import PostRiver from '$lib/components/PostRiver.svelte';
 	import type { RiverEntry } from '$lib/blog-index';
+	import { site } from '$lib/seo/config';
 
 	type Kind = 'all' | 'note' | 'log' | 'essay';
 
@@ -53,7 +54,7 @@
 <div class="mx-auto max-w-[880px] px-6 py-10 md:px-10 md:py-14">
 	<PageMasthead {title} variant="thought" {sub} {filters} filtersLabel="Post kinds">
 		<span class="p-author h-card hidden">
-			<a class="u-url p-name" href="{base}/about/">Rhea Pradeep</a>
+			<a class="u-url p-name" href="{base}/about/">{site.name}</a>
 		</span>
 	</PageMasthead>
 

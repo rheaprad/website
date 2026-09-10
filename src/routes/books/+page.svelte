@@ -3,15 +3,18 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import type { PageData } from './$types';
+	import { pages } from '$lib/page-copy';
+
+	const copy = pages.books;
 
 	const { data }: { data: PageData } = $props();
 </script>
 
-<Seo title="Books" description="Picture books, graphic novels and artist books by Rhea Pradeep." />
+<Seo title={copy.title} description={copy.description} />
 
 <div class="mx-auto w-full max-w-[1440px] px-5 pt-10 pb-20 md:px-8 md:pt-14">
 	<div class="mb-10 md:mb-14">
-		<PageHeader title="Books" variant="caption" />
+		<PageHeader title={copy.title} sub={copy.sub} variant="caption" />
 	</div>
 
 	<!-- Equal-sized plates in an even grid: 2 up on phones, 4 on desktop. Each

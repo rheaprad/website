@@ -10,6 +10,12 @@
 			"options": {
 				"parser": "svelte"
 			}
+		},
+		{
+			"files": "src/lib/content/**/*.md",
+			"options": {
+				"singleQuote": false
+			}
 		}
 	],
 	"tailwindStylesheet": "./src/routes/layout.css"

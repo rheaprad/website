@@ -1,0 +1,52 @@
+{
+	"work": {
+		"title": "Work",
+		"sub": "",
+		"description": "The complete catalog of Rhea Pradeep's books, comics and illustrations."
+	},
+	"books": {
+		"title": "Books",
+		"sub": "",
+		"description": "Picture books, graphic novels and artist books by Rhea Pradeep."
+	},
+	"blog": {
+		"title": "Blog",
+		"sub": "",
+		"description": "Notes, process logs and essays by Rhea Pradeep."
+	},
+	"notes": {
+		"title": "Notes",
+		"sub": "",
+		"description": "Short sketchbook notes by Rhea Pradeep."
+	},
+	"logs": {
+		"title": "Process logs",
+		"sub": "",
+		"description": "Work-in-progress diaries for Rhea Pradeep's projects."
+	},
+	"essays": {
+		"title": "Essays",
+		"sub": "",
+		"description": "Long-form writing by Rhea Pradeep."
+	},
+	"tags": {
+		"title": "Tags",
+		"sub": "",
+		"description": "Rhea Pradeep's work, indexed by tag."
+	},
+	"log": {
+		"title": "Site log",
+		"sub": "Everything added or updated, newest first",
+		"description": "Everything added to or updated on rheapradeep.com, in order."
+	},
+	"now": {
+		"title": "Now",
+		"sub": "",
+		"description": "What Rhea Pradeep is working on right now."
+	},
+	"about": {
+		"title": "About",
+		"sub": "",
+		"description": "About Rhea Pradeep, an Indian illustrator and visual artist working across comics, picture books and bookmaking."
+	}
+}

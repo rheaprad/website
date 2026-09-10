@@ -5,6 +5,9 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SectionHead from '$lib/components/SectionHead.svelte';
 	import Seo from '$lib/components/Seo.svelte';
+	import { pages } from '$lib/page-copy';
+
+	const copy = pages.about;
 
 	const { data } = $props<{ data: PageData }>();
 	const { metadata, component, images, enhanced } = $derived(data);
@@ -79,10 +82,9 @@
 </script>
 
 <Seo
-	title="About"
+	title={copy.title}
 	type="profile"
-	description={seo.description ||
-		'About Rhea Pradeep, an Indian illustrator and visual artist working across comics, picture books and bookmaking.'}
+	description={seo.description || copy.description}
 	image={shareImage}
 	keywords={seo.keywords}
 	noindex={seo.noindex}

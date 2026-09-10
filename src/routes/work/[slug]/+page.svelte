@@ -11,6 +11,7 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import { formatDate } from '$lib/format';
 	import type { PageData } from './$types';
+	import { site } from '$lib/seo/config';
 
 	const { data }: { data: PageData } = $props();
 	const { item, related, adjacent, posts } = $derived(data);
@@ -43,7 +44,7 @@
 	const titleColor = $derived(item.titleColor || fallbackColor || '');
 	const description = $derived(
 		item.seo.description ||
-			`${item.title}, ${[item.medium ?? item.type, String(item.year)].join(', ')}. By Rhea Pradeep.`
+			`${item.title}, ${[item.medium ?? item.type, String(item.year)].join(', ')}. By ${site.author}.`
 	);
 
 	let lbOpen = $state(false);

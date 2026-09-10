@@ -6,12 +6,165 @@ backend:
 
 media_folder: src/lib/content
 public_folder: /src/lib/content
-site_url: https://rheaprad.netlify.app
-logout_redirect_url: https://rheaprad.netlify.app
+site_url: https://rheapradeep.com
+logout_redirect_url: https://rheapradeep.com
 logo:
   src: /portrait_r.webp
   show_in_header: true
+
+# The settings files are JSON and Prettier checks them in CI, where .prettierrc
+# sets useTabs. Without this the CMS writes spaces and `pnpm lint` fails.
+output:
+  json:
+    indent_style: tab
+
 collections:
+  - name: settings
+    label: Settings
+    files:
+      - name: site
+        label: Site & SEO
+        file: src/lib/content/settings/site.json
+        description: "Your name, tagline and the default search/social text for the whole site. Blank any field to fall back to the built-in default."
+        fields:
+          - { label: Site Name, name: name, widget: string }
+          - {
+              label: Tagline,
+              name: tagline,
+              widget: string,
+              hint: "Shown after your name in the browser tab on the homepage, e.g. Illustrator & Visual Artist.",
+            }
+          - {
+              label: Author Name,
+              name: author,
+              widget: string,
+              hint: "Used for bylines and the automatic descriptions on work pages. Usually the same as Site Name.",
+            }
+          - {
+              label: Site Description,
+              name: description,
+              widget: text,
+              hint: "The default search and social description, also used as the paragraph under the homepage greeting and in the RSS feed.",
+            }
+          - {
+              label: Keywords,
+              name: keywords,
+              widget: list,
+              hint: "Search keywords for the site as a whole. One per line.",
+            }
+          - {
+              label: Default Share Image,
+              name: default_image,
+              widget: image,
+              required: false,
+              media_folder: /static,
+              public_folder: /,
+              hint: "1200×630 recommended. Used for any page without its own share image.",
+            }
+          - {
+              label: Contact Email,
+              name: contact_email,
+              widget: string,
+              hint: "Shown in the footer and on the homepage postcard. Set the About page's email separately if it should differ.",
+            }
+          - label: Social Links
+            name: socials
+            widget: object
+            hint: "Used in the footer, the homepage postcard, and the structured data search engines read."
+            fields:
+              - { label: Instagram URL, name: instagram, widget: string, required: false }
+              - { label: LinkedIn URL, name: linkedin, widget: string, required: false }
+              - { label: BlueSky URL, name: bluesky, widget: string, required: false }
+              - { label: Behance URL, name: behance, widget: string, required: false }
+
+      - name: page_copy
+        label: Page Titles & Descriptions
+        file: src/lib/content/settings/pages.json
+        description: "The heading, subtitle and search description for each index page. Leave a subtitle blank to show no subtitle."
+        fields:
+          - label: Work
+            name: work
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Books
+            name: books
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Blog
+            name: blog
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Blog — Notes
+            name: notes
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Blog — Process Logs
+            name: logs
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Blog — Essays
+            name: essays
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Tags
+            name: tags
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Site Log
+            name: log
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: Now
+            name: now
+            widget: object
+            collapsed: true
+            hint: "The subtitle here is ignored — the Now page shows its own Updated date instead."
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+          - label: About
+            name: about
+            widget: object
+            collapsed: true
+            hint: "The SEO Description here is only used if the About page's own SEO Description is blank."
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Subtitle, name: sub, widget: string, required: false }
+              - { label: SEO Description, name: description, widget: text, required: false }
+
   - name: books
     label: Books
     folder: src/lib/content/art-page/books
@@ -32,9 +185,9 @@ collections:
       - {
           label: Tags,
           name: tags,
-          widget: select,
-          multiple: true,
-          options: ["artist-book", "picture-book", "graphic-novel", "character-design"],
+          widget: list,
+          required: false,
+          hint: "One per line. Each tag gets its own page. Existing tags: artist-book, picture-book, graphic-novel, character-design. Use lowercase-with-hyphens, and reuse an existing tag rather than inventing a near-duplicate.",
         }
       - {
           label: Medium,
@@ -68,6 +221,22 @@ collections:
           widget: image,
           required: false,
           hint: "Full-bleed image at the top of the book's page. Falls back to the cover.",
+        }
+      - {
+          label: Feature in grid,
+          name: feature,
+          widget: boolean,
+          default: false,
+          required: false,
+          hint: "Give this piece a larger cell on the work index.",
+        }
+      - {
+          label: Cover ratio override,
+          name: cover_ratio,
+          widget: number,
+          required: false,
+          value_type: float,
+          hint: "Width ÷ height. Leave blank to use the ratio measured from the cover automatically.",
         }
       - {
           label: Title Colour override,
@@ -143,10 +312,9 @@ collections:
       - {
           label: Tags,
           name: tags,
-          widget: select,
-          multiple: true,
+          widget: list,
           required: false,
-          options: ["character-design"],
+          hint: "One per line. Each tag gets its own page. Existing tags: character-design. Use lowercase-with-hyphens.",
         }
       - {
           label: Caption,
@@ -157,12 +325,50 @@ collections:
         }
       - { label: Image, name: cover_image, widget: image }
       - {
+          label: Feature in grid,
+          name: feature,
+          widget: boolean,
+          default: false,
+          required: false,
+          hint: "Give this piece a larger cell on the work index.",
+        }
+      - {
+          label: Cover ratio override,
+          name: cover_ratio,
+          widget: number,
+          required: false,
+          value_type: float,
+          hint: "Width ÷ height. Leave blank to use the ratio measured from the image automatically.",
+        }
+      - {
           label: Related Work,
           name: related,
           widget: list,
           required: false,
           hint: "Slugs of related works from any collection, e.g. canidae, orullaigal.",
         }
+      - label: SEO
+        name: seo
+        widget: object
+        collapsed: true
+        required: false
+        hint: "Optional. Overrides the automatic search/social title, description and share image for this illustration."
+        fields:
+          - { label: SEO Title, name: title, widget: string, required: false }
+          - {
+              label: SEO Description,
+              name: description,
+              widget: text,
+              required: false,
+            }
+          - {
+              label: Share Image,
+              name: image,
+              widget: image,
+              required: false,
+              hint: "1200×630 recommended. Falls back to the image, then the site default.",
+            }
+      - { label: Description, name: body, widget: markdown, required: false }
 
   - name: comics
     label: Comics
@@ -180,7 +386,56 @@ collections:
           widget: datetime,
           required: false,
         }
+      - {
+          label: Tags,
+          name: tags,
+          widget: list,
+          required: false,
+          hint: "One per line. Each tag gets its own page. Use lowercase-with-hyphens, and reuse an existing tag where one fits.",
+        }
+      - {
+          label: Medium,
+          name: medium,
+          widget: string,
+          required: false,
+          hint: "e.g. Short comic, Webcomic",
+        }
+      - {
+          label: Caption,
+          name: caption,
+          widget: string,
+          required: false,
+          hint: "Shown under the image in the lightbox.",
+        }
       - { label: Image, name: cover_image, widget: image }
+      - {
+          label: Feature in grid,
+          name: feature,
+          widget: boolean,
+          default: false,
+          required: false,
+          hint: "Give this piece a larger cell on the work index.",
+        }
+      - {
+          label: Cover ratio override,
+          name: cover_ratio,
+          widget: number,
+          required: false,
+          value_type: float,
+          hint: "Width ÷ height. Leave blank to use the ratio measured from the image automatically.",
+        }
+      - {
+          label: Gallery,
+          name: gallery,
+          widget: list,
+          required: false,
+          summary: "{{fields.caption}}",
+          fields:
+            [
+              { label: Image, name: image, widget: image },
+              { label: Caption, name: caption, widget: string, required: false },
+            ],
+        }
       - {
           label: Related Work,
           name: related,
@@ -188,6 +443,28 @@ collections:
           required: false,
           hint: "Slugs of related works from any collection.",
         }
+      - label: SEO
+        name: seo
+        widget: object
+        collapsed: true
+        required: false
+        hint: "Optional. Overrides the automatic search/social title, description and share image for this comic."
+        fields:
+          - { label: SEO Title, name: title, widget: string, required: false }
+          - {
+              label: SEO Description,
+              name: description,
+              widget: text,
+              required: false,
+            }
+          - {
+              label: Share Image,
+              name: image,
+              widget: image,
+              required: false,
+              hint: "1200×630 recommended. Falls back to the image, then the site default.",
+            }
+      - { label: Description, name: body, widget: markdown, required: false }
 
   - name: blog
     label: Blog
@@ -218,6 +495,13 @@ collections:
           widget: string,
           required: false,
           hint: "Work slug this post belongs to (required for logs), e.g. canidae. The post appears on that work's page.",
+        }
+      - {
+          label: Tags,
+          name: tags,
+          widget: list,
+          required: false,
+          hint: "One per line. Use lowercase-with-hyphens.",
         }
       - {
           label: Description,
@@ -266,6 +550,102 @@ collections:
         label: Home Page
         file: src/lib/content/home-page/home.md
         fields:
+          - label: Greeting & Intro
+            name: hero
+            widget: object
+            fields:
+              - {
+                  label: Greeting,
+                  name: greeting,
+                  widget: string,
+                  required: false,
+                  hint: "The hand-inked balloon at the top of the page, e.g. Hi, I'm Rhea!",
+                }
+              - {
+                  label: Intro Paragraph,
+                  name: blurb,
+                  widget: text,
+                  required: false,
+                  hint: "Leave blank to use the Site Description from Settings.",
+                }
+              - {
+                  label: Primary Button,
+                  name: primary_cta,
+                  widget: string,
+                  required: false,
+                }
+              - {
+                  label: Secondary Button,
+                  name: secondary_cta,
+                  widget: string,
+                  required: false,
+                }
+          - label: Section Headings
+            name: sections
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Work Section, name: work, widget: string, required: false }
+              - { label: Work Section Link, name: work_link, widget: string, required: false }
+              - { label: Doors Section, name: doors, widget: string, required: false }
+              - { label: Lately Section, name: lately, widget: string, required: false }
+              - { label: Lately Section Link, name: lately_link, widget: string, required: false }
+          - label: Doors
+            name: doors
+            widget: object
+            collapsed: true
+            hint: "The six picture links. Only the wording is editable — where each one goes is fixed."
+            fields:
+              - label: Books
+                name: books
+                widget: object
+                fields:
+                  - { label: Label, name: label, widget: string, required: false }
+                  - { label: Note, name: note, widget: string, required: false }
+              - label: Comics
+                name: comics
+                widget: object
+                fields:
+                  - { label: Label, name: label, widget: string, required: false }
+                  - { label: Note, name: note, widget: string, required: false }
+              - label: Illustrations
+                name: illustrations
+                widget: object
+                fields:
+                  - { label: Label, name: label, widget: string, required: false }
+                  - { label: Note, name: note, widget: string, required: false }
+              - label: Blog
+                name: blog
+                widget: object
+                fields:
+                  - { label: Label, name: label, widget: string, required: false }
+                  - { label: Note, name: note, widget: string, required: false }
+              - label: About
+                name: about
+                widget: object
+                fields:
+                  - { label: Label, name: label, widget: string, required: false }
+                  - { label: Note, name: note, widget: string, required: false }
+              - label: Now
+                name: now
+                widget: object
+                fields:
+                  - { label: Label, name: label, widget: string, required: false }
+                  - {
+                      label: Note,
+                      name: note,
+                      widget: string,
+                      required: false,
+                      hint: "Leave blank to show 'since {month}' from the Now page's Updated date.",
+                    }
+          - label: Postcard
+            name: postcard
+            widget: object
+            collapsed: true
+            hint: "The contact card at the foot of the page. The email and social links come from Settings."
+            fields:
+              - { label: Eyebrow, name: eyebrow, widget: string, required: false }
+              - { label: Headline, name: headline, widget: string, required: false }
           - {
               label: Featured Book Cover,
               name: featured_book,
@@ -341,7 +721,13 @@ collections:
               widget: string,
               required: false,
             }
-          - { label: Email, name: email, widget: string, required: false }
+          - {
+              label: Email,
+              name: email,
+              widget: string,
+              required: false,
+              hint: "Shown on this page only. The site-wide contact email lives in Settings → Site & SEO.",
+            }
           - {
               label: Instagram URL,
               name: instagram,
