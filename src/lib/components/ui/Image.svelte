@@ -5,13 +5,16 @@
 		alt?: string;
 		class?: string;
 		loading?: 'lazy' | 'eager';
+		/** Rendered width hint, so an enhanced source picks a candidate that
+		 *  matches the slot instead of assuming the full viewport. */
+		sizes?: string;
 	}
 
-	let { src, alt = '', class: className = '', loading = 'lazy' }: Props = $props();
+	let { src, alt = '', class: className = '', loading = 'lazy', sizes }: Props = $props();
 </script>
 
 {#if typeof src === 'string'}
-	<img {src} {alt} {loading} class={className} />
+	<img {src} {alt} {loading} {sizes} class={className} />
 {:else if src}
-	<enhanced:img {src} {alt} {loading} class={className} />
+	<enhanced:img {src} {alt} {loading} {sizes} class={className} />
 {/if}

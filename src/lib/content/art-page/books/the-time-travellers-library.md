@@ -11,5 +11,8 @@ nav_theme: Auto
 title_color_auto: "rgb(43, 35, 40)"
 nav_text_auto: dark
 cover_ratio_auto: 1.328
+shelf_hue_auto: 342.2
+shelf_chroma_auto: 0.573
+cover_light_auto: 0.603
 ---
 

@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/josefin-sans';
 @import '@fontsource-variable/inter';
+@import '@fontsource-variable/shantell-sans';
 @import 'tw-animate-css';
+@import '../lib/styles/neat-annotations.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -320,6 +322,278 @@ body {
 }
 .shelf:not(.is-shelved) > * {
 	flex: 1 1 200px;
+}
+
+/* ─── Hand annotations ────────────────────────────────────
+   neat-annotations draws the arrow and the label; all that's set here is the
+   hand it writes in, so a note in the margin looks like the same pen that drew
+   the concertina marks and the balloons. Ink is left alone: the colour
+   variants are single-class rules like `.ann` itself, so overriding
+   `--ann-color` here would quietly beat `.ann-amber`. Each use sets its own. */
+.ann {
+	--ann-font: 'Shantell Sans Variable', 'Shantell Sans', cursive;
+}
+
+/* ─── Taped paper ─────────────────────────────────────────
+   A picture pinned to the page rather than placed in a frame: a paper margin
+   around it, a hand-set lean, and a strip of masking tape holding it up. The
+   lean is a variable so each use can set its own; the default is barely there,
+   because a wall of art doesn't need the wall to perform. */
+.taped {
+	position: relative;
+	background: var(--color-background);
+	padding: 6px;
+	rotate: var(--tilt, -2deg);
+	box-shadow:
+		0 0 0 1px var(--color-border),
+		3px 5px 16px oklch(0 0 0 / 0.12);
+}
+.tape {
+	position: absolute;
+	top: -0.55rem;
+	left: 50%;
+	width: 2.75rem;
+	height: 1.1rem;
+	translate: -50% 0;
+	rotate: -4deg;
+	background: oklch(0.87 0.055 95 / 0.6);
+	box-shadow: inset 0 0 0 1px oklch(0.76 0.05 95 / 0.4);
+}
+
+/* ─── The ribbon: scraps drifting past under the masthead ──
+   Sketchbook offcuts taped along the wall. The track holds the scraps twice
+   and travels exactly half its own width plus half a gap, so the second copy
+   lands where the first began and the loop has no seam. Heights are fixed and
+   widths are left to the pictures, the same no-cropping bargain the wall and
+   the shelf make. Decorative, so it holds still on hover and on focus, and the
+   component drops the duplicate copy outright when motion is unwelcome. */
+.ribbon {
+	--ribbon-h: 130px;
+	--ribbon-gap: 0.75rem;
+	overflow: hidden;
+	padding-block: 1.5rem 1.75rem;
+	mask-image: linear-gradient(
+		to right,
+		transparent,
+		#000 3rem,
+		#000 calc(100% - 3rem),
+		transparent
+	);
+}
+@media (min-width: 768px) {
+	.ribbon {
+		--ribbon-h: 188px;
+		--ribbon-gap: 1.25rem;
+		padding-block: 2rem 2.25rem;
+	}
+}
+.ribbon-track {
+	display: flex;
+	width: max-content;
+	align-items: center;
+	gap: var(--ribbon-gap);
+	animation: ribbon-drift var(--ribbon-duration, 90s) linear infinite;
+}
+.ribbon:hover .ribbon-track,
+.ribbon:focus-within .ribbon-track {
+	animation-play-state: paused;
+}
+@keyframes ribbon-drift {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(calc(-50% - var(--ribbon-gap) / 2), 0, 0);
+	}
+}
+.ribbon-scrap {
+	flex: 0 0 auto;
+}
+.ribbon-scrap img {
+	display: block;
+	height: var(--ribbon-h);
+	width: auto;
+	max-width: none;
+}
+@media (prefers-reduced-motion: reduce) {
+	.ribbon {
+		overflow-x: auto;
+		mask-image: none;
+	}
+	.ribbon-track {
+		animation: none;
+	}
+}
+
+/* ─── The postcard ────────────────────────────────────────
+   The page's closing invitation, built as the object it is asking for. What
+   makes a rectangle read as a postcard is never the layout, it is the small
+   print of the thing: corners a printer would actually cut, card stock warmer
+   than the desk it lies on, a keyline where the stock ends, a tight contact
+   shadow under the near edge with a wider one further out, ruled address lines
+   nobody has written on yet, and a frank struck across the stamp.
+
+   A different paper object from the taped scraps above on purpose: the same
+   trick twice on one page stops reading as a hand and starts reading as a
+   template. */
+.postcard {
+	position: relative;
+	overflow: hidden;
+	rotate: -1.1deg;
+	border-radius: 9px;
+	/* Card stock: a touch warmer and lighter than the page it rests on. */
+	background: oklch(0.992 0.009 92);
+	box-shadow:
+		0 0 0 1px oklch(0.8 0.014 92),
+		0 1px 1px oklch(0 0 0 / 0.07),
+		0 3px 6px oklch(0 0 0 / 0.07),
+		12px 20px 40px oklch(0 0 0 / 0.14);
+}
+:global(.dark) .postcard {
+	background: oklch(0.24 0.008 92);
+	box-shadow:
+		0 0 0 1px oklch(0.4 0.01 92),
+		0 3px 6px oklch(0 0 0 / 0.4),
+		12px 20px 40px oklch(0 0 0 / 0.5);
+}
+
+.postcard-pic {
+	position: relative;
+	min-height: 12rem;
+	background: var(--color-muted);
+}
+.postcard-pic img {
+	position: absolute;
+	inset: 0;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+/* The printed rule dividing picture from message. */
+.postcard-pic::after {
+	content: '';
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0;
+	height: 1px;
+	background: oklch(0.8 0.014 92);
+}
+
+.postcard-note {
+	position: relative;
+	padding: 1.75rem 1.5rem 4.5rem;
+}
+
+@media (min-width: 768px) {
+	.postcard-pic {
+		min-height: 20rem;
+	}
+	.postcard-pic::after {
+		inset-inline: auto 0;
+		inset-block: 0;
+		height: auto;
+		width: 1px;
+	}
+	.postcard-note {
+		padding: 2.5rem 2.5rem 5.5rem;
+	}
+}
+
+/* The address block: ruled and empty, because the card has not been sent yet. */
+.postcard-lines {
+	position: absolute;
+	right: 1.5rem;
+	bottom: 1.6rem;
+	left: 1.5rem;
+	height: 2.6rem;
+	background-image: repeating-linear-gradient(
+		to bottom,
+		transparent 0 1.2rem,
+		oklch(0.8 0.014 92) 1.2rem calc(1.2rem + 1px)
+	);
+}
+@media (min-width: 768px) {
+	.postcard-lines {
+		right: 2.5rem;
+		bottom: 2.25rem;
+		left: auto;
+		width: 15rem;
+		height: 3.9rem;
+	}
+}
+
+/* ─── Stamp and frank ─────────────────────────────────────
+   Her face, franked into the corner. The perforation is punched by painting
+   notches in the card's own colour around a plain margin, so where the masks
+   don't land it degrades to an ordinary bordered thumbnail. */
+.postcard-frank {
+	position: absolute;
+	top: 1.25rem;
+	right: 1.25rem;
+	width: 3.5rem;
+}
+@media (min-width: 768px) {
+	.postcard-frank {
+		top: 2rem;
+		right: 2.5rem;
+		width: 4.25rem;
+	}
+}
+.stamp {
+	position: relative;
+	display: block;
+	padding: 5px;
+	rotate: 3.5deg;
+	background: oklch(0.998 0.004 92);
+	box-shadow: inset 0 0 0 1px oklch(0.86 0.012 92);
+}
+:global(.dark) .stamp {
+	background: oklch(0.3 0.008 92);
+	box-shadow: inset 0 0 0 1px oklch(0.42 0.01 92);
+}
+.stamp img {
+	display: block;
+	aspect-ratio: 0.82;
+	width: 100%;
+	object-fit: cover;
+}
+.stamp::after {
+	content: '';
+	position: absolute;
+	inset: -5px;
+	pointer-events: none;
+	--notch: 4.5px;
+	--card: oklch(0.992 0.009 92);
+	background:
+		radial-gradient(circle var(--notch) at 50% 0, var(--card) 96%, transparent) 0 0 / 11px 10px
+			repeat-x,
+		radial-gradient(circle var(--notch) at 50% 100%, var(--card) 96%, transparent) 0 100% / 11px
+			10px repeat-x,
+		radial-gradient(circle var(--notch) at 0 50%, var(--card) 96%, transparent) 0 0 / 10px 11px
+			repeat-y,
+		radial-gradient(circle var(--notch) at 100% 50%, var(--card) 96%, transparent) 100% 0 / 10px
+			11px repeat-y;
+}
+:global(.dark) .stamp::after {
+	--card: oklch(0.24 0.008 92);
+}
+/* Struck across the stamp and out onto the card, off true and under-inked. */
+.postcard-postmark {
+	position: absolute;
+	top: -0.55rem;
+	right: 0.9rem;
+	width: 5.75rem;
+	rotate: -13deg;
+	color: var(--color-foreground);
+	opacity: 0.2;
+	pointer-events: none;
+}
+@media (min-width: 768px) {
+	.postcard-postmark {
+		top: -0.5rem;
+		right: 1.1rem;
+		width: 7rem;
+	}
 }
 
 /* ─── Long-form prose (blog posts, work descriptions) ─────── */

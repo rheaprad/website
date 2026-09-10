@@ -15,6 +15,24 @@ export interface GalleryItem {
 	caption: string;
 }
 
+/**
+ * What the cover looks like, in three numbers, measured at build time by
+ * `scripts/extract-book-colors.mjs`. BookCard turns these into the backdrop a
+ * book is staged against: `hue` says which colour the book is, `chroma` how
+ * much of that colour to admit, `light` how light the cover is, so the
+ * backdrop can move away from it and keep the object legible. Deliberately not
+ * a finished colour — lightness and chroma bands live in the card's CSS, which
+ * is what keeps ten unrelated books reading as one set.
+ */
+export interface PlateReading {
+	/** OKLCH hue in degrees, 0-360. */
+	hue: number;
+	/** 0-1: how colourful the cover is overall (greyscale work lands near 0.2). */
+	chroma: number;
+	/** 0-1: mean luminance of the cover. */
+	light: number;
+}
+
 export interface WorkItem {
 	slug: string;
 	type: WorkType;
@@ -34,6 +52,10 @@ export interface WorkItem {
 	ratio: number;
 	/** Curatorial emphasis: promote a piece to a larger cell in the grid. */
 	feature: boolean;
+	/** Cover-derived backdrop reading; see PlateReading. */
+	plate: PlateReading;
+	/** Responsive `?enhanced` form of the cover, when one could be generated. */
+	coverEnhanced?: unknown;
 	/** Resolved hero_image, falling back to the cover. */
 	hero: string;
 	gallery: GalleryItem[];
@@ -79,11 +101,24 @@ const nowModules = import.meta.glob('/src/lib/content/now-page/*.md', { eager: t
 	string,
 	any
 >;
+const homeModules = import.meta.glob('/src/lib/content/home-page/*.md', { eager: true }) as Record<
+	string,
+	any
+>;
 const images = import.meta.glob('/src/lib/content/**/*.{jpg,jpeg,png,webp}', {
 	query: '?url',
 	import: 'default',
 	eager: true
 }) as Record<string, string>;
+
+// Covers alone also get a responsive `?enhanced` form: they're the one image
+// shown many-to-a-page, and the originals are 3-4 megapixel camera files.
+// Keyed by the raw frontmatter path, not the resolved URL.
+const enhancedCovers = import.meta.glob('/src/lib/content/art-page/**/cover.{jpg,jpeg,png,webp}', {
+	query: '?enhanced',
+	import: 'default',
+	eager: true
+}) as Record<string, unknown>;
 
 export function resolveImage(path: string): string {
 	if (!path) return '';
@@ -92,11 +127,14 @@ export function resolveImage(path: string): string {
 
 const slugOf = (path: string) => path.split('/').pop()?.replace('.md', '') ?? '';
 
+const num = (v: unknown, fallback: number) => (Number.isFinite(Number(v)) ? Number(v) : fallback);
+
 function toWorkItem(path: string, mod: any): WorkItem {
 	const meta = mod.metadata ?? {};
 	const type: WorkType = meta.type ?? 'illustration';
 	const fmTags: string[] = Array.isArray(meta.tags) ? meta.tags : [];
-	const cover = resolveImage(meta.cover_image ?? '');
+	const coverPath: string = meta.cover_image ?? '';
+	const cover = resolveImage(coverPath);
 	const manualNav: 'light' | 'dark' | null =
 		meta.nav_theme === 'Light text' ? 'light' : meta.nav_theme === 'Dark text' ? 'dark' : null;
 	return {
@@ -114,6 +152,13 @@ function toWorkItem(path: string, mod: any): WorkItem {
 		cover,
 		ratio: Number(meta.cover_ratio ?? meta.cover_ratio_auto) || 0.8,
 		feature: meta.feature === true,
+		plate: {
+			// Neutral warm mid-tone when a piece hasn't been analysed yet.
+			hue: num(meta.shelf_hue_auto, 70),
+			chroma: num(meta.shelf_chroma_auto, 0.3),
+			light: num(meta.cover_light_auto, 0.6)
+		},
+		coverEnhanced: enhancedCovers[coverPath],
 		hero: resolveImage(meta.hero_image ?? '') || cover,
 		gallery: (Array.isArray(meta.gallery) ? meta.gallery : []).map((g: any) =>
 			typeof g === 'string'
@@ -306,4 +351,42 @@ export function getNow(): NowPage | undefined {
 	const mod = Object.values(nowModules)[0];
 	if (!mod) return undefined;
 	return { updated: mod.metadata?.updated ?? '', component: mod.default };
+}
+
+export interface HomePage {
+	/** Work the CMS singled out (featured_book, featured_comic), in that order. */
+	featured: WorkItem[];
+	/** Authored landing scraps — the ribbon that runs under the masthead. */
+	strip: string[];
+}
+
+/**
+ * Map an authored image path back to the work it belongs to. The CMS names a
+ * picture, not a slug, so match on the resolved URL first and fall back to the
+ * path's own shape: a book keeps its spreads in a folder named for the work,
+ * a single-image piece is named for its own.
+ */
+function workForImage(path: string): WorkItem | undefined {
+	const url = resolveImage(path);
+	if (!url) return undefined;
+	const byImage = allWork.find(
+		(w) => w.cover === url || w.hero === url || w.gallery.some((g) => g.src === url)
+	);
+	if (byImage) return byImage;
+	const parts = path.split('/');
+	const stem = parts.pop()?.replace(/\.[^.]+$/, '') ?? '';
+	const folder = parts.pop() ?? '';
+	return getWork(folder) ?? getWork(stem);
+}
+
+export function getHome(): HomePage {
+	const meta = (Object.values(homeModules)[0] as any)?.metadata ?? {};
+	const featured = [meta.featured_book, meta.featured_comic]
+		.filter((p): p is string => typeof p === 'string' && !!p)
+		.map(workForImage)
+		.filter((w): w is WorkItem => !!w);
+	const strip = (Array.isArray(meta.carousel) ? meta.carousel : [])
+		.map((c: any) => resolveImage(typeof c === 'string' ? c : (c?.image ?? '')))
+		.filter((src: string) => !!src);
+	return { featured, strip };
 }

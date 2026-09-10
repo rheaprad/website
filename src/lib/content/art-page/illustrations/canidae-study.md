@@ -10,4 +10,7 @@ related:
 title_color_auto: "rgb(40, 59, 85)"
 nav_text_auto: dark
 cover_ratio_auto: 1.5
+shelf_hue_auto: 257.2
+shelf_chroma_auto: 0.846
+cover_light_auto: 0.674
 ---
