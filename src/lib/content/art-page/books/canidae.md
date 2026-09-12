@@ -57,9 +57,11 @@ title_color_auto: rgb(40, 73, 87)
 
 > _“But grandmother, what big teeth you have!” said Little Red RIding Hood._
 > 
+> 
 > _“The better to eat you with!” roared the wolf, and before she could scream, he sprang from the bed and swallowed Little Red Riding Hood whole._
 > 
-> - _The Little Red Riding Hood_
+> 
+> \~ _The Little Red Riding Hood_
 
 Growing up, I’ve read several books about how the “Big, Bad Wolf” terrorizes people and animals, whether in _Little Red Riding Hood_, _The Three Little Pigs_ or in _Aesop’s Fables_. This stereotype has unknowingly bled into our perception of wolves in the real world - and the harm they may cause us. But the risk of a wolf attacking us is… near zero. Rather, it is in their nature to avoid us. In the early 20th century, park officials decided to eradicate the grey wolf population in Yellowstone National Park in the United States of America because they deemed the creatures to be predatory and harmful. By killing over one hundred wolves, the park felt the absence of the wolves in damaging ways. I found it interesting that we are so fond of domesticated dogs (as far as referring to them as “man’s best friend”), yet their ancestors, the wolf, are cast aside and killed off as harmful predators. 
 
