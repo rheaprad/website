@@ -6,7 +6,7 @@ updated: ''
 tags:
   - artist-book
   - comic
-medium: Artist book
+medium: Artist Book
 pages: ''
 dimensions: ''
 cover_image: /src/lib/content/art-page/books/chicago/cover.webp
