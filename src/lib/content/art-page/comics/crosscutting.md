@@ -1,7 +1,7 @@
 ---
 type: comic
 title: For the Love of Reading!
-date: 2024-05-01T00:00:00Z
+date: 2025-02-19T20:00:00
 updated: ''
 tags: []
 medium: ''
