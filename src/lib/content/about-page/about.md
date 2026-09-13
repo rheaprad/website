@@ -5,8 +5,8 @@ resume: /resume.pdf
 linkedin: https://linkedin.com/in/rheapradeep
 email: rheapradeep01@gmail.com
 instagram: https://www.instagram.com/rhepository/
-bluesky: https://bsky.app/profile/rheapradeep.com
-behance: https://www.behance.net/rheapradeep
+bluesky: https://bsky.app/profile/rhepository.bsky.social
+behance: https://www.behance.net/rheapradeep01
 seo: null
 ---
 
