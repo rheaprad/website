@@ -1,7 +1,7 @@
 ---
 type: book
 title: The Cosmic Calendar
-date: 2025-12-31T19:00:00
+date: 2026-12-31T19:00:00
 updated: ''
 tags:
   - artist-book
