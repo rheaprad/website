@@ -62,4 +62,6 @@ title_color_auto: rgb(166, 165, 162)
 
 _"Pop. Six. Squish. Uh-uh. Cicero. Lipschitz."_
 
-_Cell Block Tango_ is a song from the 1975 musical _Chicago_ about six women who are incarcerated for murdering their significant other. This piece is a series of artist’s books housed in a book box consisting of an introduction to the Cook County Jail and six zines dedicated to each woman. The books and materials used to create each story reflect the theme of their respective murder.
+_Cell Block Tango_ is a song from the 1975 musical _Chicago_ about six women who are incarcerated for murdering their significant other. This piece is a series of artist’s books housed in a book box consisting of an introduction to the Cook County Jail and six zines dedicated to each woman. The books and materials used to create each story reflect the theme of their respective murder. 
+
+Reach out to enquire about price and acquire a copy for your museum/library/personal collections.
