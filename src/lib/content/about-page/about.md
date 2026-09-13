@@ -1,7 +1,7 @@
 ---
 photo: /src/lib/content/about-page/about-photo.webp
 photo_caption: Rhea and the Oddities of Being an Artist; circa 2026
-resume: /resume.pdf
+resume: /src/lib/content/Rhea Pradeep_Resume.pdf
 linkedin: https://linkedin.com/in/rheapradeep
 email: rheapradeep01@gmail.com
 instagram: https://www.instagram.com/rhepository/
