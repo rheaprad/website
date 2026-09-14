@@ -5,9 +5,17 @@
 	import { base } from '$app/paths';
 	import EmailLink from '$lib/components/EmailLink.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import Image from '$lib/components/ui/Image.svelte';
+	import rheaAndDog from '$lib/assets/rhea-and-dog.png?enhanced';
 	import { site } from '$lib/seo/config';
 
-	const columns = [
+	type NavGroup = {
+		heading: string;
+		external?: boolean;
+		links: { href: string; label: string }[];
+	};
+
+	const navGroups: NavGroup[] = [
 		{
 			heading: 'Index',
 			links: [
@@ -25,15 +33,18 @@
 				{ href: `${base}/now/`, label: 'Now' },
 				{ href: `${base}/rss.xml`, label: 'RSS' }
 			]
+		},
+		{
+			heading: 'Elsewhere',
+			external: true,
+			links: [
+				{ href: site.socials.instagram, label: 'Instagram' },
+				{ href: site.socials.linkedin, label: 'LinkedIn' },
+				{ href: site.socials.bluesky, label: 'Bluesky' },
+				{ href: site.socials.behance, label: 'Behance' }
+			].filter((l) => !!l.href)
 		}
 	];
-
-	const elsewhere = [
-		{ href: site.socials.instagram, label: 'Instagram' },
-		{ href: site.socials.linkedin, label: 'LinkedIn' },
-		{ href: site.socials.bluesky, label: 'Bluesky' },
-		{ href: site.socials.behance, label: 'Behance' }
-	].filter((l) => !!l.href);
 
 	type SignOff = { text: string; link?: { label: string; href: string } };
 	const signOffs: SignOff[] = [
@@ -51,8 +62,8 @@
 	const year = new Date().getFullYear();
 
 	const linkClass =
-		'text-[14px] underline-offset-4 transition-colors hover:text-primary hover:underline';
-	const headingClass = 'text-[10px] font-medium  uppercase text-muted-foreground';
+		'text-[12px] leading-[1.4] underline-offset-4 transition-colors hover:text-primary hover:underline sm:text-[13.5px]';
+	const headingClass = 'text-[9px] font-medium uppercase text-muted-foreground sm:text-[10px]';
 
 	// Sending the reader back up is a nicety, not a destination, so it stays a
 	// button and honours a request for less motion.
@@ -82,13 +93,15 @@
 				class="rounded-lg border border-foreground/15 bg-background px-5 py-6 text-foreground
 				       md:px-8 md:py-7"
 			>
-				<div class="grid grid-cols-2 gap-x-8 gap-y-7 md:grid-cols-[1.1fr_auto_auto_auto]">
-					<div class="col-span-2 md:col-span-1">
+				<div
+					class="grid items-center gap-y-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:gap-x-10"
+				>
+					<div>
 						<p class="font-display text-[17px] font-semibold">{site.name}</p>
 						{#key signOff}
 							<p
 								in:fade={{ duration: prefersReducedMotion.current ? 0 : 300 }}
-								class="mt-1.5 max-w-[28ch] text-[13.5px] leading-[1.5] text-muted-foreground"
+								class="mt-1.5 max-w-[30ch] text-[13.5px] leading-[1.5] text-muted-foreground"
 							>
 								{signOff.text}
 								{#if signOff.link}
@@ -102,41 +115,48 @@
 							</p>
 						{/key}
 
-						<p class="mt-4 {headingClass}">Say hello</p>
+						<p class="mt-6 {headingClass}">Say hello</p>
 						<EmailLink
 							email={site.email}
 							label="Email"
 							side="top"
-							class="mt-1 inline-block font-display text-[15px] font-semibold underline-offset-4
+							class="mt-1.5 inline-block font-display text-[15px] font-semibold underline-offset-4
 							       transition-colors hover:text-primary hover:underline"
 						>
 							{site.email}
 						</EmailLink>
+
+						<div class="mt-8 grid grid-cols-3 gap-x-3 sm:gap-x-6">
+							{#each navGroups as col (col.heading)}
+								<nav aria-label={col.heading}>
+									<h2 class={headingClass}>{col.heading}</h2>
+									<ul class="mt-2 space-y-1">
+										{#each col.links as link (link.href)}
+											<li>
+												<a
+													href={link.href}
+													target={col.external ? '_blank' : undefined}
+													rel={col.external ? 'noopener noreferrer me' : undefined}
+													class={linkClass}
+												>
+													{link.label}
+												</a>
+											</li>
+										{/each}
+									</ul>
+								</nav>
+							{/each}
+						</div>
 					</div>
 
-					{#each columns as col (col.heading)}
-						<nav aria-label={col.heading}>
-							<h2 class={headingClass}>{col.heading}</h2>
-							<ul class="mt-3 space-y-2">
-								{#each col.links as link (link.href)}
-									<li><a href={link.href} class={linkClass}>{link.label}</a></li>
-								{/each}
-							</ul>
-						</nav>
-					{/each}
-
-					<nav aria-label="Elsewhere">
-						<h2 class={headingClass}>Elsewhere</h2>
-						<ul class="mt-3 space-y-2">
-							{#each elsewhere as s (s.href)}
-								<li>
-									<a href={s.href} target="_blank" rel="noopener noreferrer me" class={linkClass}>
-										{s.label}
-									</a>
-								</li>
-							{/each}
-						</ul>
-					</nav>
+					<div class="md:-mr-2">
+						<Image
+							src={rheaAndDog}
+							alt=""
+							sizes="(min-width: 768px) 540px, 100vw"
+							class="block w-full max-w-none"
+						/>
+					</div>
 				</div>
 			</div>
 
