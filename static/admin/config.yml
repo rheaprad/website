@@ -713,7 +713,9 @@ collections:
               name: resume,
               widget: file,
               required: false,
-              hint: "PDF or link the RESUME button points to.",
+              media_folder: /src/lib/content/files,
+              public_folder: /src/lib/content/files,
+              hint: "PDF or link the RESUME button points to. Uploads land in content/files, which is the folder the site publishes documents from.",
             }
           - {
               label: LinkedIn URL,

@@ -58,7 +58,7 @@
 
 		<div class="min-w-0 md:max-w-[34rem]">
 			<h1
-				class="font-display text-[clamp(2.5rem,7.5vw,4.5rem)] leading-[0.95] font-bold [font-feature-settings:'dlig'_1]"
+				class="font-display [font-feature-settings:'dlig'_1] text-[clamp(2.5rem,7.5vw,4.5rem)] leading-[0.95] font-bold"
 			>
 				<a href="{base}/" class="u-url p-name">{hero.greeting}</a>
 			</h1>

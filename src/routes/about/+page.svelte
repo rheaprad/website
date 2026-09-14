@@ -11,7 +11,7 @@
 	const copy = pages.about;
 
 	const { data } = $props<{ data: PageData }>();
-	const { metadata, component, photoPicture, photoSrc, shareImage } = $derived(data);
+	const { metadata, component, photoPicture, photoSrc, shareImage, resume } = $derived(data);
 	const Bio = $derived(component);
 	const about = $derived(metadata ?? {});
 
@@ -126,9 +126,9 @@
 				</div>
 			{/if}
 
-			{#if about.resume}
+			{#if resume}
 				<a
-					href={about.resume}
+					href={resume}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="tactile mt-9 bg-primary px-5 py-2.5 font-display text-[16px] font-semibold text-primary-foreground"

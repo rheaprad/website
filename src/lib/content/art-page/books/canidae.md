@@ -52,7 +52,7 @@ cover_ratio_auto: 1.5
 nav_text_auto: dark
 shelf_chroma_auto: 0.876
 shelf_hue_auto: 222.3
-title_color_auto: rgb(40, 73, 87)
+title_color_auto: "rgb(40, 73, 87)"
 ---
 
 > _“But grandmother, what big teeth you have!” said Little Red Riding Hood._

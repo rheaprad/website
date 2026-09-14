@@ -41,7 +41,7 @@ cover_ratio_auto: 1.5
 nav_text_auto: dark
 shelf_chroma_auto: 0.451
 shelf_hue_auto: 46.7
-title_color_auto: rgb(123, 67, 39)
+title_color_auto: "rgb(123, 67, 39)"
 ---
 
 _House of Memories_ is a research-driven narrative about dissociative amnesia and generational trauma. The narrative reflects the fragmented nature of memory as it follows a mother, father and son and the events that lead up to the loss of a family member. This piece is very important to me and my practice. I experiment with non-linear narratives as this story can be read from front to back, as well as back to front. The significance lies in the limited color palette: each family member is assigned one color that slowly fades and brightens as we switch from the past to the present.

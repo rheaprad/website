@@ -24,7 +24,7 @@ cover_ratio_auto: 0.753
 nav_text_auto: light
 shelf_chroma_auto: 0.581
 shelf_hue_auto: 98.7
-title_color_auto: rgb(185, 169, 71)
+title_color_auto: "rgb(185, 169, 71)"
 ---
 
 \~

@@ -1,4 +1,4 @@
-import { resolveImage, resolvePicture } from '$lib/content';
+import { resolveFile, resolveImage, resolvePicture } from '$lib/content';
 import type { PageLoad } from './$types';
 
 export const prerender = true;
@@ -16,6 +16,9 @@ export const load: PageLoad = async () => {
 		component: aboutModule?.default,
 		metadata,
 		photoPicture: resolvePicture(metadata.photo ?? ''),
+		// The résumé is authored as a source path; only the glob knows the URL
+		// the file is actually emitted at.
+		resume: resolveFile(metadata.resume ?? ''),
 		photoSrc: resolveImage(metadata.photo ?? ''),
 		shareImage: resolveImage(seo.image || metadata.photo || '')
 	};

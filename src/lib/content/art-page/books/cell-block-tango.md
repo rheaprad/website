@@ -57,7 +57,7 @@ cover_ratio_auto: 1.528
 nav_text_auto: dark
 shelf_chroma_auto: 0.293
 shelf_hue_auto: 84.6
-title_color_auto: rgb(166, 165, 162)
+title_color_auto: "rgb(166, 165, 162)"
 ---
 
 _"Pop. Six. Squish. Uh-uh. Cicero. Lipschitz."_

@@ -170,6 +170,33 @@ const rawImages = import.meta.glob('/src/lib/content/**/*.{gif,svg,avif}', {
 	eager: true
 }) as Record<string, string>;
 
+/**
+ * Documents the CMS's `file` widget can attach — the résumé today. Authored
+ * paths look like `/src/lib/content/x.pdf`, which is a *source* path: it
+ * resolves in `vite dev`, where the project root is served, and 404s in the
+ * built site, where nothing under `src/` is copied to the output. Running them
+ * through a `?url` glob emits the file as a real build asset and hands back the
+ * URL it actually lives at — which also disposes of the spaces in the authored
+ * filename. Scoped to `content/files/`, which is where the CMS's file widget
+ * puts uploads: a glob over the whole content tree would also publish documents
+ * that are in the repo but not meant for the site.
+ */
+const documents = import.meta.glob('/src/lib/content/files/**/*.{pdf,epub,zip,doc,docx}', {
+	query: '?url',
+	import: 'default',
+	eager: true
+}) as Record<string, string>;
+
+/**
+ * The emitted URL for an attached document. Anything this doesn't know about —
+ * an external link, which the CMS field also accepts — is handed back
+ * untouched.
+ */
+export function resolveFile(path: string): string {
+	if (!path) return '';
+	return documents[path] ?? path;
+}
+
 /** The responsive form. Anything rendering through `ui/Image` wants this. */
 export function resolvePicture(path: string): Picture | undefined {
 	return path ? pictures[path] : undefined;
