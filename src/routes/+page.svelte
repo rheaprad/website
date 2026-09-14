@@ -5,7 +5,6 @@
 	import portrait from '$lib/content/home-page/portrait_r.webp';
 	import Seo from '$lib/components/Seo.svelte';
 	import Image from '$lib/components/ui/Image.svelte';
-	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SectionHead from '$lib/components/SectionHead.svelte';
 	import GalleryGrid from '$lib/components/GalleryGrid.svelte';
 	import EmailLink from '$lib/components/EmailLink.svelte';
@@ -31,20 +30,41 @@
 <Seo />
 
 <!-- ─── Masthead ────────────────────────────────────────────────
-	 She introduces herself in her own idiom: the name inside a hand-inked
-	 balloon, the way every other page titles itself, and her photograph taped
-	 up beside it with a note in the margin. -->
-<section class="h-card mx-auto w-full max-w-[1100px] px-6 pt-10 pb-2 md:px-10 md:pt-16">
-	<div
-		class="flex flex-col-reverse items-start gap-10 md:flex-row md:items-center md:justify-between md:gap-14"
-	>
+	 Her photograph first, taped up with a note in the margin, and her name
+	 beside it set plainly in the display face — no balloon, no box. The name is
+	 the title of the page; the line under it does the introducing. -->
+<section class="h-card mx-auto w-full max-w-[1100px] px-6 pt-10 pb-10 md:px-10 md:pt-16 md:pb-12">
+	<div class="flex flex-col items-start gap-10 md:flex-row md:items-center md:gap-14">
+		<!-- Portrait, taped to the page with a note in the margin — leading the
+		     row on a wide page, and still first on a phone. -->
+		<span
+			class="ann ann-n ann-sm-w ann-no-mark shrink-0"
+			data-note="that's me"
+			style="--ann-color: var(--color-primary)"
+		>
+			<span class="taped block w-[168px] md:w-[240px]" style="--tilt:-2.5deg">
+				<span class="tape"></span>
+				<!-- The page's LCP: say so, rather than letting it queue behind the
+				     ribbon below it. -->
+				<img
+					src={portrait}
+					alt="Rhea Pradeep"
+					loading="eager"
+					fetchpriority="high"
+					class="u-photo block aspect-square w-full object-cover"
+				/>
+			</span>
+		</span>
+
 		<div class="min-w-0 md:max-w-[34rem]">
-			<a href="{base}/" class="u-url p-name mb-4 inline-block">
-				<PageHeader title={hero.greeting} variant="speech" />
-			</a>
+			<h1
+				class="font-display text-[clamp(2.5rem,7.5vw,4.5rem)] leading-[0.95] font-bold [font-feature-settings:'dlig'_1]"
+			>
+				<a href="{base}/" class="u-url p-name">{hero.greeting}</a>
+			</h1>
 
 			<p
-				class="p-note mt-4 max-w-[46ch] text-[15px] leading-[1.7] text-muted-foreground md:text-base"
+				class="p-note mt-5 max-w-[46ch] text-[15px] leading-[1.7] text-muted-foreground md:text-base"
 			>
 				{hero.blurb || site.description}
 			</p>
@@ -64,28 +84,6 @@
 				</a>
 			</div>
 		</div>
-
-		<!-- Portrait, taped to the page with a note in the margin — below it on a
-		     wide page, out to the right on a phone, where the space under the
-		     picture belongs to the balloon. -->
-		<span
-			class="ann ann-n ann-sm-w ann-no-mark shrink-0"
-			data-note="that's me"
-			style="--ann-color: var(--color-primary)"
-		>
-			<span class="taped block w-[168px] md:w-[220px]" style="--tilt:-2.5deg">
-				<span class="tape"></span>
-				<!-- The page's LCP: say so, rather than letting it queue behind the
-				     ribbon below it. -->
-				<img
-					src={portrait}
-					alt="Rhea Pradeep"
-					loading="eager"
-					fetchpriority="high"
-					class="u-photo block aspect-square w-full object-cover"
-				/>
-			</span>
-		</span>
 	</div>
 </section>
 

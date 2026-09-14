@@ -1,7 +1,8 @@
 ---
 hero:
-  greeting: Hi, I'm Rhea!
-  blurb: ""
+  greeting: Rhea Pradeep
+  blurb: Illustrator and visual artist in India. I make comics and picture
+    books, draw characters for a living, and bind a fair few of the books by hand.
   primary_cta: See my work
   secondary_cta: About me
 sections:

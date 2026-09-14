@@ -559,7 +559,7 @@ collections:
                   name: greeting,
                   widget: string,
                   required: false,
-                  hint: "The hand-inked balloon at the top of the page, e.g. Hi, I'm Rhea!",
+                  hint: "The big name at the top of the page, e.g. Rhea Pradeep.",
                 }
               - {
                   label: Intro Paragraph,

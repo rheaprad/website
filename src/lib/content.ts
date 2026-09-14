@@ -538,7 +538,7 @@ export interface HomePage {
 
 const HOME_DEFAULTS = {
 	hero: {
-		greeting: "Hi, I'm Rhea!",
+		greeting: 'Rhea Pradeep',
 		/** Blank by default: the masthead paragraph falls back to `site.description`. */
 		blurb: '',
 		primaryCta: 'See my work',
