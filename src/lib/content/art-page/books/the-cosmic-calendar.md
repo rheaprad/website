@@ -8,8 +8,8 @@ tags:
 medium: Artist book
 pages: ''
 dimensions: ''
-cover_image: /src/lib/content/art-page/books/the-cosmic-calendar/cover.webp
-hero_image: /src/lib/content/art-page/books/the-cosmic-calendar/cover.webp
+cover_image: /src/lib/content/TTC_1.jpg
+hero_image: /src/lib/content/TTC_1.jpg
 feature: false
 cover_ratio: null
 title_color: ''
@@ -24,7 +24,7 @@ cover_ratio_auto: 1.328
 nav_text_auto: light
 shelf_chroma_auto: 0.38
 shelf_hue_auto: 293.9
-title_color_auto: "rgb(23, 22, 25)"
+title_color_auto: rgb(23, 22, 25)
 ---
 
 \~
