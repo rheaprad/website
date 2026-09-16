@@ -9,7 +9,7 @@ medium: Artist book
 pages: ''
 dimensions: ''
 cover_image: /src/lib/content/art-page/books/the-cosmic-calendar/cover.webp
-hero_image: /src/lib/content/art-page/books/the-cosmic-calendar/cover.webp
+hero_image: /src/lib/content/home-page/landing-06.webp
 feature: false
 cover_ratio: null
 title_color: ''
