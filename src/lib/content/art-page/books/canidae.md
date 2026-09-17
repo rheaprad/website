@@ -52,7 +52,7 @@ cover_ratio_auto: 1.5
 nav_text_auto: dark
 shelf_chroma_auto: 0.876
 shelf_hue_auto: 222.3
-title_color_auto: "rgb(40, 73, 87)"
+title_color_auto: rgb(40, 73, 87)
 ---
 
 > _“But grandmother, what big teeth you have!” said Little Red Riding Hood._
@@ -67,4 +67,4 @@ _Canidae_ is an artist’s book that explores these contrasting views we hold on
 
 Currently, with the reintroduction of the grey wolf into Yellowstone, the elk population has stabilized and the trees in the forests have flourished which has resulted in more bird species. Hopefully, we’ve learned our lesson in messing with the ecosystem. 
 
-Reach out to enquire about price and acquire a copy for your museum/library/personal collections.
+[Reach out](mailto:rheapradeep01@gmail.com) to enquire about price and acquire a copy for your museum/library/personal collections.
