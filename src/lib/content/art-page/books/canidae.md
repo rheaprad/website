@@ -22,8 +22,6 @@ gallery:
     caption: ''
   - image: /src/lib/content/art-page/books/canidae/canidae_pages-to-jpg-0007.webp
     caption: ''
-  - image: /src/lib/content/art-page/books/canidae/canidae_pages-to-jpg-0008.webp
-    caption: ''
   - image: /src/lib/content/art-page/books/canidae/canidae_pages-to-jpg-0010.webp
     caption: ''
   - image: /src/lib/content/art-page/books/canidae/canidae_pages-to-jpg-0011.webp
