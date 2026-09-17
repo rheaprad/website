@@ -65,6 +65,6 @@ Growing up, I’ve read several books about how the “Big, Bad Wolf” terroriz
 
 _Canidae_ is an artist’s book that explores these contrasting views we hold on the two animals. This book has four sides: two are dedicated to the domesticated dog (_canis familiaris_) and two for the grey wolf (_canis lupus_). One part of the book covers the history of domestication, the extinction of wolves in Yellowstone, and the similarities in the biologies of the two creatures with images of the respective animal. In the other, I illustrated a comic about how each animal is portrayed from the point of view of the other. I have also interspersed adjectives between the panels of the comic. As the reader, which animal first comes to mind when you read each adjective - the domesticated dog or the grey wolf? Are you seeing a pattern as you assign them? 
 
-Currently, with the reintroduction of the grey wolf into Yellowstone, the elk population has stabilized and the trees in the forests have flourished which has resulted in more bird species. Hopefully, we’ve learned our lesson in messing with the ecosystem. 
+Currently, with the reintroduction of the grey wolf into Yellowstone, the elk population has stabilized and the trees in the Aspen forests have flourished which has resulted in more bird species. Hopefully, we’ve learned our lesson in messing with the ecosystem. 
 
 [Reach out](mailto:rheapradeep01@gmail.com) to enquire about price and acquire a copy for your museum/library/personal collections.
