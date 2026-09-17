@@ -1,7 +1,7 @@
 ---
 type: book
 title: Canidae
-date: 2025-01-23T19:00:00
+date: 2025-12-02T19:00:00
 updated: ''
 tags:
   - artist-book
