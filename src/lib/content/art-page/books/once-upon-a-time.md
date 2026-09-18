@@ -15,7 +15,23 @@ cover_ratio: null
 title_color: ''
 nav_theme: Auto
 gallery:
-  - image: /src/lib/content/home-page/landing-05.webp
+  - image: /src/lib/content/edit_1.png
+    caption: ''
+  - image: /src/lib/content/edit_2.png
+    caption: ''
+  - image: /src/lib/content/edit_3.png
+    caption: ''
+  - image: /src/lib/content/edit_4.png
+    caption: ''
+  - image: /src/lib/content/PXL_20260621_193851290.NIGHT.jpg
+    caption: ''
+  - image: /src/lib/content/edit 5.jpeg
+    caption: ''
+  - image: /src/lib/content/edit_1.png
+    caption: ''
+  - image: /src/lib/content/edit_2.png
+    caption: ''
+  - image: /src/lib/content/edit_3.png
     caption: ''
 related: []
 seo: null
@@ -24,7 +40,7 @@ cover_ratio_auto: 0.753
 nav_text_auto: light
 shelf_chroma_auto: 1
 shelf_hue_auto: 18
-title_color_auto: "rgb(186, 19, 57)"
+title_color_auto: rgb(186, 19, 57)
 ---
 
 \~
