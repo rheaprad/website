@@ -9,7 +9,7 @@ medium: Artist Book
 pages: ''
 dimensions: ''
 cover_image: /src/lib/content/art-page/books/once-upon-a-time/cover.webp
-hero_image: ''
+hero_image: /src/lib/content/1.png
 feature: false
 cover_ratio: null
 title_color: ''
