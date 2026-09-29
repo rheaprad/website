@@ -8,8 +8,8 @@ tags:
 medium: Artist Book
 pages: ''
 dimensions: ''
-cover_image: /src/lib/content/art-page/books/once-upon-a-time/cover.webp
-hero_image: /src/lib/content/1.png
+cover_image: /src/lib/content/1.png
+hero_image: /src/lib/content/14.jpg
 feature: false
 cover_ratio: null
 title_color: ''
