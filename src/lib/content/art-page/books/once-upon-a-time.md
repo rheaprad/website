@@ -15,7 +15,15 @@ cover_ratio: null
 title_color: ''
 nav_theme: Auto
 gallery:
-  - image: /src/lib/content/1.png
+  - image: /src/lib/content/once upon a time/2.png
+    caption: ''
+  - image: /src/lib/content/once upon a time/3.png
+    caption: ''
+  - image: /src/lib/content/4.png
+    caption: ''
+  - image: /src/lib/content/once upon a time/5.png
+    caption: ''
+  - image: /src/lib/content/once upon a time/6.jpeg
     caption: ''
 related: []
 seo: null
