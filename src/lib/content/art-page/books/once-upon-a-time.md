@@ -18,11 +18,11 @@ nav_theme: Auto
 gallery:
   - image: /src/lib/content/once upon a time/2.png
     caption: ''
-  - image: /src/lib/content/once upon a time/3.png
-    caption: ''
   - image: /src/lib/content/4.png
     caption: ''
   - image: /src/lib/content/once upon a time/6.jpeg
+    caption: ''
+  - image: /src/lib/content/once upon a time/3.png
     caption: ''
   - image: /src/lib/content/once upon a time/7.png
     caption: ''
