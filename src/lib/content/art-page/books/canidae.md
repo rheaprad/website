@@ -5,7 +5,7 @@ date: 2025-12-02T19:00:00
 updated: ''
 tags:
   - artist-book
-  - comic
+  - comics
 medium: Artist Book
 pages: 12 panels
 dimensions: 3 × 14 in
