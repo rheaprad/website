@@ -22,8 +22,6 @@ gallery:
     caption: ''
   - image: /src/lib/content/4.png
     caption: ''
-  - image: /src/lib/content/once upon a time/5.png
-    caption: ''
   - image: /src/lib/content/once upon a time/6.jpeg
     caption: ''
   - image: /src/lib/content/once upon a time/7.png
@@ -33,6 +31,8 @@ gallery:
   - image: /src/lib/content/OUAT_Grid Cover.jpeg
     caption: ''
   - image: /src/lib/content/once upon a time/8.png
+    caption: ''
+  - image: /src/lib/content/once upon a time/5.png
     caption: ''
 related:
   - time-frames
