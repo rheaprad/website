@@ -5,6 +5,7 @@ date: 2026-05-13T12:12:00
 updated: ''
 tags:
   - artist-book
+  - comics
 medium: Artist Book
 pages: ''
 dimensions: ''
