@@ -31,7 +31,9 @@ gallery:
     caption: ''
   - image: /src/lib/content/OUAT_Grid Cover.jpeg
     caption: ''
-related: []
+related:
+  - time-frames
+  - matter-of-time
 seo: null
 cover_light_auto: 0.427
 cover_ratio_auto: 0.753
