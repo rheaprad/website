@@ -8,8 +8,8 @@ tags:
 medium: Artist Book
 pages: ''
 dimensions: ''
-cover_image: /src/lib/content/1.png
-hero_image: /src/lib/content/14.jpg
+cover_image: /src/lib/content/OUAT_Grid Cover.jpeg
+hero_image: ''
 feature: false
 cover_ratio: null
 title_color: ''
