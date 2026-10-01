@@ -25,6 +25,12 @@ gallery:
     caption: ''
   - image: /src/lib/content/once upon a time/6.jpeg
     caption: ''
+  - image: /src/lib/content/once upon a time/7.png
+    caption: ''
+  - image: /src/lib/content/once upon a time/10.jpg
+    caption: ''
+  - image: /src/lib/content/OUAT_Grid Cover.jpeg
+    caption: ''
 related: []
 seo: null
 cover_light_auto: 0.427
