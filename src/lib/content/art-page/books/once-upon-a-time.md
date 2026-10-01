@@ -31,6 +31,8 @@ gallery:
     caption: ''
   - image: /src/lib/content/OUAT_Grid Cover.jpeg
     caption: ''
+  - image: /src/lib/content/once upon a time/8.png
+    caption: ''
 related:
   - time-frames
   - matter-of-time
